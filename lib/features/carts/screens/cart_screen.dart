@@ -12,6 +12,7 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context);
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
@@ -21,6 +22,7 @@ class CartScreen extends StatelessWidget {
       ),
       body: BlocBuilder<CartCubit, CartState>(
         builder: (context, state) {
+          final locale = Localizations.localeOf(context);
           if (state is CartLoading) {
             return const Center(
               child: CircularProgressIndicator(),
@@ -89,7 +91,7 @@ class CartScreen extends StatelessWidget {
                                   CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      car.name,
+                                      car.nameFor(locale),
                                       style: const TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,

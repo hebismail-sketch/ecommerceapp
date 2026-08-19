@@ -33,6 +33,7 @@ class _CheckOutState extends State<CheckOut> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context);
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
@@ -82,6 +83,7 @@ class _CheckOutState extends State<CheckOut> {
       BuildContext context,
       List<CartModel> cartItems,
       ) {
+    final locale = Localizations.localeOf(context);
     final carCubit = context.read<CarCubit>();
     final cartCubit = context.read<CartCubit>();
     final l10n = AppLocalizations.of(context)!;
@@ -126,7 +128,7 @@ class _CheckOutState extends State<CheckOut> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              car.name,
+                              car.nameFor(locale),
                               style: const TextStyle(
                                 fontSize: 17,
                                 fontWeight: FontWeight.bold,

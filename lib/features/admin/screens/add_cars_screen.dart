@@ -260,21 +260,29 @@ class _AddCarScreenState extends State<AddCarScreen> {
               const SizedBox(height: 16),
 
               TextFormField(
-                controller: _priceController,
-                keyboardType: TextInputType.number,
+                controller: _nameArController,
                 decoration: InputDecoration(
-                  labelText: l10n.price,
+                  labelText: 'اسم السيارة (عربي)',
                 ),
                 validator: (value) {
-                  if (value == null ||
-                      value.trim().isEmpty) {
-                    return l10n.enterPrice;
+                  if (value == null || value.trim().isEmpty) {
+                    return 'الرجاء إدخال اسم السيارة بالعربية';
                   }
+                  return null;
+                },
+              ),
 
-                  if (double.tryParse(value.trim()) == null) {
-                    return l10n.invalidPrice;
+              const SizedBox(height: 16),
+
+              TextFormField(
+                controller: _nameEnController,
+                decoration: InputDecoration(
+                  labelText: 'Car Name (English)',
+                ),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Please enter car name in English';
                   }
-
                   return null;
                 },
               ),
@@ -304,16 +312,29 @@ class _AddCarScreenState extends State<AddCarScreen> {
               const SizedBox(height: 16),
 
               TextFormField(
-                controller: _brandController,
+                controller: _brandArController,
                 decoration: InputDecoration(
-                  labelText: l10n.brand,
+                  labelText: 'الماركة (عربي)',
                 ),
                 validator: (value) {
-                  if (value == null ||
-                      value.trim().isEmpty) {
-                    return l10n.enterBrand;
+                  if (value == null || value.trim().isEmpty) {
+                    return 'الرجاء إدخال الماركة بالعربية';
                   }
+                  return null;
+                },
+              ),
 
+              const SizedBox(height: 16),
+
+              TextFormField(
+                controller: _brandEnController,
+                decoration: InputDecoration(
+                  labelText: 'Brand (English)',
+                ),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Please enter brand in English';
+                  }
                   return null;
                 },
               ),

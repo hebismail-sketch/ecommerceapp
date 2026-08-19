@@ -15,6 +15,7 @@ class ManageCarCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context);
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
@@ -27,9 +28,9 @@ class ManageCarCard extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        title: Text(car.name),
+        title: Text(car.nameFor(locale)),
         subtitle: Text(
-          "${car.brand} • ${car.price} \$",
+          "${car.brandFor(locale)} • ${car.price} \$",
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
