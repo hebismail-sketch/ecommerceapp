@@ -1,6 +1,3 @@
-import 'package:equatable/equatable.dart';
-import '../../domain/entities/cart_entity.dart';
-
 part of 'cart_cubit.dart';
 
 abstract class CartState extends Equatable {

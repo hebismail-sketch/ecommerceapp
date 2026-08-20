@@ -1,25 +1,22 @@
 import 'package:ecommerceapp/core/notifications/notification_service.dart';
-import 'package:ecommerceapp/core/services/injectain_container.dart';
+import 'package:ecommerceapp/core/services/injection_container.dart';
 import 'package:ecommerceapp/core/settings/app_settings.dart';
 import 'package:ecommerceapp/core/theme/app_theme.dart';
 
-
 import 'package:ecommerceapp/features/admin/screens/admin_home.dart';
-
 import 'package:ecommerceapp/features/products/presentation/pages/add_product_page.dart';
-
+import 'package:ecommerceapp/features/products/presentation/pages/mange_products_page.dart';
 
 import 'package:ecommerceapp/features/authentication/screens/login_screen.dart';
 import 'package:ecommerceapp/features/authentication/screens/register_screen.dart';
 
 import 'package:ecommerceapp/features/products/presentation/manager/product_cubit.dart';
-
 import 'package:ecommerceapp/features/carts/presentation/manager/cart_cubit.dart';
+
 import 'package:ecommerceapp/features/carts/screens/checkout_screen.dart';
 
 import 'package:ecommerceapp/features/favorites/controller/favorite_cubit.dart';
 import 'package:ecommerceapp/features/favorites/screens/favorite_screen.dart';
-import 'package:ecommerceapp/features/products/presentation/pages/mange_products_page.dart';
 import 'package:ecommerceapp/features/profile/screens/profile_screen.dart';
 import 'package:ecommerceapp/features/home/screens/home_screen.dart';
 
@@ -37,7 +34,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
@@ -66,12 +62,23 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider.value(value: appSettings),
 
-        // Products Cubit (Clean Architecture)
+        // Products Cubit
         BlocProvider(
           create: (_) => InjectionContainer.productCubit..loadProducts(),
         ),
 
-        BlocProvider(create: (_) => CartCubit()),
+        // Cart Cubit
+        BlocProvider(
+          create: (_) {
+            final user = FirebaseAuth.instance.currentUser;
+            final cubit = InjectionContainer.cartCubit;
+            if (user != null) {
+              cubit.loadCart(user.uid);
+            }
+            return cubit;
+          },
+        ),
+
         BlocProvider(create: (_) => FavoriteCubit()),
         BlocProvider(create: (_) => OrderCubit()),
       ],
@@ -114,7 +121,6 @@ class MyApp extends StatelessWidget {
         AdminHome.screenRoute: (_) => const AdminHome(),
 
         // Updated Routes to new Pages
-
         ManageProductsPage.screenRoute: (_) => const ManageProductsPage(),
         AddProductPage.screenRoute: (_) => const AddProductPage(),
 

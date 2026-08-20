@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/entities/cart_entity.dart';
 import '../../domain/usecases/get_cart_items.dart';
