@@ -68,6 +68,32 @@ class CartCubit extends Cubit<CartState> {
     }
   }
 
+  // Increase item quantity
+  Future<void> increaseQuantity(CartEntity cartItem) async {
+    final updatedItem = CartEntity(
+      id: cartItem.id,
+      productId: cartItem.productId,
+      price: cartItem.price,
+      quantity: cartItem.quantity + 1,
+    );
+    await updateItem(updatedItem);
+  }
+
+  // Decrease item quantity
+  Future<void> decreaseQuantity(CartEntity cartItem) async {
+    if (cartItem.quantity <= 1) {
+      await removeItem(cartItem.id);
+      return;
+    }
+    final updatedItem = CartEntity(
+      id: cartItem.id,
+      productId: cartItem.productId,
+      price: cartItem.price,
+      quantity: cartItem.quantity - 1,
+    );
+    await updateItem(updatedItem);
+  }
+
   // Calculate total price of items in the cart
   double get totalPrice {
     double total = 0;

@@ -42,6 +42,15 @@ class ProductCubit extends Cubit<ProductState> {
     );
   }
 
+  // Get product by ID
+  ProductEntity? getProductById(String id) {
+    try {
+      return _allProducts.firstWhere((product) => product.id == id);
+    } catch (e) {
+      return null;
+    }
+  }
+
   // دالة البحث عن المنتجات
   void searchProducts(String query) {
     if (state is ProductSuccess || state is ProductLoading) {
