@@ -20,9 +20,19 @@ import '../../features/carts/domain/usecases/get_cart_items.dart';
 import '../../features/carts/domain/usecases/update_cart_item.dart';
 import '../../features/carts/presentation/manager/cart_cubit.dart';
 
+// Favorite Feature Imports
+import '../../features/favorites/data/datasources/favorite_remote_data_source.dart';
+import '../../features/favorites/data/repositories/favorite_repository_impl.dart';
+import '../../features/favorites/domain/repositories/favorite_repository.dart';
+import '../../features/favorites/domain/usecases/get_favorites.dart';
+import '../../features/favorites/domain/usecases/add_favorite.dart';
+import '../../features/favorites/domain/usecases/delete_favorite.dart';
+import '../../features/favorites/presentation/manager/favorite_cubit.dart';
+
 class InjectionContainer {
   static late ProductCubit productCubit;
   static late CartCubit cartCubit;
+  static late FavoriteCubit favoriteCubit;
 
   static void init() {
     final firestore = FirebaseFirestore.instance;
@@ -31,11 +41,9 @@ class InjectionContainer {
     // 1. PRODUCTS FEATURE INITIALIZATION
     // ==========================================
     final ProductRemoteDataSource productRemoteDataSource =
-    ProductRemoteDataSourceImpl(firestore: firestore);
-
+        ProductRemoteDataSourceImpl(firestore: firestore);
     final ProductRepository productRepository =
-    ProductRepositoryImpl(remoteDataSource: productRemoteDataSource);
-
+        ProductRepositoryImpl(remoteDataSource: productRemoteDataSource);
     productCubit = ProductCubit(
       getProductsUseCase: GetProducts(productRepository),
       addProductUseCase: AddProduct(productRepository),
@@ -47,16 +55,27 @@ class InjectionContainer {
     // 2. CARTS FEATURE INITIALIZATION
     // ==========================================
     final CartRemoteDataSource cartRemoteDataSource =
-    CartRemoteDataSourceImpl(firestore: firestore);
-
+        CartRemoteDataSourceImpl(firestore: firestore);
     final CartRepository cartRepository =
-    CartRepositoryImpl(remoteDataSource: cartRemoteDataSource);
-
+        CartRepositoryImpl(remoteDataSource: cartRemoteDataSource);
     cartCubit = CartCubit(
       getCartItemsUseCase: GetCartItems(cartRepository),
       addToCartUseCase: AddToCart(cartRepository),
       updateCartItemUseCase: UpdateCartItem(cartRepository),
       deleteCartItemUseCase: DeleteCartItem(cartRepository),
+    );
+
+    // ==========================================
+    // 3. FAVORITES FEATURE INITIALIZATION
+    // ==========================================
+    final FavoriteRemoteDataSource favoriteRemoteDataSource =
+        FavoriteRemoteDataSourceImpl(firestore: firestore);
+    final FavoriteRepository favoriteRepository =
+        FavoriteRepositoryImpl(remoteDataSource: favoriteRemoteDataSource);
+    favoriteCubit = FavoriteCubit(
+      getFavoritesUseCase: GetFavorites(favoriteRepository),
+      addFavoriteUseCase: AddFavorite(favoriteRepository),
+      deleteFavoriteUseCase: DeleteFavorite(favoriteRepository),
     );
   }
 }
