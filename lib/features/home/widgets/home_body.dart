@@ -14,34 +14,49 @@ class HomeBody extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
+          // Search Field
           TextField(
             onChanged: (value) {
-              // سيتم إضافة منطق البحث في ProductCubit لاحقاً
+              // Trigger search logic in ProductCubit
+              context.read<ProductCubit>().searchProducts(value);
             },
             decoration: InputDecoration(
               hintText: l10n.searchForCar,
               prefixIcon: const Icon(Icons.search),
+              // Clear button to reset search
+              suffixIcon: IconButton(
+                onPressed: () {
+                  context.read<ProductCubit>().searchProducts('');
+                },
+                icon: const Icon(Icons.clear),
+              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
           ),
+
           const SizedBox(height: 20),
+
+          // Products List
           Expanded(
             child: BlocBuilder<ProductCubit, ProductState>(
               builder: (context, state) {
+                // Show loading spinner
                 if (state is ProductLoading) {
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
 
+                // Show error message
                 if (state is ProductFailure) {
                   return Center(
                     child: Text(state.message),
                   );
                 }
 
+                // Show products on success
                 if (state is ProductSuccess) {
                   if (state.products.isEmpty) {
                     return Center(

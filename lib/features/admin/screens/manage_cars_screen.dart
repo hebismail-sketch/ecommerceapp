@@ -1,138 +1,113 @@
-import 'package:ecommerceapp/core/utils/app_dialogs.dart';
-import 'package:ecommerceapp/core/utils/app_snackbar.dart';
-import 'package:ecommerceapp/features/admin/screens/add_cars_screen.dart';
-import 'package:ecommerceapp/features/admin/widgets/manage_car_card.dart';
-import 'package:ecommerceapp/features/cars/controller/car_cubit.dart';
-import 'package:ecommerceapp/features/cars/models/item.dart';
+import 'package:ecommerceapp/features/products/presentation/manager/product_cubit.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ManageCarsScreen extends StatelessWidget {
-  const ManageCarsScreen({super.key});
-
-  static const String screenRoute = 'manageCars';
+class HomeBody extends StatelessWidget {
+  const HomeBody({super.key});
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.manageCars),
-        centerTitle: true,
-      ),
-
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(
-            context,
-            AddCarScreen.screenRoute,
-          );
-        },
-        child: const Icon(Icons.add),
-      ),
-
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            TextField(
-              onChanged: (value) {
-                context.read<CarCubit>().searchCars(value);
-              },
-              decoration: InputDecoration(
-                hintText: l10n.searchForCar,
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          // Search Field
+          TextField(
+            onChanged: (value) {
+              // Trigger search logic in ProductCubit
+              context.read<ProductCubit>().searchProducts(value);
+            },
+            decoration: InputDecoration(
+              hintText: l10n.searchForCar,
+              prefixIcon: const Icon(Icons.search),
+              // Clear button to reset search
+              suffixIcon: IconButton(
+                onPressed: () {
+                  context.read<ProductCubit>().searchProducts('');
+                },
+                icon: const Icon(Icons.clear),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
               ),
             ),
+          ),
 
-            const SizedBox(height: 20),
+          const SizedBox(height: 20),
 
-            Expanded(
-              child: BlocBuilder<CarCubit, CarState>(
-                builder: (context, state) {
-                  if (state is CarLoading) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
+          // Products List
+          Expanded(
+            child: BlocBuilder<ProductCubit, ProductState>(
+              builder: (context, state) {
+                // Show loading spinner
+                if (state is ProductLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
 
-                  if (state is CarFailure) {
+                // Show error message
+                if (state is ProductFailure) {
+                  return Center(
+                    child: Text(state.message),
+                  );
+                }
+
+                // Show products on success
+                if (state is ProductSuccess) {
+                  if (state.products.isEmpty) {
                     return Center(
-                      child: Text(state.message),
+                      child: Text(l10n.noCars),
                     );
                   }
 
-                  if (state is! CarSuccess) {
-                    return const SizedBox();
-                  }
-
-                  final List<Item> cars = state.cars;
-
-                  if (cars.isEmpty) {
-                    return Center(
-                      child: Text(
-                        l10n.noCars,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    );
-                  }
-
-                  return ListView.builder(
-                    itemCount: cars.length,
+                  return ListView.separated(
+                    itemCount: state.products.length,
+                    separatorBuilder: (_, _) => const SizedBox(height: 12),
                     itemBuilder: (context, index) {
-                      final car = cars[index];
+                      final product = state.products[index];
 
-                      return ManageCarCard(
-                        car: car,
-
-                        onEdit: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => AddCarScreen(
-                                car: car,
-                              ),
+                      return Card(
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.all(8),
+                          leading: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.network(
+                              product.image,
+                              width: 60,
+                              height: 60,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                              const Icon(Icons.image_not_supported),
                             ),
-                          );
-                        },
-
-                        onDelete: () async {
-                          final result =
-                          await AppDialogs.confirmDelete(
-                            context,
-                            title: l10n.deleteCar,
-                            message: l10n.deleteCarConfirmation,
-                          );
-
-                          if (!result) return;
-
-                          await context
-                              .read<CarCubit>()
-                              .deleteCar(car.id);
-
-                          if (context.mounted) {
-                            AppSnackBar.success(
-                              context,
-                              l10n.carDeletedSuccessfully,
-                            );
-                          }
-                        },
+                          ),
+                          title: Text(
+                            product.nameEn,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          subtitle: Text(
+                            "${product.price} USD",
+                            style: const TextStyle(color: Colors.green),
+                          ),
+                          trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                        ),
                       );
                     },
                   );
-                },
-              ),
+                }
+
+                return const SizedBox();
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

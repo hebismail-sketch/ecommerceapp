@@ -24,12 +24,16 @@ class ProductCubit extends Cubit<ProductState> {
 
   StreamSubscription? _subscription;
 
+  // حفظ القائمة الأصلية للبحث فيها محلياً
+  List<ProductEntity> _allProducts = [];
+
   // دالة جلب المنتجات
   void loadProducts() {
     emit(ProductLoading());
     _subscription?.cancel();
     _subscription = getProductsUseCase.call().listen(
           (products) {
+        _allProducts = products;
         emit(ProductSuccess(products));
       },
       onError: (error) {
@@ -38,7 +42,26 @@ class ProductCubit extends Cubit<ProductState> {
     );
   }
 
-  // دالة إضافة منتج
+  // دالة البحث عن المنتجات
+  void searchProducts(String query) {
+    if (state is ProductSuccess || state is ProductLoading) {
+      if (query.isEmpty) {
+        emit(ProductSuccess(_allProducts));
+      } else {
+        final filteredProducts = _allProducts.where((product) {
+          final nameLower = product.nameEn.toLowerCase();
+          final nameArLower = product.nameAr.toLowerCase();
+          final searchLower = query.toLowerCase();
+
+          return nameLower.contains(searchLower) || nameArLower.contains(searchLower);
+        }).toList();
+
+        emit(ProductSuccess(filteredProducts));
+      }
+    }
+  }
+
+  // العمليات الأخرى (إضافة، تعديل، حذف)
   Future<void> addProduct(ProductEntity product) async {
     try {
       await addProductUseCase.call(product);
@@ -47,7 +70,6 @@ class ProductCubit extends Cubit<ProductState> {
     }
   }
 
-  // دالة تعديل منتج
   Future<void> updateProduct(String id, ProductEntity product) async {
     try {
       await updateProductUseCase.call(id, product);
@@ -56,7 +78,6 @@ class ProductCubit extends Cubit<ProductState> {
     }
   }
 
-  // دالة حذف منتج
   Future<void> deleteProduct(String id) async {
     try {
       await deleteProductUseCase.call(id);
