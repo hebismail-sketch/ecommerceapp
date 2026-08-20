@@ -1,5 +1,5 @@
 import 'package:ecommerceapp/core/notifications/notification_service.dart';
-import 'package:ecommerceapp/core/services/injectainer_container.dart';
+import 'package:ecommerceapp/core/services/injectain_container.dart';
 import 'package:ecommerceapp/core/settings/app_settings.dart';
 import 'package:ecommerceapp/core/theme/app_theme.dart';
 
@@ -14,7 +14,7 @@ import 'package:ecommerceapp/features/authentication/screens/register_screen.dar
 
 import 'package:ecommerceapp/features/products/presentation/manager/product_cubit.dart';
 
-import 'package:ecommerceapp/features/carts/controller/cart_cubit.dart';
+import 'package:ecommerceapp/features/carts/presentation/manager/cart_cubit.dart';
 import 'package:ecommerceapp/features/carts/screens/checkout_screen.dart';
 
 import 'package:ecommerceapp/features/favorites/controller/favorite_cubit.dart';

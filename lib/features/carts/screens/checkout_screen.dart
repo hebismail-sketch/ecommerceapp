@@ -1,5 +1,5 @@
 import 'package:ecommerceapp/features/cars/controller/car_cubit.dart';
-import 'package:ecommerceapp/features/carts/controller/cart_cubit.dart';
+import 'package:ecommerceapp/features/carts/presentation/manager/cart_cubit.dart';
 import 'package:ecommerceapp/features/carts/models/cart_model.dart';
 import 'package:ecommerceapp/features/orders/controller/order_cubit.dart';
 import 'package:ecommerceapp/features/orders/models/order_model.dart';

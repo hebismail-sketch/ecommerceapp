@@ -1,4 +1,4 @@
-import 'package:ecommerceapp/features/carts/controller/cart_cubit.dart';
+import 'package:ecommerceapp/features/carts/presentation/manager/cart_cubit.dart';
 import 'package:ecommerceapp/features/cars/controller/car_cubit.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';

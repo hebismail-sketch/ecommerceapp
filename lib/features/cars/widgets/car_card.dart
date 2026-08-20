@@ -1,6 +1,6 @@
 import 'package:ecommerceapp/features/cars/models/item.dart';
 import 'package:ecommerceapp/features/cars/screens/details_screen.dart';
-import 'package:ecommerceapp/features/carts/controller/cart_cubit.dart';
+import 'package:ecommerceapp/features/carts/presentation/manager/cart_cubit.dart';
 import 'package:ecommerceapp/features/carts/models/cart_model.dart';
 import 'package:ecommerceapp/features/favorites/controller/favorite_cubit.dart';
 import 'package:ecommerceapp/features/favorites/controller/favorite_state.dart';
