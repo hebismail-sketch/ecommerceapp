@@ -1,6 +1,6 @@
 import '../../domain/entities/car_entity.dart';
 import '../../domain/repositories/car_repository.dart';
-import '../datasources/car_remote_data_source.dart';
+import '../datasources/product_remote_data_source.dart';
 import '../models/car_model.dart';
 
 class CarRepositoryImpl implements CarRepository {
