@@ -51,7 +51,7 @@ class ProductCubit extends Cubit<ProductState> {
     }
   }
 
-  // دالة البحث عن المنتجات
+
   void searchProducts(String query) {
     if (state is ProductSuccess || state is ProductLoading) {
       if (query.isEmpty) {
@@ -70,7 +70,7 @@ class ProductCubit extends Cubit<ProductState> {
     }
   }
 
-  // العمليات الأخرى (إضافة، تعديل، حذف)
+
   Future<void> addProduct(ProductEntity product) async {
     try {
       await addProductUseCase.call(product);

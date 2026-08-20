@@ -16,7 +16,7 @@ static const String screenRoute='manageProductPage';
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // الانتقال لصفحة إضافة منتج
+
         },
         child: const Icon(Icons.add),
       ),
