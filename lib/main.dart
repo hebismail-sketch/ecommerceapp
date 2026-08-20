@@ -12,11 +12,12 @@ import 'package:ecommerceapp/features/authentication/screens/register_screen.dar
 
 import 'package:ecommerceapp/features/products/presentation/manager/product_cubit.dart';
 import 'package:ecommerceapp/features/carts/presentation/manager/cart_cubit.dart';
+import 'package:ecommerceapp/features/favorites/presentation/manager/favorite_cubit.dart';
+import 'package:ecommerceapp/features/favorites/presentation/pages/favorite_page.dart';
 
-import 'package:ecommerceapp/features/carts/screens/checkout_screen.dart';
 
-import 'package:ecommerceapp/features/favorites/controller/favorite_cubit.dart';
-import 'package:ecommerceapp/features/favorites/screens/favorite_screen.dart';
+import 'package:ecommerceapp/features/carts/presentation/pages/cart_page.dart';
+
 import 'package:ecommerceapp/features/profile/screens/profile_screen.dart';
 import 'package:ecommerceapp/features/home/screens/home_screen.dart';
 
@@ -45,10 +46,8 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await NotificationService.initialize();
-
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   final appSettings = AppSettings();
@@ -61,12 +60,10 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: appSettings),
-
-        // Products Cubit
-        BlocProvider(
-          create: (_) => InjectionContainer.productCubit..loadProducts(),
-        ),
-
+        
+        // Product Cubit
+        BlocProvider(create: (_) => InjectionContainer.productCubit..loadProducts()),
+        
         // Cart Cubit
         BlocProvider(
           create: (_) {
@@ -79,7 +76,18 @@ Future<void> main() async {
           },
         ),
 
-        BlocProvider(create: (_) => FavoriteCubit()),
+        // Favorite Cubit
+        BlocProvider(
+          create: (_) {
+            final user = FirebaseAuth.instance.currentUser;
+            final cubit = InjectionContainer.favoriteCubit;
+            if (user != null) {
+              cubit.loadFavorites(user.uid);
+            }
+            return cubit;
+          },
+        ),
+
         BlocProvider(create: (_) => OrderCubit()),
       ],
       child: const MyApp(),
@@ -117,14 +125,14 @@ class MyApp extends StatelessWidget {
         RegisterScreen.screenRoute: (_) => const RegisterScreen(),
         LoginScreen.screenRoute: (_) => const LoginScreen(),
         HomeScreen.screenRoute: (_) => const HomeScreen(),
-        CheckOut.screenRoute: (_) => const CheckOut(),
-        AdminHome.screenRoute: (_) => const AdminHome(),
 
-        // Updated Routes to new Pages
+
+        AdminHome.screenRoute: (_) => const AdminHome(),
         ManageProductsPage.screenRoute: (_) => const ManageProductsPage(),
         AddProductPage.screenRoute: (_) => const AddProductPage(),
+        CartPage.screenRoute: (_) => const CartPage(),
+        FavoritePage.screenRoute: (_) => const FavoritePage(),
 
-        FavoriteScreen.screenRoute: (_) => const FavoriteScreen(),
         MainScreen.screenRoute: (_) => const MainScreen(),
         OrdersScreen.screenRoute: (_) => const OrdersScreen(),
         SettingsScreen.screenRoute: (_) => const SettingsScreen(),
