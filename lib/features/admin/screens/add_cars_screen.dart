@@ -1,23 +1,18 @@
 import 'dart:io';
-
-import 'package:ecommerceapp/features/cars/controller/car_cubit.dart';
-import 'package:ecommerceapp/features/cars/models/item.dart';
+import 'package:ecommerceapp/features/products/presentation/manager/product_cubit.dart';
+import 'package:ecommerceapp/features/products/domain/entities/product_entity.dart';
 import 'package:ecommerceapp/features/cars/repository/image_repository.dart';
-import 'package:ecommerceapp/features/cars/services/product_translation_service.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddCarScreen extends StatefulWidget {
-  const AddCarScreen({
-    super.key,
-    this.car,
-  });
+  final ProductEntity? product;
+
+  const AddCarScreen({super.key, this.product});
 
   static const String screenRoute = 'addCar';
-
-  final Item? car;
 
   @override
   State<AddCarScreen> createState() => _AddCarScreenState();
@@ -26,427 +21,166 @@ class AddCarScreen extends StatefulWidget {
 class _AddCarScreenState extends State<AddCarScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  final _nameController = TextEditingController();
+  // Controllers for bilingual support
+  final _nameArController = TextEditingController();
+  final _nameEnController = TextEditingController();
   final _priceController = TextEditingController();
   final _yearController = TextEditingController();
-  final _brandController = TextEditingController();
-  final _locationController = TextEditingController();
-  final _descriptionController = TextEditingController();
-
-  final ImagePicker _picker = ImagePicker();
-  final ImageRepository _imageRepository = ImageRepository();
-  final ProductTranslationService _translationService =
-  ProductTranslationService();
+  final _brandArController = TextEditingController();
+  final _brandEnController = TextEditingController();
+  final _locationArController = TextEditingController();
+  final _locationEnController = TextEditingController();
+  final _descriptionArController = TextEditingController();
+  final _descriptionEnController = TextEditingController();
 
   File? _selectedImage;
-
   bool _isLoading = false;
+  final ImagePicker _picker = ImagePicker();
+  final ImageRepository _imageRepository = ImageRepository();
 
   @override
   void initState() {
     super.initState();
-
-    if (widget.car != null) {
-      final languageCode =
-          Localizations.maybeLocaleOf(context)?.languageCode ?? 'ar';
-
-      if (languageCode == 'en') {
-        _nameController.text = widget.car!.nameEn;
-        _brandController.text = widget.car!.brandEn;
-        _locationController.text = widget.car!.locationEn;
-        _descriptionController.text = widget.car!.descriptionEn;
-      } else {
-        _nameController.text = widget.car!.nameAr;
-        _brandController.text = widget.car!.brandAr;
-        _locationController.text = widget.car!.locationAr;
-        _descriptionController.text = widget.car!.descriptionAr;
-      }
-
-      _priceController.text = widget.car!.price.toString();
-      _yearController.text = widget.car!.year.toString();
+    // Fill controllers if editing existing product
+    if (widget.product != null) {
+      _nameArController.text = widget.product!.nameAr;
+      _nameEnController.text = widget.product!.nameEn;
+      _priceController.text = widget.product!.price.toString();
+      _yearController.text = widget.product!.year.toString();
+      _brandArController.text = widget.product!.brandAr;
+      _brandEnController.text = widget.product!.brandEn;
+      _locationArController.text = widget.product!.locationAr;
+      _locationEnController.text = widget.product!.locationEn;
+      _descriptionArController.text = widget.product!.descriptionAr;
+      _descriptionEnController.text = widget.product!.descriptionEn;
     }
   }
 
   @override
   void dispose() {
-    _nameController.dispose();
+    _nameArController.dispose();
+    _nameEnController.dispose();
     _priceController.dispose();
     _yearController.dispose();
-    _brandController.dispose();
-    _locationController.dispose();
-    _descriptionController.dispose();
-
-    _translationService.dispose();
-
+    _brandArController.dispose();
+    _brandEnController.dispose();
+    _locationArController.dispose();
+    _locationEnController.dispose();
+    _descriptionArController.dispose();
+    _descriptionEnController.dispose();
     super.dispose();
   }
 
   Future<void> _pickImage() async {
-    final image = await _picker.pickImage(
-      source: ImageSource.gallery,
-    );
-
-    if (image == null) return;
-
-    if (!mounted) return;
-
-    setState(() {
-      _selectedImage = File(image.path);
-    });
+    final image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) setState(() => _selectedImage = File(image.path));
   }
 
-  Future<TranslatedText> _translateField(String text) async {
-    final cleanText = text.trim();
-
-    if (cleanText.isEmpty) {
-      throw Exception('Text cannot be empty.');
-    }
-
-    return _translationService.translateAutomatically(cleanText);
-  }
-
-  Future<void> _saveCar() async {
+  Future<void> _saveProduct() async {
     final l10n = AppLocalizations.of(context)!;
-
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
-
-    if (_selectedImage == null && widget.car == null) {
+    if (!_formKey.currentState!.validate()) return;
+    if (_selectedImage == null && widget.product == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(l10n.chooseImageFirst),
-        ),
+        SnackBar(content: Text(l10n.chooseImageFirst)),
       );
       return;
     }
 
-    FocusScope.of(context).unfocus();
-
-    setState(() {
-      _isLoading = true;
-    });
-
+    setState(() => _isLoading = true);
     try {
-      String imageUrl = widget.car?.image ?? '';
-
+      String imageUrl = widget.product?.image ?? '';
       if (_selectedImage != null) {
-        imageUrl = await _imageRepository.uploadImage(
-          _selectedImage!,
-        );
+        imageUrl = await _imageRepository.uploadImage(_selectedImage!);
       }
 
-      final nameTranslation =
-      await _translateField(_nameController.text);
-
-      final brandTranslation =
-      await _translateField(_brandController.text);
-
-      final locationTranslation =
-      await _translateField(_locationController.text);
-
-      final descriptionTranslation =
-      await _translateField(_descriptionController.text);
-
-      final data = {
-        'nameAr': nameTranslation.arabic,
-        'nameEn': nameTranslation.english,
-
-        'brandAr': brandTranslation.arabic,
-        'brandEn': brandTranslation.english,
-
-        'locationAr': locationTranslation.arabic,
-        'locationEn': locationTranslation.english,
-
-        'descriptionAr': descriptionTranslation.arabic,
-        'descriptionEn': descriptionTranslation.english,
-
-        'price': double.parse(
-          _priceController.text.trim(),
-        ),
-
-        'year': int.parse(
-          _yearController.text.trim(),
-        ),
-
-        'image': imageUrl,
-
-        'order': widget.car == null
-            ? DateTime.now().millisecondsSinceEpoch
-            : null,
-      };
-
-      data.removeWhere(
-            (key, value) => value == null,
+      final newProduct = ProductEntity(
+        id: widget.product?.id ?? '',
+        nameAr: _nameArController.text,
+        nameEn: _nameEnController.text,
+        brandAr: _brandArController.text,
+        brandEn: _brandEnController.text,
+        locationAr: _locationArController.text,
+        locationEn: _locationEnController.text,
+        descriptionAr: _descriptionArController.text,
+        descriptionEn: _descriptionEnController.text,
+        price: double.parse(_priceController.text),
+        year: int.parse(_yearController.text),
+        image: imageUrl,
       );
 
-      final carCubit = context.read<CarCubit>();
-
-      if (widget.car == null) {
-        await carCubit.addCar(data);
+      if (widget.product == null) {
+        await context.read<ProductCubit>().addProduct(newProduct);
       } else {
-        await carCubit.updateCar(
-          widget.car!.id,
-          data,
-        );
+        await context.read<ProductCubit>().updateProduct(widget.product!.id, newProduct);
       }
 
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            widget.car == null
-                ? l10n.carAddedSuccessfully
-                : l10n.changesSavedSuccessfully,
-          ),
-        ),
-      );
-
-      Navigator.pop(context);
+      if (mounted) Navigator.pop(context);
     } catch (e) {
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            e.toString(),
-          ),
-        ),
-      );
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
     } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          widget.car == null
-              ? l10n.addCar
-              : l10n.editCar,
+      appBar: AppBar(title: Text(widget.product == null ? l10n.addCar : l10n.editCar)),
+      body: Form(
+        key: _formKey,
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            _buildTextField(_nameArController, 'الاسم (عربي)'),
+            _buildTextField(_nameEnController, 'Name (English)'),
+            _buildTextField(_priceController, 'Price', isNumber: true),
+            _buildTextField(_yearController, 'Year', isNumber: true),
+            _buildTextField(_brandArController, 'الماركة (عربي)'),
+            _buildTextField(_brandEnController, 'Brand (English)'),
+            _buildTextField(_locationArController, 'الموقع (عربي)'),
+            _buildTextField(_locationEnController, 'Location (English)'),
+            _buildTextField(_descriptionArController, 'الوصف (عربي)', maxLines: 3),
+            _buildTextField(_descriptionEnController, 'Description (English)', maxLines: 3),
+            const SizedBox(height: 20),
+            if (_selectedImage != null)
+              Image.file(_selectedImage!, height: 200, fit: BoxFit.cover)
+            else if (widget.product != null)
+              Image.network(widget.product!.image, height: 200, fit: BoxFit.cover),
+            const SizedBox(height: 10),
+            ElevatedButton.icon(
+              onPressed: _pickImage,
+              icon: const Icon(Icons.image),
+              label: Text(l10n.chooseImage),
+            ),
+            const SizedBox(height: 24),
+            SizedBox(
+              height: 55,
+              child: ElevatedButton(
+                onPressed: _isLoading ? null : _saveProduct,
+                child: _isLoading
+                    ? const CircularProgressIndicator(color: Colors.white)
+                    : Text(widget.product == null ? l10n.addCarButton : l10n.saveChanges),
+              ),
+            ),
+          ],
         ),
-        centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              TextFormField(
-                controller: _nameController,
-                decoration: InputDecoration(
-                  labelText: l10n.carName,
-                ),
-                validator: (value) {
-                  if (value == null ||
-                      value.trim().isEmpty) {
-                    return l10n.enterCarName;
-                  }
+    );
+  }
 
-                  return null;
-                },
-              ),
-
-              const SizedBox(height: 16),
-
-              TextFormField(
-                controller: _nameArController,
-                decoration: InputDecoration(
-                  labelText: 'اسم السيارة (عربي)',
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'الرجاء إدخال اسم السيارة بالعربية';
-                  }
-                  return null;
-                },
-              ),
-
-              const SizedBox(height: 16),
-
-              TextFormField(
-                controller: _nameEnController,
-                decoration: InputDecoration(
-                  labelText: 'Car Name (English)',
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Please enter car name in English';
-                  }
-                  return null;
-                },
-              ),
-
-              const SizedBox(height: 16),
-
-              TextFormField(
-                controller: _yearController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  labelText: l10n.manufactureYear,
-                ),
-                validator: (value) {
-                  if (value == null ||
-                      value.trim().isEmpty) {
-                    return l10n.enterManufactureYear;
-                  }
-
-                  if (int.tryParse(value.trim()) == null) {
-                    return l10n.invalidYear;
-                  }
-
-                  return null;
-                },
-              ),
-
-              const SizedBox(height: 16),
-
-              TextFormField(
-                controller: _brandArController,
-                decoration: InputDecoration(
-                  labelText: 'الماركة (عربي)',
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'الرجاء إدخال الماركة بالعربية';
-                  }
-                  return null;
-                },
-              ),
-
-              const SizedBox(height: 16),
-
-              TextFormField(
-                controller: _brandEnController,
-                decoration: InputDecoration(
-                  labelText: 'Brand (English)',
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Please enter brand in English';
-                  }
-                  return null;
-                },
-              ),
-
-              const SizedBox(height: 16),
-
-              TextFormField(
-                controller: _locationController,
-                decoration: InputDecoration(
-                  labelText: l10n.location,
-                ),
-                validator: (value) {
-                  if (value == null ||
-                      value.trim().isEmpty) {
-                    return l10n.enterLocation;
-                  }
-
-                  return null;
-                },
-              ),
-
-              const SizedBox(height: 16),
-
-              SizedBox(
-                height: 200,
-                width: double.infinity,
-                child: _selectedImage == null
-                    ? Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.grey,
-                    ),
-                    borderRadius:
-                    BorderRadius.circular(12),
-                  ),
-                  child: Center(
-                    child: Text(
-                      l10n.noImageSelected,
-                    ),
-                  ),
-                )
-                    : ClipRRect(
-                  borderRadius:
-                  BorderRadius.circular(12),
-                  child: Image.file(
-                    _selectedImage!,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 16),
-
-              SizedBox(
-                height: 50,
-                child: ElevatedButton.icon(
-                  onPressed: _isLoading
-                      ? null
-                      : _pickImage,
-                  icon: const Icon(Icons.image),
-                  label: Text(
-                    l10n.chooseImage,
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 16),
-
-              TextFormField(
-                controller: _descriptionController,
-                maxLines: 4,
-                decoration: InputDecoration(
-                  labelText: l10n.descriptionLabel,
-                ),
-                validator: (value) {
-                  if (value == null ||
-                      value.trim().isEmpty) {
-                    return l10n.enterDescription;
-                  }
-
-                  return null;
-                },
-              ),
-
-              const SizedBox(height: 24),
-
-              SizedBox(
-                height: 55,
-                child: ElevatedButton(
-                  onPressed: _isLoading
-                      ? null
-                      : _saveCar,
-                  child: _isLoading
-                      ? const SizedBox(
-                    width: 25,
-                    height: 25,
-                    child:
-                    CircularProgressIndicator(
-                      color: Colors.white,
-                      strokeWidth: 3,
-                    ),
-                  )
-                      : Text(
-                    widget.car == null
-                        ? l10n.addCarButton
-                        : l10n.saveChanges,
-                  ),
-                ),
-              ),
-            ],
-          ),
+  Widget _buildTextField(TextEditingController controller, String label, {bool isNumber = false, int maxLines = 1}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: label,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         ),
+        keyboardType: isNumber ? TextInputType.number : TextInputType.text,
+        maxLines: maxLines,
+        validator: (value) => (value == null || value.trim().isEmpty) ? 'Required field' : null,
       ),
     );
   }
