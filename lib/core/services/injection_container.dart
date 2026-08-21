@@ -1,4 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+// Authentication Feature Imports
+import '../../features/authentication/data/datasources/authentication_remote_data_source.dart';
+import '../../features/authentication/data/datasources/authentication_remote_data_source_impl.dart';
+import '../../features/authentication/data/repositories/authentication_repository_impl.dart';
+import '../../features/authentication/domain/repositories/authentication_repository.dart';
+import '../../features/authentication/domain/usecases/get_current_user_usecase.dart';
+import '../../features/authentication/domain/usecases/login_usecase.dart';
+import '../../features/authentication/domain/usecases/logout_usecase.dart';
+import '../../features/authentication/domain/usecases/register_usecase.dart';
+import '../../features/authentication/domain/usecases/save_device_token_usecase.dart';
+import '../../features/authentication/presentation/manager/authentication_bloc.dart';
 
 // Product Feature Imports
 import '../../features/products/data/datasources/product_remote_data_source.dart';
@@ -33,9 +46,29 @@ class InjectionContainer {
   static late ProductCubit productCubit;
   static late CartCubit cartCubit;
   static late FavoriteCubit favoriteCubit;
+  static late AuthenticationBloc authenticationBloc;
 
   static void init() {
     final firestore = FirebaseFirestore.instance;
+    final firebaseAuth = FirebaseAuth.instance;
+
+    // ==========================================
+    // 0. AUTHENTICATION FEATURE INITIALIZATION
+    // ==========================================
+    final AuthenticationRemoteDataSource authRemoteDataSource =
+        AuthenticationRemoteDataSourceImpl(
+      firebaseAuth: firebaseAuth,
+      firestore: firestore,
+    );
+    final AuthenticationRepository authRepository =
+        AuthenticationRepositoryImpl(remoteDataSource: authRemoteDataSource);
+    authenticationBloc = AuthenticationBloc(
+      loginUseCase: LoginUseCase(repository: authRepository),
+      registerUseCase: RegisterUseCase(repository: authRepository),
+      logoutUseCase: LogoutUseCase(repository: authRepository),
+      getCurrentUserUseCase: GetCurrentUserUseCase(repository: authRepository),
+      saveDeviceTokenUseCase: SaveDeviceTokenUseCase(repository: authRepository),
+    );
 
     // ==========================================
     // 1. PRODUCTS FEATURE INITIALIZATION
