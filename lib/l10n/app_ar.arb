@@ -100,6 +100,15 @@
   "signIn": "تسجيل الدخول",
   "dontHaveAnAccount": "ليس لديك حساب؟",
   "signUp": "إنشاء حساب",
+  "createAccount": "إنشاء حساب",
+  "username": "اسم المستخدم",
+  "invalidUsername": "الرجاء إدخال اسم مستخدم صحيح",
+  "invalidEmail": "الرجاء إدخال بريد إلكتروني صحيح",
+  "passwordTooShort": "كلمة المرور يجب أن تكون على الأقل 6 أحرف",
+  "register": "تسجيل",
+  "accountCreatedSuccessfully": "تم إنشاء الحساب بنجاح",
+  "invalidCredentials": "يرجى ملء جميع الحقول",
+  "alreadyHaveAnAccount": "هل لديك حساب بالفعل؟",
   "somethingWentWrong": "حدث خطأ ما",
   "unexpectedError": "حدث خطأ غير متوقع",
   "profilePicture": "صورة الملف الشخصي",
@@ -109,3 +118,4 @@
   "saving": "جارٍ الحفظ...",
   "failedToSaveChanges": "فشل حفظ التعديلات"
 }
+
