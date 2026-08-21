@@ -1,5 +1,5 @@
 import 'package:ecommerceapp/core/settings/app_settings.dart';
-import 'package:ecommerceapp/features/authentication/screens/login_screen.dart';
+import 'package:ecommerceapp/features/authentication/presentation/pages/login_page.dart';
 import 'package:ecommerceapp/features/settings/screens/about_app_screen.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -45,7 +45,7 @@ class SettingsScreen extends StatelessWidget {
 
                 Navigator.pushNamedAndRemoveUntil(
                   context,
-                  LoginScreen.screenRoute,
+                  LoginPage.screenRoute,
                       (route) => false,
                 );
               },
