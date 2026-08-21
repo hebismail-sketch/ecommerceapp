@@ -7,8 +7,9 @@ import 'package:ecommerceapp/features/admin/screens/admin_home.dart';
 import 'package:ecommerceapp/features/products/presentation/pages/add_product_page.dart';
 import 'package:ecommerceapp/features/products/presentation/pages/mange_products_page.dart';
 
-import 'package:ecommerceapp/features/authentication/screens/login_screen.dart';
-import 'package:ecommerceapp/features/authentication/screens/register_screen.dart';
+import 'package:ecommerceapp/features/authentication/presentation/pages/login_page.dart';
+import 'package:ecommerceapp/features/authentication/presentation/pages/register_page.dart';
+import 'package:ecommerceapp/features/authentication/presentation/manager/authentication_bloc.dart';
 
 import 'package:ecommerceapp/features/products/presentation/manager/product_cubit.dart';
 import 'package:ecommerceapp/features/carts/presentation/manager/cart_cubit.dart';
@@ -61,6 +62,12 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider.value(value: appSettings),
         
+        // Authentication BLoC
+        BlocProvider(
+          create: (_) => InjectionContainer.authenticationBloc
+            ..add(const CheckAuthStatusEvent()),
+        ),
+
         // Product Cubit
         BlocProvider(create: (_) => InjectionContainer.productCubit..loadProducts()),
         
@@ -119,11 +126,11 @@ class MyApp extends StatelessWidget {
         );
       },
       initialRoute: FirebaseAuth.instance.currentUser != null
-          ? MainScreen.screenRoute
-          : RegisterScreen.screenRoute,
-      routes: {
-        RegisterScreen.screenRoute: (_) => const RegisterScreen(),
-        LoginScreen.screenRoute: (_) => const LoginScreen(),
+           ? MainScreen.screenRoute
+           : RegisterPage.screenRoute,
+       routes: {
+         RegisterPage.screenRoute: (_) => const RegisterPage(),
+         LoginPage.screenRoute: (_) => const LoginPage(),
         HomeScreen.screenRoute: (_) => const HomeScreen(),
 
 
