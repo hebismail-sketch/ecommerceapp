@@ -41,11 +41,18 @@ import '../../features/favorites/domain/usecases/get_favorites.dart';
 import '../../features/favorites/domain/usecases/add_favorite.dart';
 import '../../features/favorites/domain/usecases/delete_favorite.dart';
 import '../../features/favorites/presentation/manager/favorite_cubit.dart';
-
+// Home Feature Imports
+import '../../features/home/data/datasources/home_remote_data_source.dart';
+import '../../features/home/data/datasources/home_remote_data_source_impl.dart';
+import '../../features/home/data/repositories/home_repository_impl.dart';
+import '../../features/home/domain/repositories/home_repository.dart';
+import '../../features/home/domain/usecases/get_home_data_usecase.dart';
+import '../../features/home/presentation/manager/home_cubit.dart';
 class InjectionContainer {
   static late ProductCubit productCubit;
   static late CartCubit cartCubit;
   static late FavoriteCubit favoriteCubit;
+  static late HomeCubit homeCubit;
   static late AuthenticationBloc authenticationBloc;
 
   static void init() {
@@ -68,6 +75,16 @@ class InjectionContainer {
       logoutUseCase: LogoutUseCase(repository: authRepository),
       getCurrentUserUseCase: GetCurrentUserUseCase(repository: authRepository),
       saveDeviceTokenUseCase: SaveDeviceTokenUseCase(repository: authRepository),
+    );
+        // ==========================================
+    // 1. HOME FEATURE INITIALIZATION
+    // ==========================================
+    final HomeRemoteDataSource homeRemoteDataSource =
+        HomeRemoteDataSourceImpl(firestore: firestore);
+    final HomeRepository homeRepository =
+        HomeRepositoryImpl(remoteDataSource: homeRemoteDataSource);
+    homeCubit = HomeCubit(
+      getHomeDataUseCase: GetHomeDataUseCase(repository: homeRepository),
     );
 
     // ==========================================
