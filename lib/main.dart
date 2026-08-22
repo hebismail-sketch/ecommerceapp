@@ -11,11 +11,7 @@ import 'package:ecommerceapp/features/authentication/presentation/pages/login_pa
 import 'package:ecommerceapp/features/authentication/presentation/pages/register_page.dart';
 import 'package:ecommerceapp/features/authentication/presentation/manager/authentication_bloc.dart';
 
-import 'package:ecommerceapp/features/products/presentation/manager/product_cubit.dart';
-import 'package:ecommerceapp/features/carts/presentation/manager/cart_cubit.dart';
-import 'package:ecommerceapp/features/favorites/presentation/manager/favorite_cubit.dart';
 import 'package:ecommerceapp/features/favorites/presentation/pages/favorite_page.dart';
-
 
 import 'package:ecommerceapp/features/carts/presentation/pages/cart_page.dart';
 
@@ -82,7 +78,17 @@ Future<void> main() async {
             return cubit;
           },
         ),
-
+        // Home Cubit
+        BlocProvider(
+          create: (_) {
+            final user = FirebaseAuth.instance.currentUser;
+            final cubit = InjectionContainer.homeCubit;
+            if (user != null) {
+              cubit.loadHomeData(user.uid);
+            }
+            return cubit;
+          },
+        ),
         // Favorite Cubit
         BlocProvider(
           create: (_) {
