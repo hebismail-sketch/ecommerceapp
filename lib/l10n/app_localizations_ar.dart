@@ -258,6 +258,33 @@ class AppLocalizationsAr extends AppLocalizations {
   String get signUp => 'إنشاء حساب';
 
   @override
+  String get createAccount => 'إنشاء حساب';
+
+  @override
+  String get username => 'اسم المستخدم';
+
+  @override
+  String get invalidUsername => 'الرجاء إدخال اسم مستخدم صحيح';
+
+  @override
+  String get invalidEmail => 'الرجاء إدخال بريد إلكتروني صحيح';
+
+  @override
+  String get passwordTooShort => 'كلمة المرور يجب أن تكون على الأقل 6 أحرف';
+
+  @override
+  String get register => 'تسجيل';
+
+  @override
+  String get accountCreatedSuccessfully => 'تم إنشاء الحساب بنجاح';
+
+  @override
+  String get invalidCredentials => 'يرجى ملء جميع الحقول';
+
+  @override
+  String get alreadyHaveAnAccount => 'هل لديك حساب بالفعل؟';
+
+  @override
   String get somethingWentWrong => 'حدث خطأ ما';
 
   @override

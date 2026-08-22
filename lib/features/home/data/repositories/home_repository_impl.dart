@@ -14,7 +14,7 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
-  Future<List<String>> getFeaturedProductIds() async {
+  Future<List<String>> getFeaturedProducts() async {
     return await remoteDataSource.getFeaturedProductIds();
   }
 }

@@ -259,6 +259,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signUp => 'Sign up';
 
   @override
+  String get createAccount => 'Create Account';
+
+  @override
+  String get username => 'Username';
+
+  @override
+  String get invalidUsername => 'Please enter a valid username';
+
+  @override
+  String get invalidEmail => 'Please enter a valid email';
+
+  @override
+  String get passwordTooShort => 'Password must be at least 6 characters';
+
+  @override
+  String get register => 'Register';
+
+  @override
+  String get accountCreatedSuccessfully => 'Account created successfully';
+
+  @override
+  String get invalidCredentials => 'Please fill all fields';
+
+  @override
+  String get alreadyHaveAnAccount => 'Already have an account?';
+
+  @override
   String get somethingWentWrong => 'Something went wrong';
 
   @override
