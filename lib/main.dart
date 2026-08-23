@@ -22,7 +22,7 @@ import 'package:ecommerceapp/features/main/screens/main_screen.dart';
 
 import 'package:ecommerceapp/features/orders/presentation/pages/order_screen.dart';
 
-import 'package:ecommerceapp/features/settings/screens/setting_screen.dart';
+import 'package:ecommerceapp/features/settings/presentation/pages/setting_screen.dart';
 
 import 'package:ecommerceapp/firebase_options.dart';
 

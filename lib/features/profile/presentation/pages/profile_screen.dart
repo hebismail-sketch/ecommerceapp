@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:ecommerceapp/features/orders/presentation/pages/order_screen.dart';
 import 'package:ecommerceapp/features/profile/presentation/manager/profile_cubit.dart';
-import 'package:ecommerceapp/features/settings/screens/setting_screen.dart';
+import 'package:ecommerceapp/features/settings/presentation/pages/setting_screen.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
