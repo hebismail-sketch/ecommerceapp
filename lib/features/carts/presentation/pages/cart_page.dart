@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-import '../../domain/entities/cart_entity.dart';
 import '../manager/cart_cubit.dart';
 import '../../../products/presentation/manager/product_cubit.dart';
 import '../../../../l10n/app_localizations.dart';

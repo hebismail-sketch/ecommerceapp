@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../manager/product_cubit.dart';
-import '../../domain/entities/product_entity.dart';
-import 'add_product_page.dart';
 
 class ManageProductsPage extends StatelessWidget {
   const ManageProductsPage({super.key});

@@ -1,7 +1,5 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import '../manager/product_cubit.dart';
 import '../../domain/entities/product_entity.dart';
 
@@ -30,9 +28,6 @@ class _AddProductPageState extends State<AddProductPage> {
   final _locationEnController = TextEditingController();
   final _descriptionArController = TextEditingController();
   final _descriptionEnController = TextEditingController();
-
-  File? _selectedImage;
-  bool _isLoading = false;
 
   @override
   void initState() {
