@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ecommerceapp/core/services/cloudinary_service.dart';
 import 'package:ecommerceapp/features/orders/presentation/pages/order_screen.dart';
+import 'package:ecommerceapp/features/profile/presentation/manager/profile_cubit.dart';
 import 'package:ecommerceapp/features/settings/screens/setting_screen.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -29,7 +29,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    _loadProfileImage();
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      context.read<ProfileCubit>().loadProfile(user.uid);
+    }
   }
 
   Future<void> _pickImage() async {
@@ -65,24 +68,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
 
     try {
-      String? imageUrl = _profileImageUrl;
-
-      if (_selectedImage != null) {
-        imageUrl = await CloudinaryService.uploadProfileImage(
-          _selectedImage!,
-        );
-      }
-
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .update({
-        'profileImageUrl': imageUrl ?? FieldValue.delete(),
-      });
+      await context.read<ProfileCubit>().saveImage(
+        userId: user.uid,
+        selectedImage: _selectedImage,
+        currentImageUrl: _profileImageUrl,
+      );
 
       if (!mounted) return;
 
       final l10n = AppLocalizations.of(context)!;
+      final state = context.read<ProfileCubit>().state;
+      if (state is ProfileFailure) {
+        throw Exception(state.message);
+      }
+      final imageUrl = state is ProfileLoaded ? state.profile.imageUrl : null;
 
       setState(() {
         _profileImageUrl = imageUrl;
@@ -111,35 +110,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         });
       }
     }
-  }
-
-  Future<void> _loadProfileImage() async {
-    final user = FirebaseAuth.instance.currentUser;
-
-    if (user == null) {
-      return;
-    }
-
-    final document = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(user.uid)
-        .get();
-
-    final data = document.data();
-
-    if (data == null) {
-      return;
-    }
-
-    final imageUrl = data['profileImageUrl'] as String?;
-
-    if (!mounted) {
-      return;
-    }
-
-    setState(() {
-      _profileImageUrl = imageUrl;
-    });
   }
 
   void _showImageEditor() {

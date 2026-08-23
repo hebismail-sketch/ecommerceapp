@@ -15,7 +15,7 @@ import 'package:ecommerceapp/features/favorites/presentation/pages/favorite_page
 
 import 'package:ecommerceapp/features/carts/presentation/pages/cart_page.dart';
 
-import 'package:ecommerceapp/features/profile/screens/profile_screen.dart';
+import 'package:ecommerceapp/features/profile/presentation/pages/profile_screen.dart';
 import 'package:ecommerceapp/features/home/presentation/pages/home_page.dart';
 
 import 'package:ecommerceapp/features/main/screens/main_screen.dart';
@@ -101,6 +101,16 @@ Future<void> main() async {
         ),
 
         BlocProvider(create: (_) => InjectionContainer.orderCubit),
+        BlocProvider(
+          create: (_) {
+            final user = FirebaseAuth.instance.currentUser;
+            final cubit = InjectionContainer.profileCubit;
+            if (user != null) {
+              cubit.loadProfile(user.uid);
+            }
+            return cubit;
+          },
+        ),
       ],
       child: const MyApp(),
     ),

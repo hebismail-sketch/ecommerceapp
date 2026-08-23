@@ -50,6 +50,13 @@ import '../../features/orders/domain/usecases/delete_order.dart';
 import '../../features/orders/domain/usecases/get_orders.dart';
 import '../../features/orders/domain/usecases/update_order.dart';
 import '../../features/orders/presentation/manager/order_cubit.dart';
+// Profile Feature Imports
+import '../../features/profile/data/datasources/profile_remote_data_source.dart';
+import '../../features/profile/data/repositories/profile_repository_impl.dart';
+import '../../features/profile/domain/repositories/profile_repository.dart';
+import '../../features/profile/domain/usecases/get_profile.dart';
+import '../../features/profile/domain/usecases/save_profile_image.dart';
+import '../../features/profile/presentation/manager/profile_cubit.dart';
 // Home Feature Imports
 import '../../features/home/data/datasources/home_remote_data_source.dart';
 import '../../features/home/data/datasources/home_remote_data_source_impl.dart';
@@ -64,6 +71,7 @@ class InjectionContainer {
   static late HomeCubit homeCubit;
   static late AuthenticationBloc authenticationBloc;
   static late OrderCubit orderCubit;
+  static late ProfileCubit profileCubit;
 
   static void init() {
     final firestore = FirebaseFirestore.instance;
@@ -150,6 +158,18 @@ class InjectionContainer {
       addOrderUseCase: AddOrder(orderRepository),
       updateOrderUseCase: UpdateOrder(orderRepository),
       deleteOrderUseCase: DeleteOrder(orderRepository),
+    );
+
+    // ==========================================
+    // 5. PROFILE FEATURE INITIALIZATION
+    // ==========================================
+    final ProfileRemoteDataSource profileRemoteDataSource =
+        ProfileRemoteDataSourceImpl(firestore: firestore);
+    final ProfileRepository profileRepository =
+        ProfileRepositoryImpl(remoteDataSource: profileRemoteDataSource);
+    profileCubit = ProfileCubit(
+      getProfileUseCase: GetProfile(profileRepository),
+      saveProfileImageUseCase: SaveProfileImage(profileRepository),
     );
   }
 }

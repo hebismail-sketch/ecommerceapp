@@ -1,6 +1,6 @@
 import 'package:ecommerceapp/core/widgets/profile_avatar.dart';
 import 'package:ecommerceapp/features/home/presentation/widgets/home_body.dart';
-import 'package:ecommerceapp/features/profile/screens/profile_screen.dart';
+import 'package:ecommerceapp/features/profile/presentation/pages/profile_screen.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
