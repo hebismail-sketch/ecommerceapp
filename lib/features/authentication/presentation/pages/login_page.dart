@@ -3,7 +3,7 @@ import 'package:ecommerceapp/core/theme/app_text_style.dart';
 import 'package:ecommerceapp/core/utils/app_snackbar.dart';
 import 'package:ecommerceapp/core/widgets/app_button.dart';
 import 'package:ecommerceapp/core/widgets/app_text_field.dart';
-import 'package:ecommerceapp/features/admin/screens/admin_home.dart';
+import 'package:ecommerceapp/features/admin/presentation/pages/admin_home.dart';
 import 'package:ecommerceapp/features/authentication/presentation/manager/authentication_bloc.dart';
 import 'package:ecommerceapp/features/authentication/presentation/pages/register_page.dart';
 import 'package:ecommerceapp/features/main/screens/main_screen.dart';

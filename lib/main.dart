@@ -3,7 +3,7 @@ import 'package:ecommerceapp/core/services/injection_container.dart';
 import 'package:ecommerceapp/core/settings/app_settings.dart';
 import 'package:ecommerceapp/core/theme/app_theme.dart';
 
-import 'package:ecommerceapp/features/admin/screens/admin_home.dart';
+import 'package:ecommerceapp/features/admin/presentation/pages/admin_home.dart';
 import 'package:ecommerceapp/features/products/presentation/pages/add_product_page.dart';
 import 'package:ecommerceapp/features/products/presentation/pages/mange_products_page.dart';
 

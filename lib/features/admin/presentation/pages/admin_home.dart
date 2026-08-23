@@ -1,4 +1,5 @@
-import 'package:ecommerceapp/features/admin/widgets/dashboard_card.dart';
+
+import 'package:ecommerceapp/features/admin/presentation/widgets/dashboard_card.dart';
 import 'package:ecommerceapp/features/products/presentation/manager/product_cubit.dart';
 import 'package:ecommerceapp/features/products/presentation/pages/mange_products_page.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
