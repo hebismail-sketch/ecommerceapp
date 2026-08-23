@@ -16,7 +16,7 @@ import 'package:ecommerceapp/features/favorites/presentation/pages/favorite_page
 import 'package:ecommerceapp/features/carts/presentation/pages/cart_page.dart';
 
 import 'package:ecommerceapp/features/profile/screens/profile_screen.dart';
-import 'package:ecommerceapp/features/home/screens/home_screen.dart';
+import 'package:ecommerceapp/features/home/presentation/pages/home_page.dart';
 
 import 'package:ecommerceapp/features/main/screens/main_screen.dart';
 
@@ -137,7 +137,7 @@ class MyApp extends StatelessWidget {
        routes: {
          RegisterPage.screenRoute: (_) => const RegisterPage(),
          LoginPage.screenRoute: (_) => const LoginPage(),
-        HomeScreen.screenRoute: (_) => const HomeScreen(),
+        HomePage.screenRoute: (_) => const HomePage(),
 
 
         AdminHome.screenRoute: (_) => const AdminHome(),

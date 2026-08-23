@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:ecommerceapp/features/home/screens/home_screen.dart';
-import 'package:ecommerceapp/features/favorites/screens/favorite_screen.dart';
+import 'package:ecommerceapp/features/home/presentation/pages/home_page.dart';
+import 'package:ecommerceapp/features/favorites/presentation/pages/favorite_page.dart';
 import 'package:ecommerceapp/features/orders/screens/order_screen.dart';
-import 'package:ecommerceapp/features/carts/screens/checkout_screen.dart';
+import 'package:ecommerceapp/features/carts/presentation/pages/cart_page.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 
 class MainScreen extends StatefulWidget {
@@ -19,10 +19,10 @@ class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = const [
-    HomeScreen(),
-    FavoriteScreen(),
+    HomePage(),
+    FavoritePage(),
     OrdersScreen(),
-    CheckOut(),
+    CartPage(),
   ];
 
   @override

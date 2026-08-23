@@ -5,7 +5,7 @@ import 'package:ecommerceapp/core/utils/app_snackbar.dart';
 import 'package:ecommerceapp/core/widgets/app_button.dart';
 import 'package:ecommerceapp/core/widgets/app_text_field.dart';
 import 'package:ecommerceapp/features/authentication/screens/login_screen.dart';
-import 'package:ecommerceapp/features/home/screens/home_screen.dart';
+import 'package:ecommerceapp/features/main/screens/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerceapp/core/notifications/notification_service.dart';
@@ -64,7 +64,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       AppSnackBar.success(context, 'Account created successfully');
 
-      Navigator.pushReplacementNamed(context, HomeScreen.screenRoute);
+      Navigator.pushReplacementNamed(context, MainScreen.screenRoute);
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
 

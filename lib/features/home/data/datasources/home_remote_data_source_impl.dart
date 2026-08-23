@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerceapp/core/constants/app_constants.dart';
 import 'package:ecommerceapp/features/home/data/datasources/home_remote_data_source.dart';
 import 'package:ecommerceapp/features/home/data/models/home_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   final FirebaseFirestore firestore;

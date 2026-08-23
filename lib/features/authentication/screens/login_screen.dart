@@ -6,7 +6,7 @@ import 'package:ecommerceapp/core/widgets/app_button.dart';
 import 'package:ecommerceapp/core/widgets/app_text_field.dart';
 import 'package:ecommerceapp/features/admin/screens/admin_home.dart';
 import 'package:ecommerceapp/features/authentication/screens/register_screen.dart';
-import 'package:ecommerceapp/features/home/screens/home_screen.dart';
+import 'package:ecommerceapp/features/main/screens/main_screen.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {
         Navigator.pushReplacementNamed(
           context,
-          HomeScreen.screenRoute,
+          MainScreen.screenRoute,
         );
       }
     } on FirebaseAuthException catch (e) {
