@@ -18,7 +18,7 @@ import 'package:ecommerceapp/features/carts/presentation/pages/cart_page.dart';
 import 'package:ecommerceapp/features/profile/presentation/pages/profile_screen.dart';
 import 'package:ecommerceapp/features/home/presentation/pages/home_page.dart';
 
-import 'package:ecommerceapp/features/main/screens/main_screen.dart';
+import 'package:ecommerceapp/features/main/presentation/pages/main_screen.dart';
 
 import 'package:ecommerceapp/features/orders/presentation/pages/order_screen.dart';
 

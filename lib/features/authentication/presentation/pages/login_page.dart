@@ -6,7 +6,7 @@ import 'package:ecommerceapp/core/widgets/app_text_field.dart';
 import 'package:ecommerceapp/features/admin/presentation/pages/admin_home.dart';
 import 'package:ecommerceapp/features/authentication/presentation/manager/authentication_bloc.dart';
 import 'package:ecommerceapp/features/authentication/presentation/pages/register_page.dart';
-import 'package:ecommerceapp/features/main/screens/main_screen.dart';
+import 'package:ecommerceapp/features/main/presentation/pages/main_screen.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
