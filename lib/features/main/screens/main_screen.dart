@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:ecommerceapp/features/home/presentation/pages/home_page.dart';
 import 'package:ecommerceapp/features/favorites/presentation/pages/favorite_page.dart';
-import 'package:ecommerceapp/features/orders/screens/order_screen.dart';
+import 'package:ecommerceapp/features/orders/presentation/pages/order_screen.dart';
 import 'package:ecommerceapp/features/carts/presentation/pages/cart_page.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 

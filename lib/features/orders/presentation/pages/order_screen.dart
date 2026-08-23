@@ -1,5 +1,5 @@
-import 'package:ecommerceapp/features/orders/controller/order_cubit.dart';
-import 'package:ecommerceapp/features/orders/widgets/order_card.dart';
+import 'package:ecommerceapp/features/orders/presentation/manager/order_cubit.dart';
+import 'package:ecommerceapp/features/orders/presentation/widgets/order_card.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -38,15 +38,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
       body: BlocBuilder<OrderCubit, OrderState>(
         builder: (context, state) {
           if (state is OrderLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (state is OrderFailure) {
-            return Center(
-              child: Text(state.message),
-            );
+            return Center(child: Text(state.message));
           }
 
           if (state is OrderSuccess) {
@@ -54,9 +50,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
               return Center(
                 child: Text(
                   l10n.noOrders,
-                  style: const TextStyle(
-                    fontSize: 18,
-                  ),
+                  style: const TextStyle(fontSize: 18),
                 ),
               );
             }
@@ -64,14 +58,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
             return ListView.separated(
               padding: const EdgeInsets.all(16),
               itemCount: state.orders.length,
-              separatorBuilder: (_, _) => const SizedBox(
-                height: 12,
+              separatorBuilder: (_, _) => const SizedBox(height: 12),
+              itemBuilder: (context, index) => OrderCard(
+                order: state.orders[index],
               ),
-              itemBuilder: (context, index) {
-                return OrderCard(
-                  order: state.orders[index],
-                );
-              },
             );
           }
 

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerceapp/core/services/cloudinary_service.dart';
-import 'package:ecommerceapp/features/orders/screens/order_screen.dart';
+import 'package:ecommerceapp/features/orders/presentation/pages/order_screen.dart';
 import 'package:ecommerceapp/features/settings/screens/setting_screen.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';

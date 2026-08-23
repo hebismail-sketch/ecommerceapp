@@ -13,7 +13,7 @@ class OrderLoading extends OrderState {
 }
 
 class OrderSuccess extends OrderState {
-  final List<OrderModel> orders;
+  final List<OrderEntity> orders;
 
   const OrderSuccess(this.orders);
 }

@@ -41,6 +41,15 @@ import '../../features/favorites/domain/usecases/get_favorites.dart';
 import '../../features/favorites/domain/usecases/add_favorite.dart';
 import '../../features/favorites/domain/usecases/delete_favorite.dart';
 import '../../features/favorites/presentation/manager/favorite_cubit.dart';
+// Order Feature Imports
+import '../../features/orders/data/datasources/order_remote_data_source.dart';
+import '../../features/orders/data/repositories/order_repository_impl.dart';
+import '../../features/orders/domain/repositories/order_repository.dart';
+import '../../features/orders/domain/usecases/add_order.dart';
+import '../../features/orders/domain/usecases/delete_order.dart';
+import '../../features/orders/domain/usecases/get_orders.dart';
+import '../../features/orders/domain/usecases/update_order.dart';
+import '../../features/orders/presentation/manager/order_cubit.dart';
 // Home Feature Imports
 import '../../features/home/data/datasources/home_remote_data_source.dart';
 import '../../features/home/data/datasources/home_remote_data_source_impl.dart';
@@ -54,6 +63,7 @@ class InjectionContainer {
   static late FavoriteCubit favoriteCubit;
   static late HomeCubit homeCubit;
   static late AuthenticationBloc authenticationBloc;
+  static late OrderCubit orderCubit;
 
   static void init() {
     final firestore = FirebaseFirestore.instance;
@@ -126,6 +136,20 @@ class InjectionContainer {
       getFavoritesUseCase: GetFavorites(favoriteRepository),
       addFavoriteUseCase: AddFavorite(favoriteRepository),
       deleteFavoriteUseCase: DeleteFavorite(favoriteRepository),
+    );
+
+    // ==========================================
+    // 4. ORDERS FEATURE INITIALIZATION
+    // ==========================================
+    final OrderRemoteDataSource orderRemoteDataSource =
+        OrderRemoteDataSourceImpl(firestore: firestore);
+    final OrderRepository orderRepository =
+        OrderRepositoryImpl(remoteDataSource: orderRemoteDataSource);
+    orderCubit = OrderCubit(
+      getOrdersUseCase: GetOrders(orderRepository),
+      addOrderUseCase: AddOrder(orderRepository),
+      updateOrderUseCase: UpdateOrder(orderRepository),
+      deleteOrderUseCase: DeleteOrder(orderRepository),
     );
   }
 }

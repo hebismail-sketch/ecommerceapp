@@ -20,8 +20,7 @@ import 'package:ecommerceapp/features/home/presentation/pages/home_page.dart';
 
 import 'package:ecommerceapp/features/main/screens/main_screen.dart';
 
-import 'package:ecommerceapp/features/orders/controller/order_cubit.dart';
-import 'package:ecommerceapp/features/orders/screens/order_screen.dart';
+import 'package:ecommerceapp/features/orders/presentation/pages/order_screen.dart';
 
 import 'package:ecommerceapp/features/settings/screens/setting_screen.dart';
 
@@ -101,7 +100,7 @@ Future<void> main() async {
           },
         ),
 
-        BlocProvider(create: (_) => OrderCubit()),
+        BlocProvider(create: (_) => InjectionContainer.orderCubit),
       ],
       child: const MyApp(),
     ),

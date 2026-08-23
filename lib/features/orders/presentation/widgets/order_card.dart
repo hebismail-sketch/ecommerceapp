@@ -1,4 +1,4 @@
-import 'package:ecommerceapp/features/orders/models/order_model.dart';
+import 'package:ecommerceapp/features/orders/domain/entities/order_entity.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -9,15 +9,12 @@ class OrderCard extends StatelessWidget {
     required this.order,
   });
 
-  final OrderModel order;
+  final OrderEntity order;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-
-    final formattedPrice =
-    NumberFormat('#,###').format(order.totalPrice);
-
+    final formattedPrice = NumberFormat('#,###').format(order.totalPrice);
     final formattedDate = DateFormat(
       'dd/MM/yyyy - hh:mm a',
     ).format(order.orderDate);
@@ -35,9 +32,7 @@ class OrderCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                const CircleAvatar(
-                  child: Icon(Icons.shopping_bag),
-                ),
+                const CircleAvatar(child: Icon(Icons.shopping_bag)),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
@@ -75,32 +70,22 @@ class OrderCard extends StatelessWidget {
             const SizedBox(height: 10),
             Row(
               children: [
-                const Icon(
-                  Icons.calendar_today_outlined,
-                  size: 18,
-                ),
+                const Icon(Icons.calendar_today_outlined, size: 18),
                 const SizedBox(width: 8),
                 Text(
                   formattedDate,
-                  style: const TextStyle(
-                    color: Colors.grey,
-                  ),
+                  style: const TextStyle(color: Colors.grey),
                 ),
               ],
             ),
             const SizedBox(height: 10),
             Row(
               children: [
-                const Icon(
-                  Icons.directions_car_outlined,
-                  size: 20,
-                ),
+                const Icon(Icons.directions_car_outlined, size: 20),
                 const SizedBox(width: 8),
                 Text(
                   l10n.carsCount(order.carIds.length),
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.w500),
                 ),
               ],
             ),
