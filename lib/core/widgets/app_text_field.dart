@@ -7,6 +7,7 @@ class AppTextField extends StatelessWidget {
     required this.hintText,
     this.keyboardType = TextInputType.text,
     this.obscureText = false,
+    this.enabled = true,
     this.validator,
     this.maxLines = 1,
   });
@@ -15,6 +16,7 @@ class AppTextField extends StatelessWidget {
   final String hintText;
   final TextInputType keyboardType;
   final bool obscureText;
+  final bool enabled;
   final String? Function(String?)? validator;
   final int maxLines;
 
@@ -26,6 +28,7 @@ class AppTextField extends StatelessWidget {
         controller: controller,
         keyboardType: keyboardType,
         obscureText: obscureText,
+        enabled: enabled,
         maxLines: maxLines,
         validator: validator,
         decoration: InputDecoration(
