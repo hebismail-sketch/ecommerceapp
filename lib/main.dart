@@ -23,6 +23,7 @@ import 'package:ecommerceapp/features/main/presentation/pages/main_screen.dart';
 import 'package:ecommerceapp/features/orders/presentation/pages/order_screen.dart';
 
 import 'package:ecommerceapp/features/settings/presentation/pages/setting_screen.dart';
+import 'package:ecommerceapp/features/chat/presentation/pages/user_chat_page.dart';
 
 import 'package:ecommerceapp/firebase_options.dart';
 
@@ -56,7 +57,7 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: appSettings),
-        
+
         // Authentication BLoC
         BlocProvider(
           create: (_) => InjectionContainer.authenticationBloc
@@ -65,7 +66,7 @@ Future<void> main() async {
 
         // Product Cubit
         BlocProvider(create: (_) => InjectionContainer.productCubit..loadProducts()),
-        
+
         // Cart Cubit
         BlocProvider(
           create: (_) {
@@ -159,6 +160,7 @@ class MyApp extends StatelessWidget {
         OrdersScreen.screenRoute: (_) => const OrdersScreen(),
         SettingsScreen.screenRoute: (_) => const SettingsScreen(),
         ProfileScreen.screenRoute: (_) => const ProfileScreen(),
+        UserChatPage.screenRoute: (_) => const UserChatPage(),
       },
     );
   }
