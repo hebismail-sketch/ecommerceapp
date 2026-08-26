@@ -64,11 +64,26 @@ import '../../features/home/data/repositories/home_repository_impl.dart';
 import '../../features/home/domain/repositories/home_repository.dart';
 import '../../features/home/domain/usecases/get_home_data_usecase.dart';
 import '../../features/home/presentation/manager/home_cubit.dart';
+
+// Chat Feature Imports
+import '../../features/chat/data/datasources/chat_remote_data_source.dart';
+import '../../features/chat/data/datasources/chat_remote_data_source_impl.dart';
+import '../../features/chat/data/repositories/chat_repository_impl.dart';
+import '../../features/chat/domain/repositories/chat_repository.dart';
+import '../../features/chat/domain/usecases/mark_messages_as_read.dart';
+import '../../features/chat/domain/usecases/send_message.dart';
+import '../../features/chat/domain/usecases/update_conversation_status.dart';
+import '../../features/chat/domain/usecases/watch_admin_conversations.dart';
+import '../../features/chat/domain/usecases/watch_conversation.dart';
+import '../../features/chat/domain/usecases/watch_messages.dart';
+import '../../features/chat/presentation/manager/chat_cubit.dart';
+
 class InjectionContainer {
   static late ProductCubit productCubit;
   static late CartCubit cartCubit;
   static late FavoriteCubit favoriteCubit;
   static late HomeCubit homeCubit;
+  static late ChatCubit chatCubit;
   static late AuthenticationBloc authenticationBloc;
   static late OrderCubit orderCubit;
   static late ProfileCubit profileCubit;
@@ -170,6 +185,25 @@ class InjectionContainer {
     profileCubit = ProfileCubit(
       getProfileUseCase: GetProfile(profileRepository),
       saveProfileImageUseCase: SaveProfileImage(profileRepository),
+    );
+
+    // ==========================================
+    // 6. CHAT FEATURE INITIALIZATION
+    // ==========================================
+    final ChatRemoteDataSource chatRemoteDataSource =
+        ChatRemoteDataSourceImpl(firestore: firestore);
+    final ChatRepository chatRepository =
+        ChatRepositoryImpl(remoteDataSource: chatRemoteDataSource);
+
+    chatCubit = ChatCubit(
+      watchConversationUseCase: WatchConversation(chatRepository),
+      watchAdminConversationsUseCase:
+          WatchAdminConversations(chatRepository),
+      watchMessagesUseCase: WatchMessages(chatRepository),
+      sendMessageUseCase: SendMessage(chatRepository),
+      markMessagesAsReadUseCase: MarkMessagesAsRead(chatRepository),
+      updateConversationStatusUseCase:
+          UpdateConversationStatus(chatRepository),
     );
   }
 }

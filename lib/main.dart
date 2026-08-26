@@ -102,6 +102,12 @@ Future<void> main() async {
         ),
 
         BlocProvider(create: (_) => InjectionContainer.orderCubit),
+
+        // Chat Cubit
+        BlocProvider(
+          create: (_) => InjectionContainer.chatCubit,
+        ),
+
         BlocProvider(
           create: (_) {
             final user = FirebaseAuth.instance.currentUser;
