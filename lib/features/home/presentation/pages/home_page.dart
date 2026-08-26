@@ -1,6 +1,7 @@
 import 'package:ecommerceapp/core/widgets/profile_avatar.dart';
 import 'package:ecommerceapp/features/home/presentation/widgets/home_body.dart';
 import 'package:ecommerceapp/features/profile/presentation/pages/profile_screen.dart';
+import 'package:ecommerceapp/features/chat/presentation/pages/user_chat_page.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
@@ -26,6 +27,17 @@ class HomePage extends StatelessWidget {
           AppLocalizations.of(context)!.carStore,
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.chat_outlined),
+            onPressed: () {
+              Navigator.pushNamed(
+                context,
+                UserChatPage.screenRoute,
+              );
+            },
+          ),
+        ],
       ),
       body: const HomeBody(),
     );
