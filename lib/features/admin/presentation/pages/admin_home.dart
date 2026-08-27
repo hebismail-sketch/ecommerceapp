@@ -1,5 +1,7 @@
+// File: lib/features/admin/presentation/pages/admin_home.dart
 
 import 'package:ecommerceapp/features/admin/presentation/widgets/dashboard_card.dart';
+import 'package:ecommerceapp/features/chat/presentation/pages/admin_conversations_page.dart';
 import 'package:ecommerceapp/features/products/presentation/manager/product_cubit.dart';
 import 'package:ecommerceapp/features/products/presentation/pages/mange_products_page.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
@@ -79,6 +81,19 @@ class AdminHome extends StatelessWidget {
                     Navigator.pushNamed(
                       context,
                       ManageProductsPage.screenRoute,
+                    );
+                  },
+                ),
+                // Customer inquiries / chat management card for Admin
+                DashboardCard(
+                  title: 'Customer Chats',
+                  value: l10n.open,
+                  icon: Icons.chat_bubble_outline,
+                  color: Colors.blue,
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      AdminConversationsPage.screenRoute,
                     );
                   },
                 ),
