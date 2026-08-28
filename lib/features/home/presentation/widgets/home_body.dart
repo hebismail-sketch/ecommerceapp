@@ -8,7 +8,7 @@ import 'package:ecommerceapp/features/favorites/presentation/manager/favorite_cu
 import 'package:ecommerceapp/features/products/presentation/manager/product_cubit.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 
-/// HomeBody widget containing the promotional banner, sticky categories, and product grid with favorite toggle.
+/// HomeBody widget containing the promotional banner, sticky categories, and product grid with full dual-language support.
 class HomeBody extends StatefulWidget {
   const HomeBody({super.key});
 
@@ -18,16 +18,6 @@ class HomeBody extends StatefulWidget {
 
 class _HomeBodyState extends State<HomeBody> {
   int selectedCategoryIndex = 0;
-
-  // List of product categories with icons and titles
-  final List<Map<String, dynamic>> categories = [
-    {'icon': Icons.watch, 'title': 'Watches'},
-    {'icon': Icons.shopping_bag_outlined, 'title': 'Bags'},
-    {'icon': Icons.auto_awesome, 'title': 'Beauty'},
-    {'icon': Icons.checkroom, 'title': 'Clothing'},
-    {'icon': Icons.diamond_outlined, 'title': 'Accessories'},
-    {'icon': Icons.directions_car, 'title': 'Cars'},
-  ];
 
   @override
   void initState() {
@@ -42,9 +32,23 @@ class _HomeBodyState extends State<HomeBody> {
     }
   }
 
+  // Helper method to retrieve localized category list
+  List<Map<String, dynamic>> _getCategories(AppLocalizations l10n) {
+    return [
+      {'icon': Icons.watch, 'title': l10n.watches},
+      {'icon': Icons.shopping_bag_outlined, 'title': l10n.bags},
+      {'icon': Icons.auto_awesome, 'title': l10n.beauty},
+      {'icon': Icons.checkroom, 'title': l10n.clothing},
+      {'icon': Icons.diamond_outlined, 'title': l10n.accessories},
+      {'icon': Icons.directions_car, 'title': l10n.cars},
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+    final categories = _getCategories(l10n);
 
     return NestedScrollView(
       headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -75,9 +79,9 @@ class _HomeBodyState extends State<HomeBody> {
                           color: Colors.white.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(6),
                         ),
-                        child: const Text(
-                          'Best Seller!',
-                          style: TextStyle(
+                        child: Text(
+                          l10n.bestSeller,
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 11,
                             fontWeight: FontWeight.bold,
@@ -85,9 +89,9 @@ class _HomeBodyState extends State<HomeBody> {
                         ),
                       ),
                       const SizedBox(height: 6),
-                      const Text(
-                        'Discover the perfect shopping journey!',
-                        style: TextStyle(
+                      Text(
+                        l10n.bannerHeadline,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -106,9 +110,9 @@ class _HomeBodyState extends State<HomeBody> {
                             ),
                           ),
                           onPressed: () {},
-                          child: const Text(
-                            'Shop Now!',
-                            style: TextStyle(fontSize: 11),
+                          child: Text(
+                            l10n.shopNow,
+                            style: const TextStyle(fontSize: 11),
                           ),
                         ),
                       ),
@@ -134,15 +138,15 @@ class _HomeBodyState extends State<HomeBody> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            'Categories',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          Text(
+                            l10n.categories,
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                           TextButton(
                             onPressed: () {},
-                            child: const Text(
-                              'See more',
-                              style: TextStyle(color: Colors.red, fontSize: 13),
+                            child: Text(
+                              l10n.seeMore,
+                              style: const TextStyle(color: Colors.red, fontSize: 13),
                             ),
                           ),
                         ],
@@ -196,9 +200,9 @@ class _HomeBodyState extends State<HomeBody> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Recommended',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            Text(
+              l10n.recommended,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
             Expanded(
@@ -228,6 +232,7 @@ class _HomeBodyState extends State<HomeBody> {
                       itemCount: state.products.length,
                       itemBuilder: (context, index) {
                         final product = state.products[index];
+                        final productName = isArabic ? product.nameAr : product.nameEn;
 
                         return Container(
                           decoration: BoxDecoration(
@@ -265,7 +270,8 @@ class _HomeBodyState extends State<HomeBody> {
 
                                       return Positioned(
                                         top: 8,
-                                        right: 8,
+                                        right: isArabic ? null : 8,
+                                        left: isArabic ? 8 : null,
                                         child: GestureDetector(
                                           onTap: () {
                                             final user = FirebaseAuth.instance.currentUser;
@@ -277,8 +283,8 @@ class _HomeBodyState extends State<HomeBody> {
                                                   );
                                             } else {
                                               ScaffoldMessenger.of(context).showSnackBar(
-                                                const SnackBar(
-                                                  content: Text('Please log in first'),
+                                                SnackBar(
+                                                  content: Text(l10n.pleaseLoginFirst),
                                                 ),
                                               );
                                             }
@@ -314,14 +320,14 @@ class _HomeBodyState extends State<HomeBody> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      product.nameEn,
+                                      productName,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
-                                      '${product.price} EGP',
+                                      '${product.price}${l10n.egp}',
                                       style: const TextStyle(
                                         color: Colors.red,
                                         fontWeight: FontWeight.bold,
@@ -330,12 +336,15 @@ class _HomeBodyState extends State<HomeBody> {
                                     ),
                                     const SizedBox(height: 6),
                                     Row(
-                                      children: const [
-                                        Icon(Icons.star, size: 12, color: Colors.amber),
-                                        SizedBox(width: 4),
-                                        Text('4.9', style: TextStyle(fontSize: 10, color: Colors.grey)),
-                                        SizedBox(width: 6),
-                                        Text('| 56 Sold', style: TextStyle(fontSize: 10, color: Colors.grey)),
+                                      children: [
+                                        const Icon(Icons.star, size: 12, color: Colors.amber),
+                                        const SizedBox(width: 4),
+                                        const Text('4.9', style: TextStyle(fontSize: 10, color: Colors.grey)),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          '| ${l10n.sold('56')}',
+                                          style: const TextStyle(fontSize: 10, color: Colors.grey),
+                                        ),
                                       ],
                                     ),
                                   ],
