@@ -26,21 +26,23 @@ class _AdminChatDetailPageState extends State<AdminChatDetailPage> {
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   ConversationEntity? _conversation;
+  bool _isInitialized = false;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (_conversation == null) {
+    if (!_isInitialized) {
       final args = ModalRoute.of(context)?.settings.arguments;
       if (args is ConversationEntity) {
         _conversation = args;
+        _isInitialized = true;
         // Watch messages for this specific conversation
         context.read<ChatCubit>().watchMessages(_conversation!.id);
         // Mark existing messages as read by admin
         context.read<ChatCubit>().markMessagesAsRead(
-              conversationId: _conversation!.id,
-              readerRole: AppConstants.adminRole,
-            );
+          conversationId: _conversation!.id,
+          readerRole: AppConstants.adminRole,
+        );
       }
     }
   }
@@ -89,10 +91,10 @@ class _AdminChatDetailPageState extends State<AdminChatDetailPage> {
 
     _messageController.clear();
     await context.read<ChatCubit>().sendMessage(
-          conversationId: conversationId,
-          message: message,
-          conversation: updatedConversation,
-        );
+      conversationId: conversationId,
+      message: message,
+      conversation: updatedConversation,
+    );
     _scrollToBottom();
   }
 
@@ -146,8 +148,9 @@ class _AdminChatDetailPageState extends State<AdminChatDetailPage> {
           ],
         ),
         child: Column(
+
           crossAxisAlignment:
-              isMine ? CrossAlignment.end : CrossAlignment.start,
+          isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
@@ -321,9 +324,6 @@ class _AdminChatDetailPageState extends State<AdminChatDetailPage> {
       ),
       body: BlocConsumer<ChatCubit, ChatState>(
         listener: (context, state) {
-          if (state is ChatLoaded) {
-            _scrollToBottom();
-          }
           if (state is ChatFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message)),

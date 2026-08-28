@@ -170,7 +170,7 @@ class _UserChatPageState extends State<UserChatPage> {
         ),
         child: Column(
           crossAxisAlignment:
-              isMine ? CrossAlignment.end : CrossAlignment.start,
+              isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
