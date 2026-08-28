@@ -308,4 +308,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get failedToSaveChanges => 'Failed to save changes';
+
+  @override
+  String get chat => 'Chat';
 }

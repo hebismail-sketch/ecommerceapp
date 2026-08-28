@@ -116,5 +116,6 @@
   "myAccount": "My Account",
   "user": "User",
   "saving": "Saving...",
-  "failedToSaveChanges": "Failed to save changes"
+  "failedToSaveChanges": "Failed to save changes",
+  "chat":"Chat"
 }

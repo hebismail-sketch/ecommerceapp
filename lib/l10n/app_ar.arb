@@ -116,6 +116,7 @@
   "myAccount": "حسابي",
   "user": "المستخدم",
   "saving": "جارٍ الحفظ...",
-  "failedToSaveChanges": "فشل حفظ التعديلات"
+  "failedToSaveChanges": "فشل حفظ التعديلات",
+  "chat":"الدردشة"
 }
 

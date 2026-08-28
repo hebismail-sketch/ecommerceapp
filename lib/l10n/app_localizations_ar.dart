@@ -307,4 +307,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get failedToSaveChanges => 'فشل حفظ التعديلات';
+
+  @override
+  String get chat => 'الدردشة';
 }
