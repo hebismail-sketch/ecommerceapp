@@ -2,6 +2,7 @@
 
 import 'package:ecommerceapp/features/admin/presentation/widgets/dashboard_card.dart';
 import 'package:ecommerceapp/features/chat/presentation/pages/admin_conversations_page.dart';
+import 'package:ecommerceapp/features/notifications/presentation/pages/notifications_page.dart';
 import 'package:ecommerceapp/features/orders/presentation/pages/order_screen.dart';
 import 'package:ecommerceapp/features/products/presentation/manager/product_cubit.dart';
 import 'package:ecommerceapp/features/products/presentation/pages/add_product_page.dart';
@@ -128,18 +129,9 @@ class _AdminHomeState extends State<AdminHome> {
               ],
             ),
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(l10n.notifications)),
-              );
-            },
-          ),
-          // Direct Customer Chats Button
-          IconButton(
-            icon: const Icon(Icons.chat_outlined, color: Colors.black87),
-            onPressed: () {
               Navigator.pushNamed(
                 context,
-                AdminConversationsPage.screenRoute,
+                NotificationsPage.screenRoute,
               );
             },
           ),
@@ -261,7 +253,7 @@ class _AdminHomeState extends State<AdminHome> {
                   childAspectRatio: 1.15,
                   children: [
                     DashboardCard(
-                      title: l10n.totalCars,
+                      title: l10n.totalProducts,
                       value: products.length.toString(),
                       icon: Icons.inventory_2_outlined,
                       color: Colors.red.shade600,
@@ -321,8 +313,8 @@ class _AdminHomeState extends State<AdminHome> {
                 // Action 1: Add New Product
                 _buildActionTile(
                   context: context,
-                  title: l10n.addCar,
-                  subtitle: l10n.addCarSubtitle,
+                  title: l10n.addProduct,
+                  subtitle: l10n.addProductSubtitle,
                   icon: Icons.add_circle_outline,
                   color: Colors.red.shade600,
                   onTap: () {
@@ -336,8 +328,8 @@ class _AdminHomeState extends State<AdminHome> {
                 // Action 2: Manage Products
                 _buildActionTile(
                   context: context,
-                  title: l10n.manageCars,
-                  subtitle: l10n.manageCarsSubtitle,
+                  title: l10n.manageProducts,
+                  subtitle: l10n.manageProductsSubtitle,
                   icon: Icons.drive_file_rename_outline,
                   color: Colors.deepOrange,
                   onTap: () {
