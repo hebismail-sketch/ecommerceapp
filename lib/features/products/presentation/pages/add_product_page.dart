@@ -95,7 +95,7 @@ class _AddProductPageState extends State<AddProductPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: Colors.green,
-            content: Text(l10n.carAddedSuccessfully),
+            content: Text(l10n.productAddedSuccessfully),
           ),
         );
       }
@@ -123,7 +123,7 @@ class _AddProductPageState extends State<AddProductPage> {
       backgroundColor: Colors.grey.shade50,
       appBar: AppBar(
         title: Text(
-          isEditing ? l10n.editCar : l10n.addCar,
+          isEditing ? l10n.editProduct : l10n.addProduct,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -152,7 +152,7 @@ class _AddProductPageState extends State<AddProductPage> {
                   TextFormField(
                     controller: _imageUrlController,
                     decoration: InputDecoration(
-                      hintText: 'https://example.com/car-image.jpg',
+                      hintText: 'https://example.com/product-image.jpg',
                       prefixIcon: const Icon(Icons.link),
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
@@ -183,7 +183,7 @@ class _AddProductPageState extends State<AddProductPage> {
             ),
             const SizedBox(height: 16),
 
-            // Car Names (AR & EN)
+            // Product Names (AR & EN)
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -195,14 +195,14 @@ class _AddProductPageState extends State<AddProductPage> {
                 children: [
                   _buildTextField(
                     controller: _nameArController,
-                    label: '${l10n.carName} (عربي)',
-                    icon: Icons.directions_car,
+                    label: '${l10n.productName} (عربي)',
+                    icon: Icons.shopping_bag_outlined,
                   ),
                   const SizedBox(height: 12),
                   _buildTextField(
                     controller: _nameEnController,
-                    label: '${l10n.carName} (English)',
-                    icon: Icons.directions_car_outlined,
+                    label: '${l10n.productName} (English)',
+                    icon: Icons.shopping_bag_outlined,
                   ),
                 ],
               ),
@@ -334,7 +334,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 onPressed: () => _saveProduct(l10n),
                 icon: const Icon(Icons.check_circle_outline),
                 label: Text(
-                  isEditing ? l10n.saveChanges : l10n.addCarButton,
+                  isEditing ? l10n.saveChanges : l10n.addProductButton,
                   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),

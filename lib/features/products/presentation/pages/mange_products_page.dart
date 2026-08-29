@@ -11,7 +11,7 @@ class ManageProductsPage extends StatelessWidget {
 
   static const String screenRoute = 'manageProductPage';
 
-  void _confirmDelete(BuildContext context, String productId, String carName, AppLocalizations l10n) {
+  void _confirmDelete(BuildContext context, String productId, String productName, AppLocalizations l10n) {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -20,10 +20,10 @@ class ManageProductsPage extends StatelessWidget {
           children: [
             const Icon(Icons.warning_amber_rounded, color: Colors.red),
             const SizedBox(width: 8),
-            Text(l10n.deleteCar),
+            Text(l10n.deleteProduct),
           ],
         ),
-        content: Text('${l10n.deleteCarConfirmation}\n"$carName"'),
+        content: Text('${l10n.deleteProductConfirmation}\n"$productName"'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
@@ -40,7 +40,7 @@ class ManageProductsPage extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   backgroundColor: Colors.green,
-                  content: Text(l10n.carDeletedSuccessfully),
+                  content: Text(l10n.productDeletedSuccessfully),
                 ),
               );
             },
@@ -59,7 +59,7 @@ class ManageProductsPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
       appBar: AppBar(
-        title: Text(l10n.manageCars),
+        title: Text(l10n.manageProducts),
         centerTitle: true,
         elevation: 0,
       ),
@@ -70,7 +70,7 @@ class ManageProductsPage extends StatelessWidget {
           Navigator.pushNamed(context, AddProductPage.screenRoute);
         },
         icon: const Icon(Icons.add),
-        label: Text(l10n.addCar),
+        label: Text(l10n.addProduct),
       ),
       body: BlocBuilder<ProductCubit, ProductState>(
         builder: (context, state) {
@@ -96,13 +96,13 @@ class ManageProductsPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
-                      Icons.directions_car_outlined,
+                      Icons.inventory_2_outlined,
                       size: 64,
                       color: Colors.grey.shade400,
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      l10n.noCars,
+                      l10n.noProductsAvailable,
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.grey.shade600,
@@ -119,7 +119,7 @@ class ManageProductsPage extends StatelessWidget {
                         Navigator.pushNamed(context, AddProductPage.screenRoute);
                       },
                       icon: const Icon(Icons.add),
-                      label: Text(l10n.addCar),
+                      label: Text(l10n.addProduct),
                     ),
                   ],
                 ),
