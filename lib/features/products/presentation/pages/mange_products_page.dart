@@ -1,48 +1,257 @@
+// File: lib/features/products/presentation/pages/mange_products_page.dart
+
+import 'package:ecommerceapp/features/products/presentation/manager/product_cubit.dart';
+import 'package:ecommerceapp/features/products/presentation/pages/add_product_page.dart';
+import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../manager/product_cubit.dart';
 
 class ManageProductsPage extends StatelessWidget {
   const ManageProductsPage({super.key});
-static const String screenRoute='manageProductPage';
+
+  static const String screenRoute = 'manageProductPage';
+
+  void _confirmDelete(BuildContext context, String productId, String carName, AppLocalizations l10n) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Row(
+          children: [
+            const Icon(Icons.warning_amber_rounded, color: Colors.red),
+            const SizedBox(width: 8),
+            Text(l10n.deleteCar),
+          ],
+        ),
+        content: Text('${l10n.deleteCarConfirmation}\n"$carName"'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text(l10n.cancel),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+            ),
+            onPressed: () {
+              context.read<ProductCubit>().deleteProduct(productId);
+              Navigator.pop(dialogContext);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  backgroundColor: Colors.green,
+                  content: Text(l10n.carDeletedSuccessfully),
+                ),
+              );
+            },
+            child: Text(l10n.delete),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Manage Products'),
-        centerTitle: true,
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
+    final l10n = AppLocalizations.of(context)!;
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
 
+    return Scaffold(
+      backgroundColor: Colors.grey.shade50,
+      appBar: AppBar(
+        title: Text(l10n.manageCars),
+        centerTitle: true,
+        elevation: 0,
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Colors.red.shade600,
+        foregroundColor: Colors.white,
+        onPressed: () {
+          Navigator.pushNamed(context, AddProductPage.screenRoute);
         },
-        child: const Icon(Icons.add),
+        icon: const Icon(Icons.add),
+        label: Text(l10n.addCar),
       ),
       body: BlocBuilder<ProductCubit, ProductState>(
         builder: (context, state) {
           if (state is ProductLoading) {
             return const Center(child: CircularProgressIndicator());
           }
+
+          if (state is ProductFailure) {
+            return Center(
+              child: Text(
+                state.message,
+                style: const TextStyle(color: Colors.red),
+              ),
+            );
+          }
+
           if (state is ProductSuccess) {
-            return ListView.builder(
-              itemCount: state.products.length,
+            final products = state.products;
+
+            if (products.isEmpty) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.directions_car_outlined,
+                      size: 64,
+                      color: Colors.grey.shade400,
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      l10n.noCars,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey.shade600,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red.shade600,
+                        foregroundColor: Colors.white,
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(context, AddProductPage.screenRoute);
+                      },
+                      icon: const Icon(Icons.add),
+                      label: Text(l10n.addCar),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            return ListView.separated(
+              padding: const EdgeInsets.all(16),
+              itemCount: products.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
-                final product = state.products[index];
-                return ListTile(
-                  leading: Image.network(product.image, width: 50),
-                  title: Text(product.nameEn),
-                  subtitle: Text('${product.price} USD'),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete, color: Colors.red),
-                    onPressed: () {
-                      context.read<ProductCubit>().deleteProduct(product.id);
+                final product = products[index];
+                final name = isArabic ? product.nameAr : product.nameEn;
+                final brand = isArabic ? product.brandAr : product.brandEn;
+
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.04),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.all(12),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => AddProductPage(product: product),
+                        ),
+                      );
                     },
+                    leading: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.network(
+                        product.image,
+                        width: 70,
+                        height: 70,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stack) => Container(
+                          width: 70,
+                          height: 70,
+                          color: Colors.grey.shade100,
+                          child: const Icon(Icons.image_not_supported, color: Colors.grey),
+                        ),
+                      ),
+                    ),
+                    title: Text(
+                      name,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 4),
+                        Text(
+                          '${product.price} ${l10n.egp}',
+                          style: TextStyle(
+                            color: Colors.red.shade600,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade100,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text(
+                                brand,
+                                style: TextStyle(fontSize: 11, color: Colors.grey.shade700),
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade100,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text(
+                                '${product.year}',
+                                style: TextStyle(fontSize: 11, color: Colors.grey.shade700),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.edit_outlined, color: Colors.blue),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => AddProductPage(product: product),
+                              ),
+                            );
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete_outline, color: Colors.red),
+                          onPressed: () {
+                            _confirmDelete(context, product.id, name, l10n);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
             );
           }
-          return const SizedBox();
+
+          return const SizedBox.shrink();
         },
       ),
     );
