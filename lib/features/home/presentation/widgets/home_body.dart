@@ -3,6 +3,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ecommerceapp/features/products/presentation/pages/product_details_page.dart';
 
 import 'package:ecommerceapp/features/favorites/presentation/manager/favorite_cubit.dart';
 import 'package:ecommerceapp/features/products/presentation/manager/product_cubit.dart';
@@ -165,6 +166,7 @@ class _HomeBodyState extends State<HomeBody> {
                             padding: const EdgeInsets.symmetric(horizontal: 6),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
+
                               children: [
                                 Container(
                                   padding: const EdgeInsets.all(10),
@@ -234,123 +236,134 @@ class _HomeBodyState extends State<HomeBody> {
                         final product = state.products[index];
                         final productName = isArabic ? product.nameAr : product.nameEn;
 
-                        return Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.grey.shade200),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.shade100,
-                                blurRadius: 5,
-                                offset: const Offset(0, 2),
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ProductDetailsPage(product: product),
                               ),
-                            ],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Stack(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                                    child: Image.network(
-                                      product.image,
-                                      height: 100,
-                                      width: double.infinity,
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (context, error, stackTrace) =>
-                                          const SizedBox(height: 100, child: Icon(Icons.image_not_supported)),
-                                    ),
-                                  ),
-                                  // Real-time favorite heart toggle button
-                                  BlocBuilder<FavoriteCubit, FavoriteState>(
-                                    builder: (context, favState) {
-                                      final isFav = context.read<FavoriteCubit>().isFavorite(product.id);
-
-                                      return Positioned(
-                                        top: 8,
-                                        right: isArabic ? null : 8,
-                                        left: isArabic ? 8 : null,
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            final user = FirebaseAuth.instance.currentUser;
-                                            if (user != null) {
-                                              // Toggle product in user's favorites
-                                              context.read<FavoriteCubit>().toggleFavorite(
-                                                    user.uid,
-                                                    product.id,
-                                                  );
-                                            } else {
-                                              ScaffoldMessenger.of(context).showSnackBar(
-                                                SnackBar(
-                                                  content: Text(l10n.pleaseLoginFirst),
-                                                ),
-                                              );
-                                            }
-                                          },
-                                          child: Container(
-                                            padding: const EdgeInsets.all(5),
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              shape: BoxShape.circle,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.black.withOpacity(0.12),
-                                                  blurRadius: 4,
-                                                  offset: const Offset(0, 2),
-                                                ),
-                                              ],
-                                            ),
-                                            child: Icon(
-                                              isFav ? Icons.favorite : Icons.favorite_border,
-                                              size: 18,
-                                              color: isFav ? Colors.red : Colors.grey.shade600,
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                            );
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: Colors.grey.shade200),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.shade100,
+                                  blurRadius: 5,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Stack(
                                   children: [
-                                    Text(
-                                      productName,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      '${product.price}${l10n.egp}',
-                                      style: const TextStyle(
-                                        color: Colors.red,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12,
+                                    ClipRRect(
+                                      borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                                      child: Image.network(
+                                        product.image,
+                                        height: 100,
+                                        width: double.infinity,
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (context, error, stackTrace) =>
+                                            const SizedBox(height: 100, child: Icon(Icons.image_not_supported)),
                                       ),
                                     ),
-                                    const SizedBox(height: 6),
-                                    Row(
-                                      children: [
-                                        const Icon(Icons.star, size: 12, color: Colors.amber),
-                                        const SizedBox(width: 4),
-                                        const Text('4.9', style: TextStyle(fontSize: 10, color: Colors.grey)),
-                                        const SizedBox(width: 6),
-                                        Text(
-                                          '| ${l10n.sold('56')}',
-                                          style: const TextStyle(fontSize: 10, color: Colors.grey),
-                                        ),
-                                      ],
+                                    // Real-time favorite heart toggle button
+                                    BlocBuilder<FavoriteCubit, FavoriteState>(
+                                      builder: (context, favState) {
+                                        final isFav = context.read<FavoriteCubit>().isFavorite(product.id);
+
+                                        return Positioned(
+                                          top: 8,
+                                          right: isArabic ? null : 8,
+                                          left: isArabic ? 8 : null,
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              final user = FirebaseAuth.instance.currentUser;
+                                              if (user != null) {
+                                                // Toggle product in user's favorites
+                                                context.read<FavoriteCubit>().toggleFavorite(
+                                                      user.uid,
+                                                      product.id,
+                                                    );
+                                              } else {
+                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(l10n.pleaseLoginFirst),
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                            child: Container(
+                                              padding: const EdgeInsets.all(5),
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                shape: BoxShape.circle,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.black.withOpacity(0.12),
+                                                    blurRadius: 4,
+                                                    offset: const Offset(0, 2),
+                                                  ),
+                                                ],
+                                              ),
+                                              child: Icon(
+                                                isFav ? Icons.favorite : Icons.favorite_border,
+                                                size: 18,
+                                                color: isFav ? Colors.red : Colors.grey.shade600,
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
                                     ),
                                   ],
                                 ),
-                              ),
-                            ],
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        productName,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        '${product.price}${l10n.egp}',
+                                        style: const TextStyle(
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 6),
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.star, size: 12, color: Colors.amber),
+                                          const SizedBox(width: 4),
+                                          const Text('4.9', style: TextStyle(fontSize: 10, color: Colors.grey)),
+                                          const SizedBox(width: 6),
+                                          Text(
+                                            '| ${l10n.sold('56')}',
+                                            style: const TextStyle(fontSize: 10, color: Colors.grey),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         );
                       },
