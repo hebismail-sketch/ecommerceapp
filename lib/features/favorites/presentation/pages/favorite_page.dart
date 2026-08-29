@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ecommerceapp/features/favorites/presentation/manager/favorite_cubit.dart';
 import 'package:ecommerceapp/features/products/presentation/manager/product_cubit.dart';
 import 'package:ecommerceapp/features/products/presentation/pages/product_details_page.dart';
+import 'package:ecommerceapp/core/widgets/custom_search_app_bar.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 
 /// FavoritePage displaying the list of favorite items with modern styling matching Home page
@@ -81,13 +82,7 @@ class _FavoritePageState extends State<FavoritePage> {
     final isArabic = Localizations.localeOf(context).languageCode == 'ar';
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          l10n.favorites,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-      ),
+      appBar: const CustomSearchAppBar(showBackButton: true),
       body: BlocBuilder<FavoriteCubit, FavoriteState>(
         builder: (context, state) {
           if (state is FavoriteLoading) {

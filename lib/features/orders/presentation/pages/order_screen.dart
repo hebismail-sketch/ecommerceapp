@@ -1,5 +1,6 @@
 import 'package:ecommerceapp/features/orders/presentation/manager/order_cubit.dart';
 import 'package:ecommerceapp/features/orders/presentation/widgets/order_card.dart';
+import 'package:ecommerceapp/core/widgets/custom_search_app_bar.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -31,10 +32,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.orders),
-        centerTitle: true,
-      ),
+      appBar: const CustomSearchAppBar(showBackButton: true),
       body: BlocBuilder<OrderCubit, OrderState>(
         builder: (context, state) {
           if (state is OrderLoading) {

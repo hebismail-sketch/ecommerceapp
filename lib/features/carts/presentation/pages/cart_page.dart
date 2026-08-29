@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../manager/cart_cubit.dart';
 import '../../../products/presentation/manager/product_cubit.dart';
-import '../../../../l10n/app_localizations.dart';
+import 'package:ecommerceapp/core/widgets/custom_search_app_bar.dart';
+import 'package:ecommerceapp/l10n/app_localizations.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
@@ -15,10 +16,7 @@ class CartPage extends StatelessWidget {
     final locale = Localizations.localeOf(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.cart),
-        centerTitle: true,
-      ),
+      appBar: const CustomSearchAppBar(showBackButton: true),
       body: BlocBuilder<CartCubit, CartState>(
         builder: (context, state) {
           if (state is CartLoading) {
