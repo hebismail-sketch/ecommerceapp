@@ -10,7 +10,7 @@ import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-/// Modern Admin Home Dashboard with stats grid, quick actions, and full management capabilities.
+/// Modern Admin Home Dashboard with stats grid, quick actions, and full bilingual support.
 class AdminHome extends StatefulWidget {
   const AdminHome({super.key});
 
@@ -104,9 +104,47 @@ class _AdminHomeState extends State<AdminHome> {
           l10n.adminDashboard,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        centerTitle: true,
+        centerTitle: false,
         elevation: 0,
         backgroundColor: Colors.white,
+        actions: [
+          // Notification Action Button
+          IconButton(
+            icon: Stack(
+              children: [
+                const Icon(Icons.notifications_outlined, color: Colors.black87),
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Container(
+                    width: 8,
+                    height: 8,
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(l10n.notifications)),
+              );
+            },
+          ),
+          // Direct Customer Chats Button
+          IconButton(
+            icon: const Icon(Icons.chat_outlined, color: Colors.black87),
+            onPressed: () {
+              Navigator.pushNamed(
+                context,
+                AdminConversationsPage.screenRoute,
+              );
+            },
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
       body: BlocBuilder<ProductCubit, ProductState>(
         builder: (context, state) {
@@ -177,19 +215,19 @@ class _AdminHomeState extends State<AdminHome> {
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
+                          children: [
                             Text(
-                              'Control Center',
-                              style: TextStyle(
+                              l10n.controlCenter,
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: 4),
+                            const SizedBox(height: 4),
                             Text(
-                              'Manage inventory, customer chats & orders',
-                              style: TextStyle(
+                              l10n.adminSubtitle,
+                              style: const TextStyle(
                                 color: Colors.white70,
                                 fontSize: 12,
                               ),
@@ -203,9 +241,9 @@ class _AdminHomeState extends State<AdminHome> {
                 const SizedBox(height: 20),
 
                 // Section Title: Quick Statistics
-                const Text(
-                  'Overview Statistics',
-                  style: TextStyle(
+                Text(
+                  l10n.overviewStats,
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
@@ -225,7 +263,7 @@ class _AdminHomeState extends State<AdminHome> {
                     DashboardCard(
                       title: l10n.totalCars,
                       value: products.length.toString(),
-                      icon: Icons.directions_car,
+                      icon: Icons.inventory_2_outlined,
                       color: Colors.red.shade600,
                       onTap: () {
                         Navigator.pushNamed(
@@ -237,7 +275,7 @@ class _AdminHomeState extends State<AdminHome> {
                     DashboardCard(
                       title: l10n.totalBrands,
                       value: brands.length.toString(),
-                      icon: Icons.branding_watermark,
+                      icon: Icons.category_outlined,
                       color: Colors.deepOrange,
                       onTap: () {
                         Navigator.pushNamed(
@@ -249,13 +287,13 @@ class _AdminHomeState extends State<AdminHome> {
                     DashboardCard(
                       title: l10n.totalPrices,
                       value: '${totalPrice.toStringAsFixed(0)} ${l10n.egp}',
-                      icon: Icons.account_balance_wallet,
+                      icon: Icons.account_balance_wallet_outlined,
                       color: Colors.green.shade700,
                       onTap: () {},
                     ),
                     DashboardCard(
-                      title: 'Support Chats',
-                      value: 'Active',
+                      title: l10n.supportChats,
+                      value: l10n.active,
                       icon: Icons.chat_bubble_outline,
                       color: Colors.blue.shade600,
                       onTap: () {
@@ -270,9 +308,9 @@ class _AdminHomeState extends State<AdminHome> {
                 const SizedBox(height: 24),
 
                 // Section Title: Quick Actions
-                const Text(
-                  'Quick Management Actions',
-                  style: TextStyle(
+                Text(
+                  l10n.quickActions,
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
@@ -280,11 +318,11 @@ class _AdminHomeState extends State<AdminHome> {
                 ),
                 const SizedBox(height: 12),
 
-                // Action 1: Add New Car
+                // Action 1: Add New Product
                 _buildActionTile(
                   context: context,
                   title: l10n.addCar,
-                  subtitle: 'Add a new vehicle to the store inventory',
+                  subtitle: l10n.addCarSubtitle,
                   icon: Icons.add_circle_outline,
                   color: Colors.red.shade600,
                   onTap: () {
@@ -295,11 +333,11 @@ class _AdminHomeState extends State<AdminHome> {
                   },
                 ),
 
-                // Action 2: Manage Cars
+                // Action 2: Manage Products
                 _buildActionTile(
                   context: context,
                   title: l10n.manageCars,
-                  subtitle: 'Edit, update prices, or remove cars',
+                  subtitle: l10n.manageCarsSubtitle,
                   icon: Icons.drive_file_rename_outline,
                   color: Colors.deepOrange,
                   onTap: () {
@@ -313,8 +351,8 @@ class _AdminHomeState extends State<AdminHome> {
                 // Action 3: Customer Chats
                 _buildActionTile(
                   context: context,
-                  title: 'Customer Inquiries & Support',
-                  subtitle: 'Live chat and support conversation center',
+                  title: l10n.customerChats,
+                  subtitle: l10n.customerChatsSubtitle,
                   icon: Icons.forum_outlined,
                   color: Colors.blue.shade600,
                   onTap: () {
@@ -329,7 +367,7 @@ class _AdminHomeState extends State<AdminHome> {
                 _buildActionTile(
                   context: context,
                   title: l10n.orders,
-                  subtitle: 'View and track incoming customer orders',
+                  subtitle: l10n.customerOrdersSubtitle,
                   icon: Icons.receipt_long_outlined,
                   color: Colors.purple.shade600,
                   onTap: () {
@@ -347,4 +385,5 @@ class _AdminHomeState extends State<AdminHome> {
     );
   }
 }
+
 
