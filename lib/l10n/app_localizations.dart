@@ -901,6 +901,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Close'**
   String get close;
+
+  /// No description provided for @notificationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notificationsTitle;
+
+  /// No description provided for @noNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'No notifications right now'**
+  String get noNotifications;
+
+  /// No description provided for @notificationsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You will receive updates and alerts here'**
+  String get notificationsSubtitle;
+
+  /// No description provided for @manageProducts.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Products'**
+  String get manageProducts;
+
+  /// No description provided for @products.
+  ///
+  /// In en, this message translates to:
+  /// **'Products'**
+  String get products;
+
+  /// No description provided for @addProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Product'**
+  String get addProduct;
+
+  /// No description provided for @editProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Product'**
+  String get editProduct;
+
+  /// No description provided for @productName.
+  ///
+  /// In en, this message translates to:
+  /// **'Product Name'**
+  String get productName;
+
+  /// No description provided for @enterProductName.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter product name'**
+  String get enterProductName;
+
+  /// No description provided for @totalProducts.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Products'**
+  String get totalProducts;
+
+  /// No description provided for @deleteProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Product'**
+  String get deleteProduct;
+
+  /// No description provided for @deleteProductConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this product?'**
+  String get deleteProductConfirmation;
+
+  /// No description provided for @productDeletedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Product deleted successfully'**
+  String get productDeletedSuccessfully;
+
+  /// No description provided for @productAddedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Product added successfully'**
+  String get productAddedSuccessfully;
+
+  /// No description provided for @addProductButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Product'**
+  String get addProductButton;
+
+  /// No description provided for @addProductSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a new product to the store inventory'**
+  String get addProductSubtitle;
+
+  /// No description provided for @manageProductsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit, update prices, or remove products'**
+  String get manageProductsSubtitle;
+
+  /// No description provided for @noProductsAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No products available'**
+  String get noProductsAvailable;
 }
 
 class _AppLocalizationsDelegate

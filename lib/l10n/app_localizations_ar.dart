@@ -356,67 +356,119 @@ class AppLocalizationsAr extends AppLocalizations {
   String get pleaseLoginFirst => 'يرجى تسجيل الدخول أولاً';
 
   @override
-  String get controlCenter => 'Control Center';
+  String get controlCenter => 'مركز التحكم';
 
   @override
-  String get adminSubtitle => 'Manage inventory, customer chats & orders';
+  String get adminSubtitle => 'إدارة المخزون ومحادثات العملاء والطلبات';
 
   @override
-  String get overviewStats => 'Overview Statistics';
+  String get overviewStats => 'إحصائيات عامة';
 
   @override
-  String get quickActions => 'Quick Management Actions';
+  String get quickActions => 'الإجراءات السريعة';
 
   @override
-  String get addCarSubtitle => 'Add a new product to the store inventory';
+  String get addCarSubtitle => 'إضافة منتج جديد لمخزون المتجر';
 
   @override
-  String get manageCarsSubtitle => 'Edit, update prices, or remove products';
+  String get manageCarsSubtitle => 'تعديل أو تحديث الأسعار أو حذف المنتجات';
 
   @override
-  String get customerChats => 'Customer Inquiries & Support';
+  String get customerChats => 'محادثات واستفسارات العملاء';
 
   @override
-  String get customerChatsSubtitle =>
-      'Live chat and support conversation center';
+  String get customerChatsSubtitle => 'مركز المحادثات والدعم الفني المباشر';
 
   @override
-  String get customerOrdersSubtitle =>
-      'View and track incoming customer orders';
+  String get customerOrdersSubtitle => 'عرض ومتابعة طلبات العملاء الواردة';
 
   @override
-  String get supportChats => 'Support Chats';
+  String get supportChats => 'محادثات الدعم';
 
   @override
-  String get active => 'Active';
+  String get active => 'نشطة';
 
   @override
-  String get chatDetails => 'Chat Details';
+  String get chatDetails => 'تفاصيل المحادثة';
 
   @override
-  String get noConversations => 'No conversations yet';
+  String get noConversations => 'لا توجد محادثات حتى الآن';
 
   @override
-  String get noMessagesInChat => 'No messages in this chat';
+  String get noMessagesInChat => 'لا توجد رسائل في هذه المحادثة';
 
   @override
-  String get typeResponse => 'Type response to customer...';
+  String get typeResponse => 'اكتب الرد للعميل...';
 
   @override
-  String get customerMessagesAppearHere => 'Customer messages will appear here';
+  String get customerMessagesAppearHere => 'ستظهر رسائل واستفسارات العملاء هنا';
 
   @override
-  String get customer => 'Customer';
+  String get customer => 'عميل';
 
   @override
-  String get userProfile => 'User Profile';
+  String get userProfile => 'الملف الشخصي للمستخدم';
 
   @override
-  String get email => 'Email';
+  String get email => 'البريد الإلكتروني';
 
   @override
-  String get userId => 'User ID';
+  String get userId => 'معرّف المستخدم';
 
   @override
-  String get close => 'Close';
+  String get close => 'إغلاق';
+
+  @override
+  String get notificationsTitle => 'الإشعارات';
+
+  @override
+  String get noNotifications => 'لا توجد إشعارات حالياً';
+
+  @override
+  String get notificationsSubtitle => 'ستتلقى التنبيهات والتحديثات الجديدة هنا';
+
+  @override
+  String get manageProducts => 'إدارة المنتجات';
+
+  @override
+  String get products => 'المنتجات';
+
+  @override
+  String get addProduct => 'إضافة منتج';
+
+  @override
+  String get editProduct => 'تعديل منتج';
+
+  @override
+  String get productName => 'اسم المنتج';
+
+  @override
+  String get enterProductName => 'ادخل اسم المنتج';
+
+  @override
+  String get totalProducts => 'إجمالي المنتجات';
+
+  @override
+  String get deleteProduct => 'حذف المنتج';
+
+  @override
+  String get deleteProductConfirmation => 'هل أنت متأكد من حذف هذا المنتج؟';
+
+  @override
+  String get productDeletedSuccessfully => 'تم حذف المنتج بنجاح';
+
+  @override
+  String get productAddedSuccessfully => 'تمت إضافة المنتج بنجاح';
+
+  @override
+  String get addProductButton => 'إضافة المنتج';
+
+  @override
+  String get addProductSubtitle => 'إضافة منتج جديد لمخزون المتجر';
+
+  @override
+  String get manageProductsSubtitle => 'تعديل أو تحديث الأسعار أو حذف المنتجات';
+
+  @override
+  String get noProductsAvailable => 'لا توجد منتجات متوفرة';
 }

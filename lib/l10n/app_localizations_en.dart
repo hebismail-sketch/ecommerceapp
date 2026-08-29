@@ -420,4 +420,61 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get close => 'Close';
+
+  @override
+  String get notificationsTitle => 'Notifications';
+
+  @override
+  String get noNotifications => 'No notifications right now';
+
+  @override
+  String get notificationsSubtitle =>
+      'You will receive updates and alerts here';
+
+  @override
+  String get manageProducts => 'Manage Products';
+
+  @override
+  String get products => 'Products';
+
+  @override
+  String get addProduct => 'Add Product';
+
+  @override
+  String get editProduct => 'Edit Product';
+
+  @override
+  String get productName => 'Product Name';
+
+  @override
+  String get enterProductName => 'Enter product name';
+
+  @override
+  String get totalProducts => 'Total Products';
+
+  @override
+  String get deleteProduct => 'Delete Product';
+
+  @override
+  String get deleteProductConfirmation =>
+      'Are you sure you want to delete this product?';
+
+  @override
+  String get productDeletedSuccessfully => 'Product deleted successfully';
+
+  @override
+  String get productAddedSuccessfully => 'Product added successfully';
+
+  @override
+  String get addProductButton => 'Add Product';
+
+  @override
+  String get addProductSubtitle => 'Add a new product to the store inventory';
+
+  @override
+  String get manageProductsSubtitle =>
+      'Edit, update prices, or remove products';
+
+  @override
+  String get noProductsAvailable => 'No products available';
 }

@@ -157,6 +157,24 @@
   "userProfile": "User Profile",
   "email": "Email",
   "userId": "User ID",
-  "close": "Close"
+  "close": "Close",
+  "notificationsTitle": "Notifications",
+  "noNotifications": "No notifications right now",
+  "notificationsSubtitle": "You will receive updates and alerts here",
+  "manageProducts": "Manage Products",
+  "products": "Products",
+  "addProduct": "Add Product",
+  "editProduct": "Edit Product",
+  "productName": "Product Name",
+  "enterProductName": "Enter product name",
+  "totalProducts": "Total Products",
+  "deleteProduct": "Delete Product",
+  "deleteProductConfirmation": "Are you sure you want to delete this product?",
+  "productDeletedSuccessfully": "Product deleted successfully",
+  "productAddedSuccessfully": "Product added successfully",
+  "addProductButton": "Add Product",
+  "addProductSubtitle": "Add a new product to the store inventory",
+  "manageProductsSubtitle": "Edit, update prices, or remove products",
+  "noProductsAvailable": "No products available"
 }
 
