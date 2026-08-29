@@ -12,6 +12,8 @@ import 'package:ecommerceapp/features/chat/domain/entities/chat_message_entity.d
 import 'package:ecommerceapp/features/chat/domain/entities/conversation_entity.dart';
 import 'package:ecommerceapp/features/chat/presentation/manager/chat_cubit.dart';
 import 'package:ecommerceapp/features/chat/presentation/manager/chat_state.dart';
+import 'package:ecommerceapp/features/chat/presentation/widgets/user_avatar_widget.dart';
+import 'package:ecommerceapp/features/chat/presentation/widgets/user_profile_modal.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 
 class AdminChatDetailPage extends StatefulWidget {
@@ -296,87 +298,10 @@ class _AdminChatDetailPageState extends State<AdminChatDetailPage> {
   }
 
   void _showCustomerProfileDialog(BuildContext context, ConversationEntity conversation, AppLocalizations l10n) {
-    showModalBottomSheet(
+    UserProfileModal.show(
       context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (bottomSheetContext) => SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
-              const SizedBox(height: 20),
-              CircleAvatar(
-                radius: 40,
-                backgroundColor: Colors.red.shade100,
-                child: Text(
-                  conversation.userName.isNotEmpty
-                      ? conversation.userName[0].toUpperCase()
-                      : 'U',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red.shade700,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 14),
-              Text(
-                conversation.userName.isNotEmpty
-                    ? conversation.userName
-                    : '${l10n.customer} (${conversation.userId.substring(0, 5)})',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              if (conversation.userEmail.isNotEmpty) ...[
-                const SizedBox(height: 4),
-                Text(
-                  conversation.userEmail,
-                  style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
-                ),
-              ],
-              const SizedBox(height: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade100,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  '${l10n.userId}: ${conversation.userId}',
-                  style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
-                ),
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                  ),
-                  onPressed: () => Navigator.pop(bottomSheetContext),
-                  child: Text(l10n.close),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+      conversation: conversation,
+      l10n: l10n,
     );
   }
 
@@ -399,19 +324,10 @@ class _AdminChatDetailPageState extends State<AdminChatDetailPage> {
           },
           child: Row(
             children: [
-              CircleAvatar(
+              UserAvatarWidget(
+                userId: _conversation!.userId,
+                fallbackName: _conversation!.userName,
                 radius: 18,
-                backgroundColor: Colors.red.shade100,
-                child: Text(
-                  _conversation!.userName.isNotEmpty
-                      ? _conversation!.userName[0].toUpperCase()
-                      : 'U',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red.shade700,
-                  ),
-                ),
               ),
               const SizedBox(width: 10),
               Expanded(

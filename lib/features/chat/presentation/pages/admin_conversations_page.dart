@@ -4,6 +4,8 @@ import 'package:ecommerceapp/features/chat/domain/entities/conversation_entity.d
 import 'package:ecommerceapp/features/chat/presentation/manager/chat_cubit.dart';
 import 'package:ecommerceapp/features/chat/presentation/manager/chat_state.dart';
 import 'package:ecommerceapp/features/chat/presentation/pages/admin_chat_detail_page.dart';
+import 'package:ecommerceapp/features/chat/presentation/widgets/user_avatar_widget.dart';
+import 'package:ecommerceapp/features/chat/presentation/widgets/user_profile_modal.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,97 +46,17 @@ class _AdminConversationsPageState extends State<AdminConversationsPage> {
   }
 
   void _showUserProfileDialog(BuildContext context, ConversationEntity conversation, AppLocalizations l10n) {
-    showModalBottomSheet(
+    UserProfileModal.show(
       context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (bottomSheetContext) => SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
-              const SizedBox(height: 20),
-              CircleAvatar(
-                radius: 40,
-                backgroundColor: Colors.red.shade100,
-                child: Text(
-                  conversation.userName.isNotEmpty
-                      ? conversation.userName[0].toUpperCase()
-                      : 'U',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red.shade700,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 14),
-              Text(
-                conversation.userName.isNotEmpty
-                    ? conversation.userName
-                    : '${l10n.customer} (${conversation.userId.substring(0, 5)})',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              if (conversation.userEmail.isNotEmpty) ...[
-                const SizedBox(height: 4),
-                Text(
-                  conversation.userEmail,
-                  style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
-                ),
-              ],
-              const SizedBox(height: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade100,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  '${l10n.userId}: ${conversation.userId}',
-                  style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
-                ),
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red.shade600,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                  ),
-                  icon: const Icon(Icons.chat),
-                  label: Text(l10n.chat),
-                  onPressed: () {
-                    Navigator.pop(bottomSheetContext);
-                    Navigator.pushNamed(
-                      context,
-                      AdminChatDetailPage.screenRoute,
-                      arguments: conversation,
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+      conversation: conversation,
+      l10n: l10n,
+      onChatPressed: () {
+        Navigator.pushNamed(
+          context,
+          AdminChatDetailPage.screenRoute,
+          arguments: conversation,
+        );
+      },
     );
   }
 
@@ -194,19 +116,10 @@ class _AdminConversationsPageState extends State<AdminConversationsPage> {
         },
         child: Stack(
           children: [
-            CircleAvatar(
+            UserAvatarWidget(
+              userId: conversation.userId,
+              fallbackName: conversation.userName,
               radius: 24,
-              backgroundColor: isDark ? Colors.red.shade900 : Colors.red.shade100,
-              child: Text(
-                conversation.userName.isNotEmpty
-                    ? conversation.userName[0].toUpperCase()
-                    : 'U',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: isDark ? Colors.red.shade200 : Colors.red.shade800,
-                ),
-              ),
             ),
             if (hasUnread)
               Positioned(
