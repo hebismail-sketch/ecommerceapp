@@ -691,6 +691,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Chat'**
   String get chat;
+
+  /// No description provided for @bestSeller.
+  ///
+  /// In en, this message translates to:
+  /// **'Best Seller!'**
+  String get bestSeller;
+
+  /// No description provided for @bannerHeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover the perfect shopping journey!'**
+  String get bannerHeadline;
+
+  /// No description provided for @shopNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop Now!'**
+  String get shopNow;
+
+  /// No description provided for @categories.
+  ///
+  /// In en, this message translates to:
+  /// **'Categories'**
+  String get categories;
+
+  /// No description provided for @seeMore.
+  ///
+  /// In en, this message translates to:
+  /// **'See more'**
+  String get seeMore;
+
+  /// No description provided for @recommended.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended'**
+  String get recommended;
+
+  /// No description provided for @sold.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} Sold'**
+  String sold(Object count);
+
+  /// No description provided for @watches.
+  ///
+  /// In en, this message translates to:
+  /// **'Watches'**
+  String get watches;
+
+  /// No description provided for @bags.
+  ///
+  /// In en, this message translates to:
+  /// **'Bags'**
+  String get bags;
+
+  /// No description provided for @beauty.
+  ///
+  /// In en, this message translates to:
+  /// **'Beauty'**
+  String get beauty;
+
+  /// No description provided for @clothing.
+  ///
+  /// In en, this message translates to:
+  /// **'Clothing'**
+  String get clothing;
+
+  /// No description provided for @accessories.
+  ///
+  /// In en, this message translates to:
+  /// **'Accessories'**
+  String get accessories;
+
+  /// No description provided for @cars.
+  ///
+  /// In en, this message translates to:
+  /// **'Cars'**
+  String get cars;
+
+  /// No description provided for @pleaseLoginFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Please log in first'**
+  String get pleaseLoginFirst;
 }
 
 class _AppLocalizationsDelegate

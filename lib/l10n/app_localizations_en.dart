@@ -311,4 +311,48 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chat => 'Chat';
+
+  @override
+  String get bestSeller => 'Best Seller!';
+
+  @override
+  String get bannerHeadline => 'Discover the perfect shopping journey!';
+
+  @override
+  String get shopNow => 'Shop Now!';
+
+  @override
+  String get categories => 'Categories';
+
+  @override
+  String get seeMore => 'See more';
+
+  @override
+  String get recommended => 'Recommended';
+
+  @override
+  String sold(Object count) {
+    return '$count Sold';
+  }
+
+  @override
+  String get watches => 'Watches';
+
+  @override
+  String get bags => 'Bags';
+
+  @override
+  String get beauty => 'Beauty';
+
+  @override
+  String get clothing => 'Clothing';
+
+  @override
+  String get accessories => 'Accessories';
+
+  @override
+  String get cars => 'Cars';
+
+  @override
+  String get pleaseLoginFirst => 'Please log in first';
 }

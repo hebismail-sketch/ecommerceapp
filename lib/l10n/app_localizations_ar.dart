@@ -310,4 +310,48 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get chat => 'الدردشة';
+
+  @override
+  String get bestSeller => 'الأكثر مبيعاً!';
+
+  @override
+  String get bannerHeadline => 'اكتشف رحلة التسوق المثالية!';
+
+  @override
+  String get shopNow => 'تسوق الآن!';
+
+  @override
+  String get categories => 'الأقسام';
+
+  @override
+  String get seeMore => 'عرض المزيد';
+
+  @override
+  String get recommended => 'الموصى بها';
+
+  @override
+  String sold(Object count) {
+    return 'تم بيع $count';
+  }
+
+  @override
+  String get watches => 'ساعات';
+
+  @override
+  String get bags => 'حقائب';
+
+  @override
+  String get beauty => 'تجميل';
+
+  @override
+  String get clothing => 'ملابس';
+
+  @override
+  String get accessories => 'إكسسوارات';
+
+  @override
+  String get cars => 'سيارات';
+
+  @override
+  String get pleaseLoginFirst => 'يرجى تسجيل الدخول أولاً';
 }

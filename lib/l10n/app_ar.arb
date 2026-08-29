@@ -1,3 +1,4 @@
+
 {
   "settings": "الإعدادات",
   "language": "اللغة",
@@ -117,6 +118,24 @@
   "user": "المستخدم",
   "saving": "جارٍ الحفظ...",
   "failedToSaveChanges": "فشل حفظ التعديلات",
-  "chat":"الدردشة"
+  "chat": "الدردشة",
+  "bestSeller": "الأكثر مبيعاً!",
+  "bannerHeadline": "اكتشف رحلة التسوق المثالية!",
+  "shopNow": "تسوق الآن!",
+  "categories": "الأقسام",
+  "seeMore": "عرض المزيد",
+  "recommended": "الموصى بها",
+  "sold": "تم بيع {count}",
+  "@sold": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "watches": "ساعات",
+  "bags": "حقائب",
+  "beauty": "تجميل",
+  "clothing": "ملابس",
+  "accessories": "إكسسوارات",
+  "cars": "سيارات",
+  "pleaseLoginFirst": "يرجى تسجيل الدخول أولاً"
 }
-

@@ -117,5 +117,24 @@
   "user": "User",
   "saving": "Saving...",
   "failedToSaveChanges": "Failed to save changes",
-  "chat":"Chat"
+  "chat": "Chat",
+  "bestSeller": "Best Seller!",
+  "bannerHeadline": "Discover the perfect shopping journey!",
+  "shopNow": "Shop Now!",
+  "categories": "Categories",
+  "seeMore": "See more",
+  "recommended": "Recommended",
+  "sold": "{count} Sold",
+  "@sold": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "watches": "Watches",
+  "bags": "Bags",
+  "beauty": "Beauty",
+  "clothing": "Clothing",
+  "accessories": "Accessories",
+  "cars": "Cars",
+  "pleaseLoginFirst": "Please log in first"
 }
