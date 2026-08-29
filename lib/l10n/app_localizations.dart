@@ -197,19 +197,19 @@ abstract class AppLocalizations {
   /// No description provided for @carStore.
   ///
   /// In en, this message translates to:
-  /// **'Car Store'**
+  /// **'Store'**
   String get carStore;
 
   /// No description provided for @searchForCar.
   ///
   /// In en, this message translates to:
-  /// **'Search for a car...'**
+  /// **'Search for products...'**
   String get searchForCar;
 
   /// No description provided for @noCars.
   ///
   /// In en, this message translates to:
-  /// **'No cars available'**
+  /// **'No products available'**
   String get noCars;
 
   /// No description provided for @favorites.
@@ -221,7 +221,7 @@ abstract class AppLocalizations {
   /// No description provided for @noFavoriteCars.
   ///
   /// In en, this message translates to:
-  /// **'No cars in favorites'**
+  /// **'No products in favorites'**
   String get noFavoriteCars;
 
   /// No description provided for @cart.
@@ -335,31 +335,31 @@ abstract class AppLocalizations {
   /// No description provided for @carsCount.
   ///
   /// In en, this message translates to:
-  /// **'{count} cars'**
+  /// **'{count} products'**
   String carsCount(Object count);
 
   /// No description provided for @addCar.
   ///
   /// In en, this message translates to:
-  /// **'Add Car'**
+  /// **'Add Product'**
   String get addCar;
 
   /// No description provided for @editCar.
   ///
   /// In en, this message translates to:
-  /// **'Edit Car'**
+  /// **'Edit Product'**
   String get editCar;
 
   /// No description provided for @carName.
   ///
   /// In en, this message translates to:
-  /// **'Car Name'**
+  /// **'Product Name'**
   String get carName;
 
   /// No description provided for @enterCarName.
   ///
   /// In en, this message translates to:
-  /// **'Enter car name'**
+  /// **'Enter product name'**
   String get enterCarName;
 
   /// No description provided for @price.
@@ -383,13 +383,13 @@ abstract class AppLocalizations {
   /// No description provided for @manufactureYear.
   ///
   /// In en, this message translates to:
-  /// **'Manufacture Year'**
+  /// **'Manufacture Year / Model'**
   String get manufactureYear;
 
   /// No description provided for @enterManufactureYear.
   ///
   /// In en, this message translates to:
-  /// **'Enter manufacture year'**
+  /// **'Enter year or model'**
   String get enterManufactureYear;
 
   /// No description provided for @invalidYear.
@@ -401,13 +401,13 @@ abstract class AppLocalizations {
   /// No description provided for @brand.
   ///
   /// In en, this message translates to:
-  /// **'Brand'**
+  /// **'Brand / Category'**
   String get brand;
 
   /// No description provided for @enterBrand.
   ///
   /// In en, this message translates to:
-  /// **'Enter brand'**
+  /// **'Enter brand or category'**
   String get enterBrand;
 
   /// No description provided for @location.
@@ -431,7 +431,7 @@ abstract class AppLocalizations {
   /// No description provided for @chooseImage.
   ///
   /// In en, this message translates to:
-  /// **'Choose Image'**
+  /// **'Product Image URL'**
   String get chooseImage;
 
   /// No description provided for @descriptionLabel.
@@ -449,13 +449,13 @@ abstract class AppLocalizations {
   /// No description provided for @chooseImageFirst.
   ///
   /// In en, this message translates to:
-  /// **'Please choose an image first'**
+  /// **'Please enter or choose an image first'**
   String get chooseImageFirst;
 
   /// No description provided for @carAddedSuccessfully.
   ///
   /// In en, this message translates to:
-  /// **'Car added successfully'**
+  /// **'Product added successfully'**
   String get carAddedSuccessfully;
 
   /// No description provided for @changesSavedSuccessfully.
@@ -467,7 +467,7 @@ abstract class AppLocalizations {
   /// No description provided for @addCarButton.
   ///
   /// In en, this message translates to:
-  /// **'Add Car'**
+  /// **'Add Product'**
   String get addCarButton;
 
   /// No description provided for @saveChanges.
@@ -503,7 +503,7 @@ abstract class AppLocalizations {
   /// No description provided for @totalCars.
   ///
   /// In en, this message translates to:
-  /// **'Total Cars'**
+  /// **'Total Products'**
   String get totalCars;
 
   /// No description provided for @totalBrands.
@@ -515,13 +515,13 @@ abstract class AppLocalizations {
   /// No description provided for @totalPrices.
   ///
   /// In en, this message translates to:
-  /// **'Total Prices'**
+  /// **'Total Inventory Value'**
   String get totalPrices;
 
   /// No description provided for @manageCars.
   ///
   /// In en, this message translates to:
-  /// **'Manage Cars'**
+  /// **'Manage Products'**
   String get manageCars;
 
   /// No description provided for @open.
@@ -533,19 +533,19 @@ abstract class AppLocalizations {
   /// No description provided for @deleteCar.
   ///
   /// In en, this message translates to:
-  /// **'Delete Car'**
+  /// **'Delete Product'**
   String get deleteCar;
 
   /// No description provided for @deleteCarConfirmation.
   ///
   /// In en, this message translates to:
-  /// **'Are you sure you want to delete this car?'**
+  /// **'Are you sure you want to delete this product?'**
   String get deleteCarConfirmation;
 
   /// No description provided for @carDeletedSuccessfully.
   ///
   /// In en, this message translates to:
-  /// **'Car deleted successfully'**
+  /// **'Product deleted successfully'**
   String get carDeletedSuccessfully;
 
   /// No description provided for @welcomeBack.
@@ -775,6 +775,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please log in first'**
   String get pleaseLoginFirst;
+
+  /// No description provided for @controlCenter.
+  ///
+  /// In en, this message translates to:
+  /// **'Control Center'**
+  String get controlCenter;
+
+  /// No description provided for @adminSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage inventory, customer chats & orders'**
+  String get adminSubtitle;
+
+  /// No description provided for @overviewStats.
+  ///
+  /// In en, this message translates to:
+  /// **'Overview Statistics'**
+  String get overviewStats;
+
+  /// No description provided for @quickActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Management Actions'**
+  String get quickActions;
+
+  /// No description provided for @addCarSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a new product to the store inventory'**
+  String get addCarSubtitle;
+
+  /// No description provided for @manageCarsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit, update prices, or remove products'**
+  String get manageCarsSubtitle;
+
+  /// No description provided for @customerChats.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer Inquiries & Support'**
+  String get customerChats;
+
+  /// No description provided for @customerChatsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Live chat and support conversation center'**
+  String get customerChatsSubtitle;
+
+  /// No description provided for @customerOrdersSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'View and track incoming customer orders'**
+  String get customerOrdersSubtitle;
+
+  /// No description provided for @supportChats.
+  ///
+  /// In en, this message translates to:
+  /// **'Support Chats'**
+  String get supportChats;
+
+  /// No description provided for @active.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get active;
+
+  /// No description provided for @chatDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat Details'**
+  String get chatDetails;
+
+  /// No description provided for @noConversations.
+  ///
+  /// In en, this message translates to:
+  /// **'No conversations yet'**
+  String get noConversations;
+
+  /// No description provided for @noMessagesInChat.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages in this chat'**
+  String get noMessagesInChat;
+
+  /// No description provided for @typeResponse.
+  ///
+  /// In en, this message translates to:
+  /// **'Type response to customer...'**
+  String get typeResponse;
+
+  /// No description provided for @customerMessagesAppearHere.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer messages will appear here'**
+  String get customerMessagesAppearHere;
+
+  /// No description provided for @customer.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer'**
+  String get customer;
+
+  /// No description provided for @userProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'User Profile'**
+  String get userProfile;
+
+  /// No description provided for @email.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get email;
+
+  /// No description provided for @userId.
+  ///
+  /// In en, this message translates to:
+  /// **'User ID'**
+  String get userId;
+
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
 }
 
 class _AppLocalizationsDelegate

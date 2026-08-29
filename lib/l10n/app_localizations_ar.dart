@@ -354,4 +354,69 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get pleaseLoginFirst => 'يرجى تسجيل الدخول أولاً';
+
+  @override
+  String get controlCenter => 'Control Center';
+
+  @override
+  String get adminSubtitle => 'Manage inventory, customer chats & orders';
+
+  @override
+  String get overviewStats => 'Overview Statistics';
+
+  @override
+  String get quickActions => 'Quick Management Actions';
+
+  @override
+  String get addCarSubtitle => 'Add a new product to the store inventory';
+
+  @override
+  String get manageCarsSubtitle => 'Edit, update prices, or remove products';
+
+  @override
+  String get customerChats => 'Customer Inquiries & Support';
+
+  @override
+  String get customerChatsSubtitle =>
+      'Live chat and support conversation center';
+
+  @override
+  String get customerOrdersSubtitle =>
+      'View and track incoming customer orders';
+
+  @override
+  String get supportChats => 'Support Chats';
+
+  @override
+  String get active => 'Active';
+
+  @override
+  String get chatDetails => 'Chat Details';
+
+  @override
+  String get noConversations => 'No conversations yet';
+
+  @override
+  String get noMessagesInChat => 'No messages in this chat';
+
+  @override
+  String get typeResponse => 'Type response to customer...';
+
+  @override
+  String get customerMessagesAppearHere => 'Customer messages will appear here';
+
+  @override
+  String get customer => 'Customer';
+
+  @override
+  String get userProfile => 'User Profile';
+
+  @override
+  String get email => 'Email';
+
+  @override
+  String get userId => 'User ID';
+
+  @override
+  String get close => 'Close';
 }

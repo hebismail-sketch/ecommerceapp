@@ -57,19 +57,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logoutConfirmation => 'Are you sure you want to log out?';
 
   @override
-  String get carStore => 'Car Store';
+  String get carStore => 'Store';
 
   @override
-  String get searchForCar => 'Search for a car...';
+  String get searchForCar => 'Search for products...';
 
   @override
-  String get noCars => 'No cars available';
+  String get noCars => 'No products available';
 
   @override
   String get favorites => 'Favorites';
 
   @override
-  String get noFavoriteCars => 'No cars in favorites';
+  String get noFavoriteCars => 'No products in favorites';
 
   @override
   String get cart => 'Cart';
@@ -131,20 +131,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String carsCount(Object count) {
-    return '$count cars';
+    return '$count products';
   }
 
   @override
-  String get addCar => 'Add Car';
+  String get addCar => 'Add Product';
 
   @override
-  String get editCar => 'Edit Car';
+  String get editCar => 'Edit Product';
 
   @override
-  String get carName => 'Car Name';
+  String get carName => 'Product Name';
 
   @override
-  String get enterCarName => 'Enter car name';
+  String get enterCarName => 'Enter product name';
 
   @override
   String get price => 'Price';
@@ -156,19 +156,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get invalidPrice => 'Invalid price';
 
   @override
-  String get manufactureYear => 'Manufacture Year';
+  String get manufactureYear => 'Manufacture Year / Model';
 
   @override
-  String get enterManufactureYear => 'Enter manufacture year';
+  String get enterManufactureYear => 'Enter year or model';
 
   @override
   String get invalidYear => 'Invalid year';
 
   @override
-  String get brand => 'Brand';
+  String get brand => 'Brand / Category';
 
   @override
-  String get enterBrand => 'Enter brand';
+  String get enterBrand => 'Enter brand or category';
 
   @override
   String get location => 'Location';
@@ -180,7 +180,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noImageSelected => 'No image selected';
 
   @override
-  String get chooseImage => 'Choose Image';
+  String get chooseImage => 'Product Image URL';
 
   @override
   String get descriptionLabel => 'Description';
@@ -189,16 +189,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get enterDescription => 'Enter description';
 
   @override
-  String get chooseImageFirst => 'Please choose an image first';
+  String get chooseImageFirst => 'Please enter or choose an image first';
 
   @override
-  String get carAddedSuccessfully => 'Car added successfully';
+  String get carAddedSuccessfully => 'Product added successfully';
 
   @override
   String get changesSavedSuccessfully => 'Changes saved successfully';
 
   @override
-  String get addCarButton => 'Add Car';
+  String get addCarButton => 'Add Product';
 
   @override
   String get saveChanges => 'Save Changes';
@@ -216,29 +216,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get adminDashboard => 'Admin Dashboard';
 
   @override
-  String get totalCars => 'Total Cars';
+  String get totalCars => 'Total Products';
 
   @override
   String get totalBrands => 'Total Brands';
 
   @override
-  String get totalPrices => 'Total Prices';
+  String get totalPrices => 'Total Inventory Value';
 
   @override
-  String get manageCars => 'Manage Cars';
+  String get manageCars => 'Manage Products';
 
   @override
   String get open => 'Open';
 
   @override
-  String get deleteCar => 'Delete Car';
+  String get deleteCar => 'Delete Product';
 
   @override
   String get deleteCarConfirmation =>
-      'Are you sure you want to delete this car?';
+      'Are you sure you want to delete this product?';
 
   @override
-  String get carDeletedSuccessfully => 'Car deleted successfully';
+  String get carDeletedSuccessfully => 'Product deleted successfully';
 
   @override
   String get welcomeBack => 'Welcome Back';
@@ -355,4 +355,69 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pleaseLoginFirst => 'Please log in first';
+
+  @override
+  String get controlCenter => 'Control Center';
+
+  @override
+  String get adminSubtitle => 'Manage inventory, customer chats & orders';
+
+  @override
+  String get overviewStats => 'Overview Statistics';
+
+  @override
+  String get quickActions => 'Quick Management Actions';
+
+  @override
+  String get addCarSubtitle => 'Add a new product to the store inventory';
+
+  @override
+  String get manageCarsSubtitle => 'Edit, update prices, or remove products';
+
+  @override
+  String get customerChats => 'Customer Inquiries & Support';
+
+  @override
+  String get customerChatsSubtitle =>
+      'Live chat and support conversation center';
+
+  @override
+  String get customerOrdersSubtitle =>
+      'View and track incoming customer orders';
+
+  @override
+  String get supportChats => 'Support Chats';
+
+  @override
+  String get active => 'Active';
+
+  @override
+  String get chatDetails => 'Chat Details';
+
+  @override
+  String get noConversations => 'No conversations yet';
+
+  @override
+  String get noMessagesInChat => 'No messages in this chat';
+
+  @override
+  String get typeResponse => 'Type response to customer...';
+
+  @override
+  String get customerMessagesAppearHere => 'Customer messages will appear here';
+
+  @override
+  String get customer => 'Customer';
+
+  @override
+  String get userProfile => 'User Profile';
+
+  @override
+  String get email => 'Email';
+
+  @override
+  String get userId => 'User ID';
+
+  @override
+  String get close => 'Close';
 }
