@@ -1,7 +1,8 @@
 import 'package:ecommerceapp/core/settings/app_settings.dart';
 import 'package:ecommerceapp/features/authentication/presentation/pages/login_page.dart';
-import 'package:ecommerceapp/features/settings/presentation/pages/about_app_screen.dart';
+
 import 'package:ecommerceapp/l10n/app_localizations.dart';
+import 'package:ecommerceapp/l10n/settings/presentation/pages/about_app_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

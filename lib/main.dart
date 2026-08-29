@@ -22,10 +22,11 @@ import 'package:ecommerceapp/features/main/presentation/pages/main_screen.dart';
 
 import 'package:ecommerceapp/features/orders/presentation/pages/order_screen.dart';
 
-import 'package:ecommerceapp/features/settings/presentation/pages/setting_screen.dart';
+
 import 'package:ecommerceapp/features/chat/presentation/pages/user_chat_page.dart';
 
 import 'package:ecommerceapp/firebase_options.dart';
+import 'package:ecommerceapp/l10n/settings/presentation/pages/setting_screen.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
