@@ -15,6 +15,9 @@ class ProductModel extends ProductEntity {
     required super.image,
     required super.price,
     required super.year,
+    super.storeName = '',
+    super.latitude,
+    super.longitude,
   });
 
   factory ProductModel.fromJson(String id, Map<String, dynamic> json) {
@@ -32,6 +35,9 @@ class ProductModel extends ProductEntity {
       image: json['image'] ?? '',
       price: (json['price'] as num?)?.toDouble() ?? 0,
       year: (json['year'] as num?)?.toInt() ?? 0,
+      storeName: json['storeName'] as String? ?? '',
+      latitude: (json['latitude'] as num?)?.toDouble(),
+      longitude: (json['longitude'] as num?)?.toDouble(),
     );
   }
 
@@ -49,6 +55,9 @@ class ProductModel extends ProductEntity {
       'image': image,
       'price': price,
       'year': year,
+      'storeName': storeName,
+      'latitude': latitude,
+      'longitude': longitude,
     };
   }
 }
