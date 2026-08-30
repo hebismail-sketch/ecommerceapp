@@ -20,6 +20,11 @@ class ProductEntity extends Equatable {
   final double price;
   final int year;
 
+  // Store Location Fields
+  final String storeName;
+  final double? latitude;
+  final double? longitude;
+
   const ProductEntity({
     required this.id,
     this.favoriteId,
@@ -34,6 +39,9 @@ class ProductEntity extends Equatable {
     required this.image,
     required this.price,
     required this.year,
+    this.storeName = '',
+    this.latitude,
+    this.longitude,
   });
 
   @override
@@ -51,5 +59,8 @@ class ProductEntity extends Equatable {
         image,
         price,
         year,
+        storeName,
+        latitude,
+        longitude,
       ];
 }
