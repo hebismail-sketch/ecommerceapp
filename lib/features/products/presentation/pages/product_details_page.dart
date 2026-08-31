@@ -1,14 +1,14 @@
 // File: lib/features/products/presentation/pages/product_details_page.dart
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:ecommerceapp/features/carts/domain/entities/cart_entity.dart';
 import 'package:ecommerceapp/features/carts/presentation/manager/cart_cubit.dart';
 import 'package:ecommerceapp/features/favorites/presentation/manager/favorite_cubit.dart';
 import 'package:ecommerceapp/features/products/domain/entities/product_entity.dart';
+import 'package:ecommerceapp/features/products/presentation/pages/store_map_page.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductDetailsPage extends StatelessWidget {
   final ProductEntity product;
@@ -29,6 +29,10 @@ class ProductDetailsPage extends StatelessWidget {
     final location = isArabic ? product.locationAr : product.locationEn;
     final description = isArabic ? product.descriptionAr : product.descriptionEn;
 
+    final storeNameDisplay = product.storeName.isNotEmpty
+        ? product.storeName
+        : (location.isNotEmpty ? location : (isArabic ? 'المتجر الرئيسي' : 'Main Store'));
+
     return Scaffold(
       appBar: AppBar(
         title: Text(name),
@@ -38,7 +42,7 @@ class ProductDetailsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Car Image with Favorite Button
+            // Product Image with Favorite Button
             Stack(
               children: [
                 Image.network(
@@ -81,7 +85,87 @@ class ProductDetailsPage extends StatelessWidget {
               ],
             ),
 
-            // Car Information
+            // Store Location Banner under Image
+            InkWell(
+              onTap: () {
+                if (product.latitude != null && product.longitude != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => StoreMapPage(
+                        storeName: storeNameDisplay,
+                        storeLatitude: product.latitude!,
+                        storeLongitude: product.longitude!,
+                      ),
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('لم يتم تحديد إحداثيات موقع هذا المتجر على الخريطة من قبل البائع'),
+                    ),
+                  );
+                }
+              },
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                decoration: BoxDecoration(
+                  color: Colors.blue.shade50,
+                  border: Border(
+                    bottom: BorderSide(color: Colors.blue.shade100),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.blue.shade600,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.location_on,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            storeNameDisplay,
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue.shade900,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            product.latitude != null
+                                ? (isArabic ? 'اضغط لعرض موقع المتجر والمسافة على الخريطة' : 'Tap to view store location & distance on map')
+                                : (isArabic ? 'موقع المتجر غير محدد على الخريطة' : 'Map location not set'),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.blue.shade700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Icon(
+                      isArabic ? Icons.chevron_left : Icons.chevron_right,
+                      color: Colors.blue.shade700,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // Product Information
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
