@@ -161,7 +161,6 @@ class _StoreMapPageState extends State<StoreMapPage> {
                       points: [userLocation, storeLocation],
                       strokeWidth: 4.0,
                       color: Colors.blue.shade600,
-                      isDotted: true,
                     ),
                   ],
                 ),
