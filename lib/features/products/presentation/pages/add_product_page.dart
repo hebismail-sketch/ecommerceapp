@@ -1,5 +1,6 @@
 // File: lib/features/products/presentation/pages/add_product_page.dart
 
+import 'package:ecommerceapp/core/services/location_service.dart';
 import 'package:ecommerceapp/features/products/domain/entities/product_entity.dart';
 import 'package:ecommerceapp/features/products/presentation/manager/product_cubit.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
@@ -33,6 +34,12 @@ class _AddProductPageState extends State<AddProductPage> {
   final _descriptionEnController = TextEditingController();
   final _imageUrlController = TextEditingController();
 
+  // Store & Location Controllers
+  final _storeNameController = TextEditingController();
+  final _latitudeController = TextEditingController();
+  final _longitudeController = TextEditingController();
+  bool _isGettingLocation = false;
+
   @override
   void initState() {
     super.initState();
@@ -48,6 +55,13 @@ class _AddProductPageState extends State<AddProductPage> {
       _descriptionArController.text = widget.product!.descriptionAr;
       _descriptionEnController.text = widget.product!.descriptionEn;
       _imageUrlController.text = widget.product!.image;
+      _storeNameController.text = widget.product!.storeName;
+      if (widget.product!.latitude != null) {
+        _latitudeController.text = widget.product!.latitude.toString();
+      }
+      if (widget.product!.longitude != null) {
+        _longitudeController.text = widget.product!.longitude.toString();
+      }
     }
   }
 
@@ -64,7 +78,38 @@ class _AddProductPageState extends State<AddProductPage> {
     _descriptionArController.dispose();
     _descriptionEnController.dispose();
     _imageUrlController.dispose();
+    _storeNameController.dispose();
+    _latitudeController.dispose();
+    _longitudeController.dispose();
     super.dispose();
+  }
+
+  Future<void> _fetchCurrentLocation() async {
+    setState(() => _isGettingLocation = true);
+    final pos = await LocationService.getCurrentLocation();
+    setState(() => _isGettingLocation = false);
+
+    if (pos != null) {
+      _latitudeController.text = pos.latitude.toString();
+      _longitudeController.text = pos.longitude.toString();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: Colors.green,
+            content: Text('تم تحديد موقع المتجر بنجاح!'),
+          ),
+        );
+      }
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: Colors.red,
+            content: Text('تعذر الحصول على الموقع الحالي، يرجى التأكد من تشغيل الـ GPS ومنح الصلاحية'),
+          ),
+        );
+      }
+    }
   }
 
   Future<void> _saveProduct(AppLocalizations l10n) async {
@@ -87,6 +132,9 @@ class _AddProductPageState extends State<AddProductPage> {
       price: double.tryParse(_priceController.text.trim()) ?? 0,
       year: int.tryParse(_yearController.text.trim()) ?? 2024,
       image: image,
+      storeName: _storeNameController.text.trim(),
+      latitude: double.tryParse(_latitudeController.text.trim()),
+      longitude: double.tryParse(_longitudeController.text.trim()),
     );
 
     if (widget.product == null) {
@@ -203,6 +251,87 @@ class _AddProductPageState extends State<AddProductPage> {
                     controller: _nameEnController,
                     label: '${l10n.productName} (English)',
                     icon: Icons.shopping_bag_outlined,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // Store Information & GPS Coordinates
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Colors.blue.shade100),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.storefront, color: Colors.blue.shade700, size: 22),
+                      const SizedBox(width: 8),
+                      Text(
+                        'بيانات موقع المتجر / Store Location',
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.blue.shade900),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+                  _buildTextField(
+                    controller: _storeNameController,
+                    label: 'اسم المتجر / Store Name',
+                    icon: Icons.store,
+                    required: false,
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _buildTextField(
+                          controller: _latitudeController,
+                          label: 'Latitude (خط العرض)',
+                          icon: Icons.map_outlined,
+                          isNumber: true,
+                          required: false,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: _buildTextField(
+                          controller: _longitudeController,
+                          label: 'Longitude (خط الطول)',
+                          icon: Icons.map_outlined,
+                          isNumber: true,
+                          required: false,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.blue.shade700,
+                        side: BorderSide(color: Colors.blue.shade400),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                      ),
+                      onPressed: _isGettingLocation ? null : _fetchCurrentLocation,
+                      icon: _isGettingLocation
+                          ? const SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : const Icon(Icons.my_location, size: 18),
+                      label: Text(
+                        _isGettingLocation ? 'جاري تحديد الموقع...' : 'تحديد موقع المتجر الحالي تلقائياً (GPS)',
+                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -352,18 +481,30 @@ class _AddProductPageState extends State<AddProductPage> {
     required IconData icon,
     bool isNumber = false,
     int maxLines = 1,
+    bool required = true,
   }) {
     return TextFormField(
       controller: controller,
       maxLines: maxLines,
-      keyboardType: isNumber ? TextInputType.number : TextInputType.text,
+      keyboardType: isNumber
+          ? const TextInputType.numberWithOptions(decimal: true)
+          : TextInputType.text,
       decoration: InputDecoration(
         labelText: label,
-        prefixIcon: Icon(icon, size: 20, color: Colors.grey.shade600),
+        prefixIcon: Icon(icon, size: 20),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        filled: true,
+        fillColor: Colors.grey.shade50,
         contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       ),
-      validator: (value) => (value == null || value.trim().isEmpty) ? 'Required' : null,
+      validator: required
+          ? (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'هذا الحقل مطلوب';
+              }
+              return null;
+            }
+          : null,
     );
   }
 }
