@@ -22,7 +22,6 @@ import 'package:ecommerceapp/features/main/presentation/pages/main_screen.dart';
 
 import 'package:ecommerceapp/features/orders/presentation/pages/order_screen.dart';
 
-
 import 'package:ecommerceapp/features/chat/presentation/pages/user_chat_page.dart';
 
 import 'package:ecommerceapp/firebase_options.dart';
@@ -61,12 +60,15 @@ Future<void> main() async {
 
         // Authentication BLoC
         BlocProvider(
-          create: (_) => InjectionContainer.authenticationBloc
-            ..add(const CheckAuthStatusEvent()),
+          create: (_) =>
+              InjectionContainer.authenticationBloc
+                ..add(const CheckAuthStatusEvent()),
         ),
 
         // Product Cubit
-        BlocProvider(create: (_) => InjectionContainer.productCubit..loadProducts()),
+        BlocProvider(
+          create: (_) => InjectionContainer.productCubit..loadProducts(),
+        ),
 
         // Cart Cubit
         BlocProvider(
@@ -105,9 +107,7 @@ Future<void> main() async {
         BlocProvider(create: (_) => InjectionContainer.orderCubit),
 
         // Chat Cubit
-        BlocProvider(
-          create: (_) => InjectionContainer.chatCubit,
-        ),
+        BlocProvider(create: (_) => InjectionContainer.chatCubit),
 
         BlocProvider(
           create: (_) {
@@ -149,13 +149,12 @@ class MyApp extends StatelessWidget {
         );
       },
       initialRoute: FirebaseAuth.instance.currentUser != null
-           ? MainScreen.screenRoute
-           : RegisterPage.screenRoute,
-       routes: {
-         RegisterPage.screenRoute: (_) => const RegisterPage(),
-         LoginPage.screenRoute: (_) => const LoginPage(),
+          ? MainScreen.screenRoute
+          : RegisterPage.screenRoute,
+      routes: {
+        RegisterPage.screenRoute: (_) => const RegisterPage(),
+        LoginPage.screenRoute: (_) => const LoginPage(),
         HomePage.screenRoute: (_) => const HomePage(),
-
 
         AdminHome.screenRoute: (_) => const AdminHome(),
         ManageProductsPage.screenRoute: (_) => const ManageProductsPage(),
