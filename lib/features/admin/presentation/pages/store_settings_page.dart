@@ -23,12 +23,17 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
   final _nameEnController = TextEditingController();
   final _addressController = TextEditingController();
 
-  double _latitude = 30.0444;
-  double _longitude = 31.2357;
+  double _latitude = _defaultLatitude;
+  double _longitude = _defaultLongitude;
   bool _isLoading = true;
   bool _isSaving = false;
   bool _isGettingLocation = false;
   final MapController _mapController = MapController();
+
+  static const _defaultStoreNameAr = 'المتجر الرئيسي';
+  static const _defaultStoreNameEn = 'Main Store';
+  static const _defaultLatitude = 30.0444;
+  static const _defaultLongitude = 31.2357;
 
   @override
   void initState() {
@@ -37,15 +42,27 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
   }
 
   Future<void> _loadSettings() async {
-    final settings = await StoreSettingsService.getStoreSettings();
-    if (settings != null) {
-      _nameArController.text = settings.storeNameAr;
-      _nameEnController.text = settings.storeNameEn;
-      _addressController.text = settings.address;
-      _latitude = settings.latitude;
-      _longitude = settings.longitude;
+    try {
+      final settings = await StoreSettingsService.getStoreSettings().timeout(
+        const Duration(seconds: 10),
+      );
+
+      if (settings != null) {
+        _nameArController.text = settings.storeNameAr;
+        _nameEnController.text = settings.storeNameEn;
+        _addressController.text = settings.address;
+        _latitude = settings.latitude;
+        _longitude = settings.longitude;
+      }
+    } catch (_) {
+      // Keep the page usable when Firestore is unavailable or slow.
+      _nameArController.text = _defaultStoreNameAr;
+      _nameEnController.text = _defaultStoreNameEn;
     }
-    setState(() => _isLoading = false);
+
+    if (mounted) {
+      setState(() => _isLoading = false);
+    }
   }
 
   @override
@@ -116,10 +133,10 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
     final settings = StoreSettingsModel(
       storeNameAr: _nameArController.text.trim().isNotEmpty
           ? _nameArController.text.trim()
-          : 'المتجر الرئيسي',
+          : _defaultStoreNameAr,
       storeNameEn: _nameEnController.text.trim().isNotEmpty
           ? _nameEnController.text.trim()
-          : 'Main Store',
+          : _defaultStoreNameEn,
       latitude: _latitude,
       longitude: _longitude,
       address: _addressController.text.trim(),
