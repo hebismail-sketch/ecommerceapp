@@ -1,6 +1,7 @@
 // File: lib/features/admin/presentation/pages/store_settings_page.dart
 
 import 'package:ecommerceapp/core/services/location_service.dart';
+import 'package:ecommerceapp/core/services/product_translation_service.dart';
 import 'package:ecommerceapp/core/services/store_settings_service.dart';
 import 'package:ecommerceapp/features/products/presentation/pages/location_picker_page.dart';
 import 'package:flutter/material.dart';
@@ -19,9 +20,11 @@ class StoreSettingsPage extends StatefulWidget {
 class _StoreSettingsPageState extends State<StoreSettingsPage> {
   final _formKey = GlobalKey<FormState>();
 
-  final _nameArController = TextEditingController();
-  final _nameEnController = TextEditingController();
+  final _nameController = TextEditingController();
   final _addressController = TextEditingController();
+  String _translatedStoreName = '';
+  bool _isTranslating = false;
+  int _translationRequest = 0;
 
   double _latitude = _defaultLatitude;
   double _longitude = _defaultLongitude;
@@ -42,33 +45,82 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
   }
 
   Future<void> _loadSettings() async {
+    _nameController.text = _defaultStoreNameAr;
+    _translatedStoreName = _defaultStoreNameEn;
+
     try {
       final settings = await StoreSettingsService.getStoreSettings().timeout(
         const Duration(seconds: 10),
       );
+      if (!mounted || settings == null) return;
 
-      if (settings != null) {
-        _nameArController.text = settings.storeNameAr;
-        _nameEnController.text = settings.storeNameEn;
-        _addressController.text = settings.address;
+      final savedArabicName = settings.storeNameAr.trim();
+      final savedEnglishName = settings.storeNameEn.trim();
+      _nameController.text = savedArabicName.isNotEmpty
+          ? savedArabicName
+          : savedEnglishName;
+      _translatedStoreName =
+          savedArabicName.isNotEmpty && savedEnglishName != savedArabicName
+          ? savedEnglishName
+          : '';
+      _addressController.text = settings.address;
+      if (_hasValidCoordinates(settings.latitude, settings.longitude)) {
         _latitude = settings.latitude;
         _longitude = settings.longitude;
       }
     } catch (_) {
       // Keep the page usable when Firestore is unavailable or slow.
-      _nameArController.text = _defaultStoreNameAr;
-      _nameEnController.text = _defaultStoreNameEn;
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  bool _hasValidCoordinates(double latitude, double longitude) {
+    return latitude.isFinite &&
+        longitude.isFinite &&
+        latitude >= -90 &&
+        latitude <= 90 &&
+        longitude >= -180 &&
+        longitude <= 180;
+  }
+
+  bool _containsArabic(String text) {
+    return RegExp(r'[\u0600-\u06FF]').hasMatch(text);
+  }
+
+  Future<void> _translateStoreName(String value) async {
+    final text = value.trim();
+    final request = ++_translationRequest;
+    if (text.isEmpty) {
+      if (mounted) setState(() => _translatedStoreName = '');
+      return;
     }
 
-    if (mounted) {
-      setState(() => _isLoading = false);
+    setState(() => _isTranslating = true);
+    try {
+      final translated = await ProductTranslationService.translate(
+        text: text,
+        fromArabic: _containsArabic(text),
+      );
+      if (mounted && request == _translationRequest) {
+        setState(() => _translatedStoreName = translated);
+      }
+    } catch (_) {
+      if (mounted && request == _translationRequest) {
+        setState(() => _translatedStoreName = '');
+      }
+    } finally {
+      if (mounted && request == _translationRequest) {
+        setState(() => _isTranslating = false);
+      }
     }
   }
 
   @override
   void dispose() {
-    _nameArController.dispose();
-    _nameEnController.dispose();
+    _nameController.dispose();
     _addressController.dispose();
     super.dispose();
   }
@@ -84,76 +136,165 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
       ),
     );
 
-    if (result != null) {
-      setState(() {
-        _latitude = result.latitude;
-        _longitude = result.longitude;
-      });
-      _mapController.move(result, 14.0);
-    }
+    if (!mounted || result == null) return;
+
+    setState(() {
+      _latitude = result.latitude;
+      _longitude = result.longitude;
+    });
+    _mapController.move(result, 14.0);
   }
 
   Future<void> _fetchCurrentGPS() async {
+    if (_isGettingLocation) return;
     setState(() => _isGettingLocation = true);
-    final pos = await LocationService.getCurrentLocation();
-    setState(() => _isGettingLocation = false);
-
-    if (pos != null) {
+    try {
+      final pos = await LocationService.getCurrentLocation();
+      if (!mounted) return;
+      if (pos == null) {
+        _showMessage(
+          'تعذر تحديد الموقع. تأكد من تفعيل GPS ومنح الصلاحية.',
+          isError: true,
+        );
+        return;
+      }
       final newLoc = LatLng(pos.latitude, pos.longitude);
       setState(() {
         _latitude = pos.latitude;
         _longitude = pos.longitude;
       });
       _mapController.move(newLoc, 14.0);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            backgroundColor: Colors.green,
-            content: Text('تم تحديد موقع المتجر الحالي بنجاح!'),
-          ),
-        );
-      }
-    } else {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            backgroundColor: Colors.red,
-            content: Text('تعذر تحديد الموقع، يرجى التأكد من تشغيل الـ GPS'),
-          ),
-        );
-      }
+      _showMessage('تم تحديث موقع المتجر بنجاح.');
+    } catch (_) {
+      if (mounted)
+        _showMessage('حدث خطأ أثناء قراءة الموقع الحالي.', isError: true);
+    } finally {
+      if (mounted) setState(() => _isGettingLocation = false);
     }
   }
 
-  Future<void> _saveSettings() async {
-    if (!_formKey.currentState!.validate()) return;
-
-    setState(() => _isSaving = true);
-
-    final settings = StoreSettingsModel(
-      storeNameAr: _nameArController.text.trim().isNotEmpty
-          ? _nameArController.text.trim()
-          : _defaultStoreNameAr,
-      storeNameEn: _nameEnController.text.trim().isNotEmpty
-          ? _nameEnController.text.trim()
-          : _defaultStoreNameEn,
-      latitude: _latitude,
-      longitude: _longitude,
-      address: _addressController.text.trim(),
-    );
-
-    await StoreSettingsService.saveStoreSettings(settings);
-
-    setState(() => _isSaving = false);
-
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          backgroundColor: Colors.green,
-          content: Text('تم حفظ بيانات وموقع المتجر بنجاح!'),
+  void _showMessage(String message, {bool isError = false}) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.all(16),
+          backgroundColor: isError
+              ? Colors.red.shade700
+              : Colors.green.shade700,
+          content: Text(message),
         ),
       );
+  }
+
+  Widget _sectionTitle({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required Color color,
+  }) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(11),
+          decoration: BoxDecoration(
+            color: color.withOpacity(.1),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(icon, color: color, size: 22),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 3),
+              Text(
+                subtitle,
+                style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  InputDecoration _fieldDecoration({
+    required String label,
+    required IconData icon,
+    String? hint,
+  }) {
+    return InputDecoration(
+      labelText: label,
+      hintText: hint,
+      prefixIcon: Icon(icon, size: 21),
+      filled: true,
+      fillColor: Colors.grey.shade50,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide.none,
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Colors.grey.shade200),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Colors.blue.shade600, width: 1.5),
+      ),
+    );
+  }
+
+  Future<void> _saveSettings() async {
+    if (_isSaving || !_formKey.currentState!.validate()) return;
+    if (_translatedStoreName.trim().isEmpty) {
+      await _translateStoreName(_nameController.text);
+    }
+    if (_translatedStoreName.trim().isEmpty) {
+      _showMessage(
+        'تعذر إنشاء الترجمة تلقائيًا. حاول مرة أخرى.',
+        isError: true,
+      );
+      return;
+    }
+    if (!_hasValidCoordinates(_latitude, _longitude)) {
+      _showMessage('يرجى اختيار موقع صحيح للمتجر.', isError: true);
+      return;
+    }
+    setState(() => _isSaving = true);
+    try {
+      await StoreSettingsService.saveStoreSettings(
+        StoreSettingsModel(
+          storeNameAr: _containsArabic(_nameController.text.trim())
+              ? _nameController.text.trim()
+              : _translatedStoreName,
+          storeNameEn: _containsArabic(_nameController.text.trim())
+              ? _translatedStoreName
+              : _nameController.text.trim(),
+          latitude: _latitude,
+          longitude: _longitude,
+          address: _addressController.text.trim(),
+        ),
+      );
+      if (!mounted) return;
+      _showMessage('تم حفظ إعدادات المتجر بنجاح.');
       Navigator.pop(context);
+    } catch (_) {
+      if (mounted)
+        _showMessage('تعذر حفظ الإعدادات. حاول مرة أخرى.', isError: true);
+    } finally {
+      if (mounted) setState(() => _isSaving = false);
     }
   }
 
@@ -176,253 +317,341 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
       ),
       body: Form(
         key: _formKey,
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            // Store Info Card
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.grey.shade200),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(Icons.store, color: Colors.red.shade700, size: 22),
-                      const SizedBox(width: 8),
-                      const Text(
-                        'بيانات المتجر الأساسية',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                        ),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 920),
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(16, 20, 16, 28),
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.red.shade400, Colors.red.shade700],
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.red.shade200,
+                        blurRadius: 14,
+                        offset: const Offset(0, 6),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 14),
-                  TextFormField(
-                    controller: _nameArController,
-                    decoration: InputDecoration(
-                      labelText: 'اسم المتجر (عربي)',
-                      prefixIcon: const Icon(Icons.storefront),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      filled: true,
-                      fillColor: Colors.grey.shade50,
-                    ),
-                    validator: (val) => val == null || val.trim().isEmpty
-                        ? 'يرجى إدخال اسم المتجر'
-                        : null,
-                  ),
-                  const SizedBox(height: 12),
-                  TextFormField(
-                    controller: _nameEnController,
-                    decoration: InputDecoration(
-                      labelText: 'اسم المتجر (English)',
-                      prefixIcon: const Icon(Icons.storefront_outlined),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      filled: true,
-                      fillColor: Colors.grey.shade50,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  TextFormField(
-                    controller: _addressController,
-                    decoration: InputDecoration(
-                      labelText: 'عنوان المتجر بالتفصيل (اختياري)',
-                      prefixIcon: const Icon(Icons.location_city),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      filled: true,
-                      fillColor: Colors.grey.shade50,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Map & Pin Location Card
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.blue.shade100),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+                  child: const Row(
                     children: [
-                      Icon(
-                        Icons.pin_drop,
-                        color: Colors.blue.shade700,
-                        size: 22,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        'موقع المتجر على الخريطة',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                          color: Colors.blue.shade900,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'الإحداثيات الحالية: ${_latitude.toStringAsFixed(5)}, ${_longitude.toStringAsFixed(5)}',
-                    style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-                  ),
-                  const SizedBox(height: 12),
-
-                  // Mini Map Preview
-                  Container(
-                    height: 180,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.grey.shade300),
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    child: FlutterMap(
-                      mapController: _mapController,
-                      options: MapOptions(
-                        initialCenter: storeLocation,
-                        initialZoom: 13.0,
-                        interactionOptions: const InteractionOptions(
-                          flags: InteractiveFlag.none,
-                        ),
-                      ),
-                      children: [
-                        TileLayer(
-                          urlTemplate:
-                              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                          userAgentPackageName: 'com.example.ecommerceapp',
-                        ),
-                        MarkerLayer(
-                          markers: [
-                            Marker(
-                              point: storeLocation,
-                              width: 50,
-                              height: 50,
-                              child: const Icon(
-                                Icons.location_on,
-                                color: Colors.red,
-                                size: 38,
+                      Icon(Icons.tune_rounded, color: Colors.white, size: 34),
+                      SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'إدارة بيانات المتجر',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 19,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            Text(
+                              'حدّث بيانات متجرك وموقعه ليظهر للعملاء بشكل دقيق.',
+                              style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: 12,
                               ),
                             ),
                           ],
                         ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-
-                  // Open interactive map picker button
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue.shade600,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
-                      onPressed: _openMapPicker,
-                      icon: const Icon(Icons.map, size: 20),
-                      label: const Text(
-                        'تحديد موقع المتجر وتثبيت الدبوس على الخريطة',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-
-                  // GPS button
-                  SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton.icon(
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: Colors.blue.shade700,
-                        side: BorderSide(color: Colors.blue.shade300),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                      ),
-                      onPressed: _isGettingLocation ? null : _fetchCurrentGPS,
-                      icon: _isGettingLocation
-                          ? const SizedBox(
-                              width: 16,
-                              height: 16,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                          : const Icon(Icons.my_location, size: 18),
-                      label: Text(
-                        _isGettingLocation
-                            ? 'جاري تحديد الموقع...'
-                            : 'استخدام موقعي الحالي بالـ GPS',
-                        style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // Save Button
-            SizedBox(
-              height: 52,
-              child: ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red.shade600,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  elevation: 2,
-                ),
-                onPressed: _isSaving ? null : _saveSettings,
-                icon: _isSaving
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 2,
-                        ),
-                      )
-                    : const Icon(Icons.save),
-                label: Text(
-                  _isSaving ? 'جاري الحفظ...' : 'حفظ إعدادات المتجر',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                    ],
                   ),
                 ),
-              ),
+                const SizedBox(height: 20),
+                // Store Info Card
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Colors.grey.shade200),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _sectionTitle(
+                        icon: Icons.storefront_rounded,
+                        title: 'بيانات المتجر الأساسية',
+                        subtitle: 'هذه المعلومات تظهر للعملاء داخل التطبيق',
+                        color: Colors.red.shade700,
+                      ),
+                      const SizedBox(height: 18),
+                      TextFormField(
+                        controller: _nameController,
+                        textDirection: TextDirection.rtl,
+                        textInputAction: TextInputAction.next,
+                        onChanged: (value) {
+                          Future<void>.delayed(
+                            const Duration(milliseconds: 650),
+                            () {
+                              if (mounted && value == _nameController.text) {
+                                _translateStoreName(value);
+                              }
+                            },
+                          );
+                        },
+                        decoration: _fieldDecoration(
+                          label: 'اسم المتجر',
+                          icon: Icons.storefront,
+                          hint: 'اكتب الاسم بالعربي أو English',
+                        ),
+                        validator: (val) => val == null || val.trim().isEmpty
+                            ? 'يرجى إدخال اسم المتجر'
+                            : null,
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Icon(
+                            _isTranslating ? Icons.sync : Icons.translate,
+                            size: 16,
+                            color: Colors.blue.shade700,
+                          ),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: Text(
+                              _isTranslating
+                                  ? 'جاري تجهيز الترجمة تلقائيًا...'
+                                  : _translatedStoreName.isEmpty
+                                  ? 'سيتم حفظ الاسم باللغتين تلقائيًا'
+                                  : 'الترجمة التلقائية: $_translatedStoreName',
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: Colors.blue.shade700,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        controller: _addressController,
+                        maxLines: 2,
+                        textDirection: TextDirection.rtl,
+                        decoration: _fieldDecoration(
+                          label: 'عنوان المتجر بالتفصيل (اختياري)',
+                          icon: Icons.location_city_outlined,
+                          hint: 'الحي، الشارع، رقم المبنى',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // Map & Pin Location Card
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Colors.blue.shade100),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _sectionTitle(
+                        icon: Icons.map_outlined,
+                        title: 'موقع المتجر على الخريطة',
+                        subtitle:
+                            'ثبّت الدبوس بدقة حتى يتمكن العملاء من الوصول إليك',
+                        color: Colors.blue.shade700,
+                      ),
+                      const SizedBox(height: 14),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.blue.shade50,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.gps_fixed,
+                              size: 17,
+                              color: Colors.blue.shade700,
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                'الإحداثيات الحالية: ${_latitude.toStringAsFixed(5)}, ${_longitude.toStringAsFixed(5)}',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.blue.shade900,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+
+                      // Mini Map Preview
+                      Container(
+                        height: 220,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.grey.shade300),
+                        ),
+                        clipBehavior: Clip.antiAlias,
+                        child: FlutterMap(
+                          mapController: _mapController,
+                          options: MapOptions(
+                            initialCenter: storeLocation,
+                            initialZoom: 13.0,
+                            interactionOptions: const InteractionOptions(
+                              flags: InteractiveFlag.none,
+                            ),
+                          ),
+                          children: [
+                            TileLayer(
+                              urlTemplate:
+                                  'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                              userAgentPackageName: 'com.example.ecommerceapp',
+                            ),
+                            MarkerLayer(
+                              markers: [
+                                Marker(
+                                  point: storeLocation,
+                                  width: 50,
+                                  height: 50,
+                                  child: const Icon(
+                                    Icons.location_on,
+                                    color: Colors.red,
+                                    size: 38,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+
+                      // Open interactive map picker button
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue.shade600,
+                            foregroundColor: Colors.white,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                          ),
+                          onPressed: _openMapPicker,
+                          icon: const Icon(Icons.map, size: 20),
+                          label: const Text(
+                            'تعديل الموقع على الخريطة',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+
+                      // GPS button
+                      SizedBox(
+                        width: double.infinity,
+                        child: OutlinedButton.icon(
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: Colors.blue.shade700,
+                            side: BorderSide(color: Colors.blue.shade300),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                          ),
+                          onPressed: _isGettingLocation
+                              ? null
+                              : _fetchCurrentGPS,
+                          icon: _isGettingLocation
+                              ? const SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : const Icon(Icons.my_location, size: 18),
+                          label: Text(
+                            _isGettingLocation
+                                ? 'جاري تحديد الموقع...'
+                                : 'استخدام موقعي الحالي بالـ GPS',
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+
+                // Save Button
+                SizedBox(
+                  height: 56,
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red.shade600,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      elevation: 1,
+                    ),
+                    onPressed: _isSaving ? null : _saveSettings,
+                    icon: _isSaving
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : const Icon(Icons.save),
+                    label: Text(
+                      _isSaving ? 'جاري الحفظ...' : 'حفظ إعدادات المتجر',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Center(
+                  child: Text(
+                    'سيتم تطبيق التغييرات فورًا على واجهة العملاء',
+                    style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
+                  ),
+                ),
+                const SizedBox(height: 24),
+              ],
             ),
-            const SizedBox(height: 24),
-          ],
+          ),
         ),
       ),
     );
