@@ -1,3 +1,4 @@
+import 'package:ecommerceapp/core/constants/app_constants.dart';
 import 'package:ecommerceapp/core/notifications/notification_service.dart';
 import 'package:ecommerceapp/core/services/injection_container.dart';
 import 'package:ecommerceapp/core/settings/app_settings.dart';
@@ -148,9 +149,7 @@ class MyApp extends StatelessWidget {
           child: child!,
         );
       },
-      initialRoute: FirebaseAuth.instance.currentUser != null
-          ? MainScreen.screenRoute
-          : RegisterPage.screenRoute,
+      home: const _AuthenticationGate(),
       routes: {
         RegisterPage.screenRoute: (_) => const RegisterPage(),
         LoginPage.screenRoute: (_) => const LoginPage(),
@@ -167,6 +166,31 @@ class MyApp extends StatelessWidget {
         SettingsScreen.screenRoute: (_) => const SettingsScreen(),
         ProfileScreen.screenRoute: (_) => const ProfileScreen(),
         UserChatPage.screenRoute: (_) => const UserChatPage(),
+      },
+    );
+  }
+}
+
+class _AuthenticationGate extends StatelessWidget {
+  const _AuthenticationGate();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+      builder: (context, state) {
+        if (state is AuthenticationInitial || state is AuthenticationLoading) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        if (state is UserLoggedIn) {
+          return state.user.role == AppConstants.adminRole
+              ? const AdminHome()
+              : const MainScreen();
+        }
+
+        return const LoginPage();
       },
     );
   }
