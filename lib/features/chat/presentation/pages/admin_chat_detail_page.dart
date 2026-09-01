@@ -17,7 +17,9 @@ import 'package:ecommerceapp/features/chat/presentation/widgets/user_profile_mod
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 
 class AdminChatDetailPage extends StatefulWidget {
-  const AdminChatDetailPage({super.key});
+  final ConversationEntity? conversation;
+
+  const AdminChatDetailPage({super.key, this.conversation});
 
   static const String screenRoute = 'adminChatDetail';
 
@@ -36,8 +38,10 @@ class _AdminChatDetailPageState extends State<AdminChatDetailPage> {
     super.didChangeDependencies();
     if (!_isInitialized) {
       final args = ModalRoute.of(context)?.settings.arguments;
-      if (args is ConversationEntity) {
-        _conversation = args;
+      final conversation =
+          widget.conversation ?? (args is ConversationEntity ? args : null);
+      if (conversation != null) {
+        _conversation = conversation;
         _isInitialized = true;
         // Watch messages for this specific conversation
         context.read<ChatCubit>().watchMessages(_conversation!.id);
@@ -151,9 +155,9 @@ class _AdminChatDetailPageState extends State<AdminChatDetailPage> {
           ],
         ),
         child: Column(
-
-          crossAxisAlignment:
-          isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          crossAxisAlignment: isMine
+              ? CrossAxisAlignment.end
+              : CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
@@ -176,7 +180,9 @@ class _AdminChatDetailPageState extends State<AdminChatDetailPage> {
                     fontSize: 11,
                     color: isMine
                         ? Colors.white70
-                        : (isDark ? Colors.grey.shade400 : Colors.grey.shade600),
+                        : (isDark
+                              ? Colors.grey.shade400
+                              : Colors.grey.shade600),
                   ),
                 ),
                 if (isMine) ...[
@@ -225,10 +231,7 @@ class _AdminChatDetailPageState extends State<AdminChatDetailPage> {
       itemBuilder: (context, index) {
         final message = state.messages[index];
         final isMine = message.senderRole == AppConstants.adminRole;
-        return _buildMessageBubble(
-          message: message,
-          isMine: isMine,
-        );
+        return _buildMessageBubble(message: message, isMine: isMine);
       },
     );
   }
@@ -283,11 +286,7 @@ class _AdminChatDetailPageState extends State<AdminChatDetailPage> {
                 onTap: _sendMessage,
                 child: const Padding(
                   padding: EdgeInsets.all(12),
-                  child: Icon(
-                    Icons.send,
-                    color: Colors.white,
-                    size: 20,
-                  ),
+                  child: Icon(Icons.send, color: Colors.white, size: 20),
                 ),
               ),
             ),
@@ -297,7 +296,11 @@ class _AdminChatDetailPageState extends State<AdminChatDetailPage> {
     );
   }
 
-  void _showCustomerProfileDialog(BuildContext context, ConversationEntity conversation, AppLocalizations l10n) {
+  void _showCustomerProfileDialog(
+    BuildContext context,
+    ConversationEntity conversation,
+    AppLocalizations l10n,
+  ) {
     UserProfileModal.show(
       context: context,
       conversation: conversation,
@@ -337,15 +340,21 @@ class _AdminChatDetailPageState extends State<AdminChatDetailPage> {
                     Text(
                       _conversation!.userName.isNotEmpty
                           ? _conversation!.userName
-                          : '${l10n.customer} (${_conversation!.userId.substring(0, 5)})',
-                      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                          : '${l10n.customer} (${_conversation!.userId.length > 5 ? _conversation!.userId.substring(0, 5) : _conversation!.userId})',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     if (_conversation!.userEmail.isNotEmpty)
                       Text(
                         _conversation!.userEmail,
-                        style: const TextStyle(fontSize: 11, color: Colors.grey),
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: Colors.grey,
+                        ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -359,9 +368,9 @@ class _AdminChatDetailPageState extends State<AdminChatDetailPage> {
       body: BlocConsumer<ChatCubit, ChatState>(
         listener: (context, state) {
           if (state is ChatFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
           }
         },
         builder: (context, state) {
