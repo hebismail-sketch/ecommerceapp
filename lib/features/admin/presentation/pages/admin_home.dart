@@ -1,6 +1,7 @@
 // File: lib/features/admin/presentation/pages/admin_home.dart
 
 import 'package:ecommerceapp/features/admin/presentation/widgets/dashboard_card.dart';
+import 'package:ecommerceapp/features/admin/presentation/pages/store_settings_page.dart';
 import 'package:ecommerceapp/features/chat/presentation/pages/admin_conversations_page.dart';
 import 'package:ecommerceapp/features/notifications/presentation/pages/notifications_page.dart';
 import 'package:ecommerceapp/features/orders/presentation/pages/order_screen.dart';
@@ -66,17 +67,11 @@ class _AdminHomeState extends State<AdminHome> {
         ),
         title: Text(
           title,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 15,
-          ),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
         ),
         subtitle: Text(
           subtitle,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.grey.shade600,
-          ),
+          style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
         ),
         trailing: Container(
           padding: const EdgeInsets.all(8),
@@ -129,10 +124,7 @@ class _AdminHomeState extends State<AdminHome> {
               ],
             ),
             onPressed: () {
-              Navigator.pushNamed(
-                context,
-                NotificationsPage.screenRoute,
-              );
+              Navigator.pushNamed(context, NotificationsPage.screenRoute);
             },
           ),
           const SizedBox(width: 8),
@@ -289,9 +281,11 @@ class _AdminHomeState extends State<AdminHome> {
                       icon: Icons.chat_bubble_outline,
                       color: Colors.blue.shade600,
                       onTap: () {
-                        Navigator.pushNamed(
+                        Navigator.push(
                           context,
-                          AdminConversationsPage.screenRoute,
+                          MaterialPageRoute(
+                            builder: (_) => const AdminConversationsPage(),
+                          ),
                         );
                       },
                     ),
@@ -318,10 +312,7 @@ class _AdminHomeState extends State<AdminHome> {
                   icon: Icons.add_circle_outline,
                   color: Colors.red.shade600,
                   onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      AddProductPage.screenRoute,
-                    );
+                    Navigator.pushNamed(context, AddProductPage.screenRoute);
                   },
                 ),
 
@@ -340,7 +331,24 @@ class _AdminHomeState extends State<AdminHome> {
                   },
                 ),
 
-                // Action 3: Customer Chats
+                // Action 3: Store Location
+                _buildActionTile(
+                  context: context,
+                  title: l10n.storeLocation,
+                  subtitle: l10n.storeLocationSubtitle,
+                  icon: Icons.location_on_outlined,
+                  color: Colors.teal.shade600,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const StoreSettingsPage(),
+                      ),
+                    );
+                  },
+                ),
+
+                // Action 4: Customer Chats
                 _buildActionTile(
                   context: context,
                   title: l10n.customerChats,
@@ -348,14 +356,16 @@ class _AdminHomeState extends State<AdminHome> {
                   icon: Icons.forum_outlined,
                   color: Colors.blue.shade600,
                   onTap: () {
-                    Navigator.pushNamed(
+                    Navigator.push(
                       context,
-                      AdminConversationsPage.screenRoute,
+                      MaterialPageRoute(
+                        builder: (_) => const AdminConversationsPage(),
+                      ),
                     );
                   },
                 ),
 
-                // Action 4: Customer Orders
+                // Action 5: Customer Orders
                 _buildActionTile(
                   context: context,
                   title: l10n.orders,
@@ -363,10 +373,7 @@ class _AdminHomeState extends State<AdminHome> {
                   icon: Icons.receipt_long_outlined,
                   color: Colors.purple.shade600,
                   onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      OrdersScreen.screenRoute,
-                    );
+                    Navigator.pushNamed(context, OrdersScreen.screenRoute);
                   },
                 ),
               ],
@@ -377,5 +384,3 @@ class _AdminHomeState extends State<AdminHome> {
     );
   }
 }
-
-
