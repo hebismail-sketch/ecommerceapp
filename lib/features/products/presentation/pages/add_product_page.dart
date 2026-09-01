@@ -1,5 +1,6 @@
 // File: lib/features/products/presentation/pages/add_product_page.dart
 
+import 'package:ecommerceapp/core/services/product_translation_service.dart';
 import 'package:ecommerceapp/features/products/domain/entities/product_entity.dart';
 import 'package:ecommerceapp/features/products/presentation/manager/product_cubit.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
@@ -32,6 +33,9 @@ class _AddProductPageState extends State<AddProductPage> {
   final _descriptionArController = TextEditingController();
   final _descriptionEnController = TextEditingController();
   final _imageUrlController = TextEditingController();
+  late bool _isArabicInput;
+  bool _isLanguageInitialized = false;
+  bool _isTranslating = false;
 
   @override
   void initState() {
@@ -52,6 +56,15 @@ class _AddProductPageState extends State<AddProductPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_isLanguageInitialized) {
+      _isArabicInput = Localizations.localeOf(context).languageCode == 'ar';
+      _isLanguageInitialized = true;
+    }
+  }
+
+  @override
   void dispose() {
     _nameArController.dispose();
     _nameEnController.dispose();
@@ -68,7 +81,41 @@ class _AddProductPageState extends State<AddProductPage> {
   }
 
   Future<void> _saveProduct(AppLocalizations l10n) async {
-    if (!_formKey.currentState!.validate()) return;
+    if (!_formKey.currentState!.validate() || _isTranslating) return;
+
+    final productCubit = context.read<ProductCubit>();
+    setState(() => _isTranslating = true);
+    try {
+      final translated = await ProductTranslationService.translateAll(
+        texts: [
+          _isArabicInput ? _nameArController.text : _nameEnController.text,
+          _isArabicInput ? _brandArController.text : _brandEnController.text,
+          _isArabicInput ? _locationArController.text : _locationEnController.text,
+          _isArabicInput ? _descriptionArController.text : _descriptionEnController.text,
+        ],
+        fromArabic: _isArabicInput,
+      );
+
+      if (_isArabicInput) {
+        _nameEnController.text = translated[0];
+        _brandEnController.text = translated[1];
+        _locationEnController.text = translated[2];
+        _descriptionEnController.text = translated[3];
+      } else {
+        _nameArController.text = translated[0];
+        _brandArController.text = translated[1];
+        _locationArController.text = translated[2];
+        _descriptionArController.text = translated[3];
+      }
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Translation failed. Please try again.\n$error')),
+        );
+        setState(() => _isTranslating = false);
+      }
+      return;
+    }
 
     final image = _imageUrlController.text.trim().isNotEmpty
         ? _imageUrlController.text.trim()
@@ -90,7 +137,7 @@ class _AddProductPageState extends State<AddProductPage> {
     );
 
     if (widget.product == null) {
-      await context.read<ProductCubit>().addProduct(product);
+      await productCubit.addProduct(product);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -100,7 +147,7 @@ class _AddProductPageState extends State<AddProductPage> {
         );
       }
     } else {
-      await context.read<ProductCubit>().updateProduct(product.id, product);
+      await productCubit.updateProduct(product.id, product);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -111,7 +158,10 @@ class _AddProductPageState extends State<AddProductPage> {
       }
     }
 
-    if (mounted) Navigator.pop(context);
+    if (mounted) {
+      setState(() => _isTranslating = false);
+      Navigator.pop(context);
+    }
   }
 
   @override
@@ -183,7 +233,7 @@ class _AddProductPageState extends State<AddProductPage> {
             ),
             const SizedBox(height: 16),
 
-            // Product Names (AR & EN)
+            // The admin enters text in the current app language only.
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -194,14 +244,8 @@ class _AddProductPageState extends State<AddProductPage> {
               child: Column(
                 children: [
                   _buildTextField(
-                    controller: _nameArController,
-                    label: '${l10n.productName} (عربي)',
-                    icon: Icons.shopping_bag_outlined,
-                  ),
-                  const SizedBox(height: 12),
-                  _buildTextField(
-                    controller: _nameEnController,
-                    label: '${l10n.productName} (English)',
+                    controller: _isArabicInput ? _nameArController : _nameEnController,
+                    label: l10n.productName,
                     icon: Icons.shopping_bag_outlined,
                   ),
                 ],
@@ -241,7 +285,7 @@ class _AddProductPageState extends State<AddProductPage> {
             ),
             const SizedBox(height: 16),
 
-            // Brand (AR & EN)
+            // Brand
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -252,14 +296,8 @@ class _AddProductPageState extends State<AddProductPage> {
               child: Column(
                 children: [
                   _buildTextField(
-                    controller: _brandArController,
-                    label: '${l10n.brand} (عربي)',
-                    icon: Icons.branding_watermark,
-                  ),
-                  const SizedBox(height: 12),
-                  _buildTextField(
-                    controller: _brandEnController,
-                    label: '${l10n.brand} (English)',
+                    controller: _isArabicInput ? _brandArController : _brandEnController,
+                    label: l10n.brand,
                     icon: Icons.branding_watermark_outlined,
                   ),
                 ],
@@ -267,7 +305,7 @@ class _AddProductPageState extends State<AddProductPage> {
             ),
             const SizedBox(height: 16),
 
-            // Location (AR & EN)
+            // Location
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -278,14 +316,8 @@ class _AddProductPageState extends State<AddProductPage> {
               child: Column(
                 children: [
                   _buildTextField(
-                    controller: _locationArController,
-                    label: '${l10n.location} (عربي)',
-                    icon: Icons.location_on,
-                  ),
-                  const SizedBox(height: 12),
-                  _buildTextField(
-                    controller: _locationEnController,
-                    label: '${l10n.location} (English)',
+                    controller: _isArabicInput ? _locationArController : _locationEnController,
+                    label: l10n.location,
                     icon: Icons.location_on_outlined,
                   ),
                 ],
@@ -304,15 +336,8 @@ class _AddProductPageState extends State<AddProductPage> {
               child: Column(
                 children: [
                   _buildTextField(
-                    controller: _descriptionArController,
-                    label: '${l10n.descriptionLabel} (عربي)',
-                    icon: Icons.description,
-                    maxLines: 2,
-                  ),
-                  const SizedBox(height: 12),
-                  _buildTextField(
-                    controller: _descriptionEnController,
-                    label: '${l10n.descriptionLabel} (English)',
+                    controller: _isArabicInput ? _descriptionArController : _descriptionEnController,
+                    label: l10n.descriptionLabel,
                     icon: Icons.description_outlined,
                     maxLines: 2,
                   ),
@@ -331,10 +356,18 @@ class _AddProductPageState extends State<AddProductPage> {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                   elevation: 2,
                 ),
-                onPressed: () => _saveProduct(l10n),
-                icon: const Icon(Icons.check_circle_outline),
+                onPressed: _isTranslating ? null : () => _saveProduct(l10n),
+                icon: _isTranslating
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                      )
+                    : const Icon(Icons.check_circle_outline),
                 label: Text(
-                  isEditing ? l10n.saveChanges : l10n.addProductButton,
+                  _isTranslating
+                      ? 'Translating...'
+                      : (isEditing ? l10n.saveChanges : l10n.addProductButton),
                   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
