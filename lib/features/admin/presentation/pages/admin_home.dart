@@ -146,8 +146,9 @@ class _AdminHomeState extends State<AdminHome> {
           }
 
           final products = state is ProductSuccess ? state.products : [];
+          final isArabic = Localizations.localeOf(context).languageCode == 'ar';
           final brands = products
-              .map((product) => product.brandEn.trim())
+              .map((product) => (isArabic ? product.brandAr : product.brandEn).trim())
               .where((brand) => brand.isNotEmpty)
               .toSet();
 
