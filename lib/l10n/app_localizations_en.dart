@@ -292,6 +292,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get unexpectedError => 'Unexpected error';
 
   @override
+  String get retry => 'Retry';
+
+  @override
   String get profilePicture => 'Profile Picture';
 
   @override
@@ -382,6 +385,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Live chat and support conversation center';
 
   @override
+  String get storeLocation => 'Store Location';
+
+  @override
+  String get storeLocationSubtitle =>
+      'Pin and save your store location on the map';
+
+  @override
   String get customerOrdersSubtitle =>
       'View and track incoming customer orders';
 
@@ -405,6 +415,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get customerMessagesAppearHere => 'Customer messages will appear here';
+
+  @override
+  String get searchConversations => 'Search by customer name or message...';
+
+  @override
+  String get allConversations => 'All';
+
+  @override
+  String get unreadConversations => 'Unread';
+
+  @override
+  String conversationCount(Object count) {
+    return '$count conversations';
+  }
+
+  @override
+  String get noMatchingConversations => 'No matching conversations';
+
+  @override
+  String get noMessagesPreview => 'No messages yet';
 
   @override
   String get customer => 'Customer';

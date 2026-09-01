@@ -52,6 +52,11 @@
       "count": {}
     }
   },
+  "@conversationCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
 
   "@orderCreatedSuccessfully": {
     "placeholders": {
@@ -112,6 +117,7 @@
   "alreadyHaveAnAccount": "هل لديك حساب بالفعل؟",
   "somethingWentWrong": "حدث خطأ ما",
   "unexpectedError": "حدث خطأ غير متوقع",
+  "retry": "إعادة المحاولة",
   "profilePicture": "صورة الملف الشخصي",
   "deleteImage": "حذف الصورة",
   "myAccount": "حسابي",
@@ -146,6 +152,8 @@
   "manageCarsSubtitle": "تعديل أو تحديث الأسعار أو حذف المنتجات",
   "customerChats": "محادثات واستفسارات العملاء",
   "customerChatsSubtitle": "مركز المحادثات والدعم الفني المباشر",
+  "storeLocation": "موقع المتجر",
+  "storeLocationSubtitle": "تثبيت وحفظ موقع المتجر على الخريطة",
   "customerOrdersSubtitle": "عرض ومتابعة طلبات العملاء الواردة",
   "supportChats": "محادثات الدعم",
   "active": "نشطة",
@@ -154,6 +162,12 @@
   "noMessagesInChat": "لا توجد رسائل في هذه المحادثة",
   "typeResponse": "اكتب الرد للعميل...",
   "customerMessagesAppearHere": "ستظهر رسائل واستفسارات العملاء هنا",
+  "searchConversations": "ابحث باسم العميل أو نص الرسالة...",
+  "allConversations": "الكل",
+  "unreadConversations": "غير المقروءة",
+  "conversationCount": "{count} محادثة",
+  "noMatchingConversations": "لا توجد محادثات مطابقة",
+  "noMessagesPreview": "لا توجد رسائل بعد",
   "customer": "عميل",
   "userProfile": "الملف الشخصي للمستخدم",
   "email": "البريد الإلكتروني",

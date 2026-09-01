@@ -650,6 +650,12 @@ abstract class AppLocalizations {
   /// **'Unexpected error'**
   String get unexpectedError;
 
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
   /// No description provided for @profilePicture.
   ///
   /// In en, this message translates to:
@@ -824,6 +830,18 @@ abstract class AppLocalizations {
   /// **'Live chat and support conversation center'**
   String get customerChatsSubtitle;
 
+  /// No description provided for @storeLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Store Location'**
+  String get storeLocation;
+
+  /// No description provided for @storeLocationSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin and save your store location on the map'**
+  String get storeLocationSubtitle;
+
   /// No description provided for @customerOrdersSubtitle.
   ///
   /// In en, this message translates to:
@@ -871,6 +889,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Customer messages will appear here'**
   String get customerMessagesAppearHere;
+
+  /// No description provided for @searchConversations.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by customer name or message...'**
+  String get searchConversations;
+
+  /// No description provided for @allConversations.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get allConversations;
+
+  /// No description provided for @unreadConversations.
+  ///
+  /// In en, this message translates to:
+  /// **'Unread'**
+  String get unreadConversations;
+
+  /// No description provided for @conversationCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} conversations'**
+  String conversationCount(Object count);
+
+  /// No description provided for @noMatchingConversations.
+  ///
+  /// In en, this message translates to:
+  /// **'No matching conversations'**
+  String get noMatchingConversations;
+
+  /// No description provided for @noMessagesPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages yet'**
+  String get noMessagesPreview;
 
   /// No description provided for @customer.
   ///

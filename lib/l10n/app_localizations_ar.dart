@@ -291,6 +291,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get unexpectedError => 'حدث خطأ غير متوقع';
 
   @override
+  String get retry => 'إعادة المحاولة';
+
+  @override
   String get profilePicture => 'صورة الملف الشخصي';
 
   @override
@@ -380,6 +383,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get customerChatsSubtitle => 'مركز المحادثات والدعم الفني المباشر';
 
   @override
+  String get storeLocation => 'موقع المتجر';
+
+  @override
+  String get storeLocationSubtitle => 'تثبيت وحفظ موقع المتجر على الخريطة';
+
+  @override
   String get customerOrdersSubtitle => 'عرض ومتابعة طلبات العملاء الواردة';
 
   @override
@@ -402,6 +411,26 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get customerMessagesAppearHere => 'ستظهر رسائل واستفسارات العملاء هنا';
+
+  @override
+  String get searchConversations => 'ابحث باسم العميل أو نص الرسالة...';
+
+  @override
+  String get allConversations => 'الكل';
+
+  @override
+  String get unreadConversations => 'غير المقروءة';
+
+  @override
+  String conversationCount(Object count) {
+    return '$count محادثة';
+  }
+
+  @override
+  String get noMatchingConversations => 'لا توجد محادثات مطابقة';
+
+  @override
+  String get noMessagesPreview => 'لا توجد رسائل بعد';
 
   @override
   String get customer => 'عميل';

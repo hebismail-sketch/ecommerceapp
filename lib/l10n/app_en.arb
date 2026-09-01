@@ -51,6 +51,11 @@
       "count": {}
     }
   },
+  "@conversationCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
 
   "@orderCreatedSuccessfully": {
     "placeholders": {
@@ -111,6 +116,7 @@
   "alreadyHaveAnAccount": "Already have an account?",
   "somethingWentWrong": "Something went wrong",
   "unexpectedError": "Unexpected error",
+  "retry": "Retry",
   "profilePicture": "Profile Picture",
   "deleteImage": "Delete Image",
   "myAccount": "My Account",
@@ -145,6 +151,8 @@
   "manageCarsSubtitle": "Edit, update prices, or remove products",
   "customerChats": "Customer Inquiries & Support",
   "customerChatsSubtitle": "Live chat and support conversation center",
+  "storeLocation": "Store Location",
+  "storeLocationSubtitle": "Pin and save your store location on the map",
   "customerOrdersSubtitle": "View and track incoming customer orders",
   "supportChats": "Support Chats",
   "active": "Active",
@@ -153,6 +161,12 @@
   "noMessagesInChat": "No messages in this chat",
   "typeResponse": "Type response to customer...",
   "customerMessagesAppearHere": "Customer messages will appear here",
+  "searchConversations": "Search by customer name or message...",
+  "allConversations": "All",
+  "unreadConversations": "Unread",
+  "conversationCount": "{count} conversations",
+  "noMatchingConversations": "No matching conversations",
+  "noMessagesPreview": "No messages yet",
   "customer": "Customer",
   "userProfile": "User Profile",
   "email": "Email",
