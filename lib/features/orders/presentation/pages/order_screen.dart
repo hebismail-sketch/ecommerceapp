@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class OrdersScreen extends StatefulWidget {
-  const OrdersScreen({super.key});
+  final bool adminMode;
+
+  const OrdersScreen({super.key, this.adminMode = false});
 
   static const String screenRoute = 'orders';
 
@@ -21,10 +23,13 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
     final user = FirebaseAuth.instance.currentUser;
 
-    if (user != null) {
+    if (widget.adminMode || user != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          context.read<OrderCubit>().loadOrders(user.uid);
+        if (!mounted) return;
+        if (widget.adminMode) {
+          context.read<OrderCubit>().loadAllOrders();
+        } else {
+          context.read<OrderCubit>().loadOrders(user!.uid);
         }
       });
     }
@@ -41,9 +46,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
         surfaceTintColor: Colors.white,
         elevation: 0,
         centerTitle: false,
-        title: const Text(
-          'طلباتي',
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+        title: Text(
+          widget.adminMode ? 'طلبات العملاء' : 'طلباتي',
+          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
         ),
       ),
       body: BlocBuilder<OrderCubit, OrderState>(
@@ -60,7 +65,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
               actionLabel: 'إعادة المحاولة',
               onAction: () {
                 final user = FirebaseAuth.instance.currentUser;
-                if (user != null) {
+                if (widget.adminMode) {
+                  context.read<OrderCubit>().loadAllOrders();
+                } else if (user != null) {
                   context.read<OrderCubit>().loadOrders(user.uid);
                 }
               },
@@ -79,7 +86,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
           return RefreshIndicator(
             onRefresh: () async {
               final user = FirebaseAuth.instance.currentUser;
-              if (user != null) {
+              if (widget.adminMode) {
+                await context.read<OrderCubit>().loadAllOrders();
+              } else if (user != null) {
                 await context.read<OrderCubit>().loadOrders(user.uid);
               }
             },
@@ -90,7 +99,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
               itemBuilder: (context, index) {
                 if (index == 0) {
                   return Text(
-                    'سجل الطلبات',
+                    widget.adminMode ? 'طلبات العملاء الواردة' : 'سجل الطلبات',
                     style: TextStyle(
                       color: Colors.grey.shade700,
                       fontSize: 14,

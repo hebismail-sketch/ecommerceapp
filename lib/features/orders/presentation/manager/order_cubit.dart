@@ -34,6 +34,15 @@ class OrderCubit extends Cubit<OrderState> {
     }, onError: (error) => emit(OrderFailure(error.toString())));
   }
 
+  Future<void> loadAllOrders() async {
+    emit(const OrderLoading());
+    await _subscription?.cancel();
+    _subscription = getOrdersUseCase.callForAdmin().listen((items) {
+      orders = items;
+      emit(OrderSuccess(List.from(orders)));
+    }, onError: (error) => emit(OrderFailure(error.toString())));
+  }
+
   Future<void> addOrder(OrderEntity order) async {
     try {
       await addOrderUseCase.call(order);

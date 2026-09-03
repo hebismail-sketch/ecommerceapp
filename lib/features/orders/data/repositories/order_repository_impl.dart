@@ -18,16 +18,22 @@ class OrderRepositoryImpl implements OrderRepository {
   }
 
   @override
+  Stream<List<OrderEntity>> getAllOrders() {
+    return remoteDataSource.getAllOrders().map((orders) {
+      final entities = orders.map((order) => order.toEntity()).toList();
+      entities.sort((a, b) => b.orderDate.compareTo(a.orderDate));
+      return entities;
+    });
+  }
+
+  @override
   Future<void> addOrder(OrderEntity order) {
     return remoteDataSource.addOrder(OrderModel.fromEntity(order));
   }
 
   @override
   Future<void> updateOrder(String orderId, OrderEntity order) {
-    return remoteDataSource.updateOrder(
-      orderId,
-      OrderModel.fromEntity(order),
-    );
+    return remoteDataSource.updateOrder(orderId, OrderModel.fromEntity(order));
   }
 
   @override

@@ -59,24 +59,27 @@ class _AdminHomeState extends State<AdminHome> {
         borderRadius: BorderRadius.circular(16),
         clipBehavior: Clip.antiAlias,
         child: ListTile(
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-          onTap: onTap,
-        leading: Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(12),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 6,
           ),
-          child: Icon(icon, color: color, size: 24),
-        ),
-        title: Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-        ),
-        subtitle: Text(
-          subtitle,
-          style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-        ),
+          onTap: onTap,
+          leading: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(icon, color: color, size: 24),
+          ),
+          title: Text(
+            title,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+          ),
+          subtitle: Text(
+            subtitle,
+            style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+          ),
           trailing: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
@@ -153,7 +156,10 @@ class _AdminHomeState extends State<AdminHome> {
           final products = state is ProductSuccess ? state.products : [];
           final isArabic = Localizations.localeOf(context).languageCode == 'ar';
           final brands = products
-              .map((product) => (isArabic ? product.brandAr : product.brandEn).trim())
+              .map(
+                (product) =>
+                    (isArabic ? product.brandAr : product.brandEn).trim(),
+              )
               .where((brand) => brand.isNotEmpty)
               .toSet();
 
@@ -379,7 +385,12 @@ class _AdminHomeState extends State<AdminHome> {
                   icon: Icons.receipt_long_outlined,
                   color: Colors.purple.shade600,
                   onTap: () {
-                    Navigator.pushNamed(context, OrdersScreen.screenRoute);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const OrdersScreen(adminMode: true),
+                      ),
+                    );
                   },
                 ),
               ],

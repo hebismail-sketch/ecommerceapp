@@ -4,6 +4,7 @@ import '../models/order_model.dart';
 
 abstract class OrderRemoteDataSource {
   Stream<List<OrderModel>> getOrders(String userId);
+  Stream<List<OrderModel>> getAllOrders();
   Future<void> addOrder(OrderModel order);
   Future<void> updateOrder(String orderId, OrderModel order);
   Future<void> deleteOrder(String orderId);
@@ -29,6 +30,15 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
               .map((doc) => OrderModel.fromJson(doc.id, doc.data()))
               .toList(),
         );
+  }
+
+  @override
+  Stream<List<OrderModel>> getAllOrders() {
+    return _ordersCollection.snapshots().map(
+      (snapshot) => snapshot.docs
+          .map((doc) => OrderModel.fromJson(doc.id, doc.data()))
+          .toList(),
+    );
   }
 
   @override

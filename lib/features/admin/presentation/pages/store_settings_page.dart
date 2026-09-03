@@ -1,5 +1,6 @@
 // File: lib/features/admin/presentation/pages/store_settings_page.dart
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerceapp/core/services/location_service.dart';
 import 'package:ecommerceapp/core/services/product_translation_service.dart';
 import 'package:ecommerceapp/core/services/store_settings_service.dart';
@@ -25,7 +26,6 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
   String _translatedStoreName = '';
   bool _isTranslating = false;
   int _translationRequest = 0;
-  String _translatedSource = '';
 
   double _latitude = _defaultLatitude;
   double _longitude = _defaultLongitude;
@@ -108,14 +108,12 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
       if (mounted && request == _translationRequest) {
         setState(() {
           _translatedStoreName = translated;
-          _translatedSource = text;
         });
       }
     } catch (_) {
       if (mounted && request == _translationRequest) {
         setState(() {
           _translatedStoreName = '';
-          _translatedSource = '';
         });
       }
     } finally {
@@ -265,6 +263,7 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
 
   Future<void> _saveSettings() async {
     if (_isSaving || !_formKey.currentState!.validate()) return;
+    FocusManager.instance.primaryFocus?.unfocus();
     if (!_hasValidCoordinates(_latitude, _longitude)) {
       _showMessage('يرجى اختيار موقع صحيح للمتجر.', isError: true);
       return;
@@ -272,14 +271,6 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
     setState(() => _isSaving = true);
     try {
       final enteredName = _nameController.text.trim();
-      if (enteredName.isNotEmpty &&
-          (_translatedStoreName.trim().isEmpty ||
-              _translatedSource != enteredName)) {
-        await _translateStoreName(
-          enteredName,
-        ).timeout(const Duration(seconds: 20), onTimeout: () {});
-      }
-
       final hasArabicName = _containsArabic(enteredName);
       final arabicName = enteredName.isEmpty
           ? _defaultStoreNameAr
@@ -310,9 +301,20 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
       if (!mounted) return;
       _showMessage('تم حفظ إعدادات المتجر بنجاح.');
       Navigator.pop(context);
-    } catch (_) {
-      if (mounted)
-        _showMessage('تعذر حفظ الإعدادات. حاول مرة أخرى.', isError: true);
+    } on FirebaseException catch (error) {
+      if (!mounted) return;
+      final message = switch (error.code) {
+        'permission-denied' =>
+          'ليس لديك صلاحية لحفظ إعدادات المتجر. راجع قواعد Firestore.',
+        'unavailable' => 'خدمة Firestore غير متاحة الآن. تحقق من الإنترنت.',
+        'deadline-exceeded' => 'استغرق الحفظ وقتًا طويلًا. حاول مرة أخرى.',
+        _ => 'تعذر حفظ الإعدادات: ${error.message ?? error.code}',
+      };
+      _showMessage(message, isError: true);
+    } catch (error) {
+      if (mounted) {
+        _showMessage('تعذر حفظ الإعدادات: $error', isError: true);
+      }
     } finally {
       if (mounted) setState(() => _isSaving = false);
     }

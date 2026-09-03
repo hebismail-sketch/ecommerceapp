@@ -9,4 +9,8 @@ class GetOrders {
   Stream<List<OrderEntity>> call(String userId) {
     return repository.getOrders(userId);
   }
+
+  Stream<List<OrderEntity>> callForAdmin() {
+    return repository.getAllOrders();
+  }
 }

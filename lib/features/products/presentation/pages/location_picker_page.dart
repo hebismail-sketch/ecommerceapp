@@ -197,7 +197,7 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
       ),
       body: Stack(
         children: [
-          // OpenStreetMap
+          // Detailed OpenStreetMap tiles show roads, buildings, and place names.
           FlutterMap(
             mapController: _mapController,
             options: MapOptions(
@@ -211,9 +211,7 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
             ),
             children: [
               TileLayer(
-                urlTemplate:
-                    'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-                subdomains: const ['a', 'b', 'c', 'd'],
+                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                 userAgentPackageName: 'com.example.ecommerceapp',
               ),
               MarkerLayer(
