@@ -11,15 +11,22 @@ class OrderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final isConfirmed = order.paymentStatus == 'confirmed';
     final formattedPrice = NumberFormat('#,###').format(order.totalPrice);
     final formattedDate = DateFormat(
-      'dd/MM/yyyy - hh:mm a',
+      'dd MMM yyyy، hh:mm a',
+      'ar',
     ).format(order.orderDate);
+    final shortId = order.id.length > 8 ? order.id.substring(0, 8) : order.id;
 
     return Card(
-      elevation: 3,
+      elevation: 0,
       margin: EdgeInsets.zero,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14),
+        side: BorderSide(color: Colors.grey.shade200),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -27,22 +34,54 @@ class OrderCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                const CircleAvatar(child: Icon(Icons.shopping_bag)),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    l10n.orderNumber(order.id),
-                    style: const TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                Container(
+                  width: 46,
+                  height: 46,
+                  decoration: BoxDecoration(
+                    color: isConfirmed
+                        ? const Color(0xFFE8F7EE)
+                        : const Color(0xFFFFF3E0),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    isConfirmed
+                        ? Icons.check_circle_outline
+                        : Icons.hourglass_empty_rounded,
+                    color: isConfirmed
+                        ? const Color(0xFF269B55)
+                        : const Color(0xFFE28A19),
                   ),
                 ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'طلب رقم #$shortId',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        formattedDate,
+                        style: TextStyle(
+                          color: Colors.grey.shade600,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                _OrderStatusChip(isConfirmed: isConfirmed),
               ],
             ),
-            const SizedBox(height: 16),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 16),
+              child: Divider(height: 1),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -62,62 +101,71 @@ class OrderCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 14),
             Row(
               children: [
-                const Icon(Icons.calendar_today_outlined, size: 18),
-                const SizedBox(width: 8),
-                Text(formattedDate, style: const TextStyle(color: Colors.grey)),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                const Icon(Icons.directions_car_outlined, size: 20),
+                Icon(
+                  Icons.shopping_bag_outlined,
+                  size: 19,
+                  color: Colors.grey.shade600,
+                ),
                 const SizedBox(width: 8),
                 Text(
-                  l10n.carsCount(order.carIds.length),
-                  style: const TextStyle(fontWeight: FontWeight.w500),
+                  '${order.carIds.length} منتجات',
+                  style: TextStyle(
+                    color: Colors.grey.shade700,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 10),
             Row(
               children: [
-                const Icon(Icons.payments_outlined, size: 20),
-                const SizedBox(width: 8),
-                const Text(
-                  'الدفع عند الاستلام',
-                  style: TextStyle(fontWeight: FontWeight.w500),
+                Icon(
+                  Icons.payments_outlined,
+                  size: 19,
+                  color: Colors.grey.shade600,
                 ),
-                const Spacer(),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 5,
-                  ),
-                  decoration: BoxDecoration(
-                    color: order.paymentStatus == 'confirmed'
-                        ? Colors.green.shade50
-                        : Colors.orange.shade50,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    order.paymentStatus == 'confirmed'
-                        ? 'تم التأكيد'
-                        : 'قيد المراجعة',
-                    style: TextStyle(
-                      color: order.paymentStatus == 'confirmed'
-                          ? Colors.green.shade700
-                          : Colors.orange.shade800,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
+                const SizedBox(width: 8),
+                Text(
+                  'الدفع عند الاستلام',
+                  style: TextStyle(
+                    color: Colors.grey.shade700,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _OrderStatusChip extends StatelessWidget {
+  const _OrderStatusChip({required this.isConfirmed});
+
+  final bool isConfirmed;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = isConfirmed
+        ? const Color(0xFF269B55)
+        : const Color(0xFFE28A19);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
+      decoration: BoxDecoration(
+        color: isConfirmed ? const Color(0xFFE8F7EE) : const Color(0xFFFFF3E0),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(
+        isConfirmed ? 'تم التأكيد' : 'قيد المراجعة',
+        style: TextStyle(
+          color: color,
+          fontSize: 11,
+          fontWeight: FontWeight.w700,
         ),
       ),
     );
