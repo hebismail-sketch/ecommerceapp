@@ -1,11 +1,13 @@
 // File: lib/features/chat/presentation/pages/admin_conversations_page.dart
 
+import 'package:ecommerceapp/core/widgets/profile_avatar.dart';
 import 'package:ecommerceapp/features/chat/domain/entities/conversation_entity.dart';
 import 'package:ecommerceapp/features/chat/presentation/manager/chat_cubit.dart';
 import 'package:ecommerceapp/features/chat/presentation/manager/chat_state.dart';
 import 'package:ecommerceapp/features/chat/presentation/pages/admin_chat_detail_page.dart';
 import 'package:ecommerceapp/features/chat/presentation/widgets/user_avatar_widget.dart';
 import 'package:ecommerceapp/features/chat/presentation/widgets/user_profile_modal.dart';
+import 'package:ecommerceapp/features/profile/presentation/pages/profile_screen.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -333,7 +335,27 @@ class _AdminConversationsPageState extends State<AdminConversationsPage> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.customerChats), centerTitle: true),
+      appBar: AppBar(
+        title: Text(l10n.customerChats),
+        centerTitle: true,
+        leading: Navigator.canPop(context)
+            ? IconButton(
+                tooltip: 'رجوع',
+                icon: const Icon(Icons.arrow_back_ios_new),
+                onPressed: () => Navigator.pop(context),
+              )
+            : null,
+        actions: [
+          Padding(
+            padding: const EdgeInsetsDirectional.only(end: 12),
+            child: ProfileAvatar(
+              size: 32,
+              onTap: () =>
+                  Navigator.pushNamed(context, ProfileScreen.screenRoute),
+            ),
+          ),
+        ],
+      ),
       body: BlocBuilder<ChatCubit, ChatState>(
         builder: (context, state) {
           if (state is ChatLoading || state is ChatInitial) {

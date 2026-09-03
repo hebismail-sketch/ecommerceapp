@@ -1,5 +1,7 @@
+import 'package:ecommerceapp/core/widgets/profile_avatar.dart';
 import 'package:ecommerceapp/features/orders/presentation/manager/order_cubit.dart';
 import 'package:ecommerceapp/features/orders/presentation/widgets/order_card.dart';
+import 'package:ecommerceapp/features/profile/presentation/pages/profile_screen.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -50,6 +52,25 @@ class _OrdersScreenState extends State<OrdersScreen> {
           widget.adminMode ? 'طلبات العملاء' : 'طلباتي',
           style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
         ),
+        leading: widget.adminMode && Navigator.canPop(context)
+            ? IconButton(
+                tooltip: 'رجوع',
+                icon: const Icon(Icons.arrow_back_ios_new),
+                onPressed: () => Navigator.pop(context),
+              )
+            : null,
+        actions: widget.adminMode
+            ? [
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(end: 12),
+                  child: ProfileAvatar(
+                    size: 32,
+                    onTap: () =>
+                        Navigator.pushNamed(context, ProfileScreen.screenRoute),
+                  ),
+                ),
+              ]
+            : null,
       ),
       body: BlocBuilder<OrderCubit, OrderState>(
         builder: (context, state) {
