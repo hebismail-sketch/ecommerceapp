@@ -52,11 +52,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
           widget.adminMode ? 'طلبات العملاء' : 'طلباتي',
           style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
         ),
-        leading: widget.adminMode && Navigator.canPop(context)
+        leading: widget.adminMode
             ? IconButton(
                 tooltip: 'رجوع',
                 icon: const Icon(Icons.arrow_back_ios_new),
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => Navigator.maybePop(context),
               )
             : null,
         actions: widget.adminMode
