@@ -6,6 +6,8 @@ class OrderModel {
   final List<String> carIds;
   final double totalPrice;
   final DateTime orderDate;
+  final String paymentMethod;
+  final String paymentStatus;
 
   const OrderModel({
     required this.id,
@@ -13,6 +15,8 @@ class OrderModel {
     required this.carIds,
     required this.totalPrice,
     required this.orderDate,
+    this.paymentMethod = 'cashOnDelivery',
+    this.paymentStatus = 'pending',
   });
 
   factory OrderModel.fromJson(String id, Map<String, dynamic> json) {
@@ -21,8 +25,11 @@ class OrderModel {
       userId: json['userId'] as String? ?? '',
       carIds: List<String>.from(json['carIds'] ?? const []),
       totalPrice: (json['totalPrice'] as num?)?.toDouble() ?? 0,
-      orderDate: DateTime.tryParse(json['orderDate'] as String? ?? '') ??
+      orderDate:
+          DateTime.tryParse(json['orderDate'] as String? ?? '') ??
           DateTime.now(),
+      paymentMethod: json['paymentMethod'] as String? ?? 'cashOnDelivery',
+      paymentStatus: json['paymentStatus'] as String? ?? 'pending',
     );
   }
 
@@ -32,6 +39,8 @@ class OrderModel {
       'carIds': carIds,
       'totalPrice': totalPrice,
       'orderDate': orderDate.toIso8601String(),
+      'paymentMethod': paymentMethod,
+      'paymentStatus': paymentStatus,
     };
   }
 
@@ -42,6 +51,8 @@ class OrderModel {
       carIds: carIds,
       totalPrice: totalPrice,
       orderDate: orderDate,
+      paymentMethod: paymentMethod,
+      paymentStatus: paymentStatus,
     );
   }
 
@@ -52,6 +63,8 @@ class OrderModel {
       carIds: entity.carIds,
       totalPrice: entity.totalPrice,
       orderDate: entity.orderDate,
+      paymentMethod: entity.paymentMethod,
+      paymentStatus: entity.paymentStatus,
     );
   }
 }

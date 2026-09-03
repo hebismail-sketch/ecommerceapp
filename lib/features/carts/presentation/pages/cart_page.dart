@@ -23,6 +23,73 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  bool _isSubmittingOrder = false;
+
+  Future<void> _submitCashOnDeliveryOrder({
+    required BuildContext context,
+    required CartSuccess cartState,
+    required double totalPrice,
+    required AppLocalizations l10n,
+  }) async {
+    if (_isSubmittingOrder) return;
+
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.pleaseLoginFirst)));
+      return;
+    }
+
+    final orderCubit = context.read<OrderCubit>();
+    final cartCubit = context.read<CartCubit>();
+    setState(() => _isSubmittingOrder = true);
+    try {
+      final cartItems = cartState.cartItems;
+      final carIds = cartItems.map((item) => item.productId).toList();
+      final order = OrderEntity(
+        id: '',
+        userId: user.uid,
+        carIds: carIds,
+        totalPrice: totalPrice,
+        orderDate: DateTime.now(),
+        paymentMethod: 'cashOnDelivery',
+        paymentStatus: 'pending',
+      );
+
+      await orderCubit.addOrder(order);
+      for (final item in cartItems) {
+        await cartCubit.removeItem(item.id);
+      }
+
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.green.shade600,
+            content: Text(
+              '${l10n.orderConfirmedSuccessfully} - الدفع عند الاستلام',
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        );
+      }
+    } catch (_) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: Colors.red,
+            content: Text('تعذر إنشاء الطلب. حاول مرة أخرى.'),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isSubmittingOrder = false);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -57,19 +124,13 @@ class _CartPageState extends State<CartPage> {
             const SizedBox(height: 20),
             Text(
               l10n.emptyCart,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             Text(
               'Your shopping cart is waiting to be filled with great items!',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey.shade600,
-              ),
+              style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
               textAlign: TextAlign.center,
             ),
           ],
@@ -124,8 +185,9 @@ class _CartPageState extends State<CartPage> {
 
                       if (product == null) return const SizedBox.shrink();
 
-                      final productName =
-                          isArabic ? product.nameAr : product.nameEn;
+                      final productName = isArabic
+                          ? product.nameAr
+                          : product.nameEn;
 
                       return Container(
                         decoration: BoxDecoration(
@@ -164,14 +226,14 @@ class _CartPageState extends State<CartPage> {
                                     fit: BoxFit.cover,
                                     errorBuilder: (context, error, stack) =>
                                         Container(
-                                      width: 85,
-                                      height: 85,
-                                      color: Colors.grey.shade100,
-                                      child: const Icon(
-                                        Icons.image_not_supported,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
+                                          width: 85,
+                                          height: 85,
+                                          color: Colors.grey.shade100,
+                                          child: const Icon(
+                                            Icons.image_not_supported,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
                                   ),
                                 ),
                               ),
@@ -213,8 +275,9 @@ class _CartPageState extends State<CartPage> {
                                           ),
                                           decoration: BoxDecoration(
                                             color: Colors.grey.shade100,
-                                            borderRadius:
-                                                BorderRadius.circular(20),
+                                            borderRadius: BorderRadius.circular(
+                                              20,
+                                            ),
                                           ),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.min,
@@ -226,25 +289,25 @@ class _CartPageState extends State<CartPage> {
                                                     .read<CartCubit>()
                                                     .decreaseQuantity(cartItem),
                                                 child: Padding(
-                                                  padding: const EdgeInsets.all(4.0),
+                                                  padding: const EdgeInsets.all(
+                                                    4.0,
+                                                  ),
                                                   child: Icon(
                                                     Icons.remove,
                                                     size: 16,
-                                                    color:
-                                                        Colors.grey.shade800,
+                                                    color: Colors.grey.shade800,
                                                   ),
                                                 ),
                                               ),
                                               Padding(
                                                 padding:
                                                     const EdgeInsets.symmetric(
-                                                  horizontal: 10,
-                                                ),
+                                                      horizontal: 10,
+                                                    ),
                                                 child: Text(
                                                   '${cartItem.quantity}',
                                                   style: const TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold,
+                                                    fontWeight: FontWeight.bold,
                                                     fontSize: 13,
                                                   ),
                                                 ),
@@ -256,12 +319,13 @@ class _CartPageState extends State<CartPage> {
                                                     .read<CartCubit>()
                                                     .increaseQuantity(cartItem),
                                                 child: Padding(
-                                                  padding: const EdgeInsets.all(4.0),
+                                                  padding: const EdgeInsets.all(
+                                                    4.0,
+                                                  ),
                                                   child: Icon(
                                                     Icons.add,
                                                     size: 16,
-                                                    color:
-                                                        Colors.grey.shade800,
+                                                    color: Colors.grey.shade800,
                                                   ),
                                                 ),
                                               ),
@@ -347,61 +411,39 @@ class _CartPageState extends State<CartPage> {
                                 borderRadius: BorderRadius.circular(14),
                               ),
                             ),
-                            onPressed: () async {
-                              final user = FirebaseAuth.instance.currentUser;
-                              if (user == null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(l10n.pleaseLoginFirst),
+                            onPressed: _isSubmittingOrder
+                                ? null
+                                : () => _submitCashOnDeliveryOrder(
+                                    context: context,
+                                    cartState: state,
+                                    totalPrice: totalPrice,
+                                    l10n: l10n,
                                   ),
-                                );
-                                return;
-                              }
-
-                              final cartItems = state.cartItems;
-                              final carIds = cartItems
-                                  .map((item) => item.productId)
-                                  .toList();
-
-                              final order = OrderEntity(
-                                id: '',
-                                userId: user.uid,
-                                carIds: carIds,
-                                totalPrice: totalPrice,
-                                orderDate: DateTime.now(),
-                              );
-
-                              await context.read<OrderCubit>().addOrder(order);
-
-                              // Clear cart items
-                              for (final item in cartItems) {
-                                await context
-                                    .read<CartCubit>()
-                                    .removeItem(item.id);
-                              }
-
-                              if (context.mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    backgroundColor: Colors.green.shade600,
-                                    content: Text(
-                                      l10n.orderConfirmedSuccessfully,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                            child: _isSubmittingOrder
+                                ? const SizedBox(
+                                    width: 22,
+                                    height: 22,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2.5,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : Text(
+                                    l10n.confirmOrder,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                );
-                              }
-                            },
-                            child: Text(
-                              l10n.confirmOrder,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'طريقة الدفع: الدفع عند الاستلام',
+                          style: TextStyle(
+                            color: Colors.grey.shade700,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ],

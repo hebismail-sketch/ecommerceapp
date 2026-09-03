@@ -6,6 +6,8 @@ class OrderEntity extends Equatable {
   final List<String> carIds;
   final double totalPrice;
   final DateTime orderDate;
+  final String paymentMethod;
+  final String paymentStatus;
 
   const OrderEntity({
     required this.id,
@@ -13,8 +15,18 @@ class OrderEntity extends Equatable {
     required this.carIds,
     required this.totalPrice,
     required this.orderDate,
+    this.paymentMethod = 'cashOnDelivery',
+    this.paymentStatus = 'pending',
   });
 
   @override
-  List<Object?> get props => [id, userId, carIds, totalPrice, orderDate];
+  List<Object?> get props => [
+    id,
+    userId,
+    carIds,
+    totalPrice,
+    orderDate,
+    paymentMethod,
+    paymentStatus,
+  ];
 }
