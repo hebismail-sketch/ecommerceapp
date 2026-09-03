@@ -19,13 +19,16 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
 
   @override
   Stream<List<OrderModel>> getOrders(String userId) {
+    // Do not combine where() and orderBy() here: Firestore may require a
+    // composite index. The repository sorts the orders locally instead.
     return _ordersCollection
         .where('userId', isEqualTo: userId)
-        .orderBy('orderDate', descending: true)
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => OrderModel.fromJson(doc.id, doc.data()))
-            .toList());
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => OrderModel.fromJson(doc.id, doc.data()))
+              .toList(),
+        );
   }
 
   @override
