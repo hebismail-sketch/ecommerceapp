@@ -23,7 +23,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
     final user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
-      context.read<OrderCubit>().loadOrders(user.uid);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          context.read<OrderCubit>().loadOrders(user.uid);
+        }
+      });
     }
   }
 
@@ -40,7 +44,15 @@ class _OrdersScreenState extends State<OrdersScreen> {
           }
 
           if (state is OrderFailure) {
-            return Center(child: Text(state.message));
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Text(
+                  'تعذر تحميل الطلبات الآن. حاول مرة أخرى.',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            );
           }
 
           if (state is OrderSuccess) {
@@ -63,7 +75,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
             );
           }
 
-          return const SizedBox.shrink();
+          return const Center(child: CircularProgressIndicator());
         },
       ),
     );
