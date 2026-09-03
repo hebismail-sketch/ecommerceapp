@@ -48,15 +48,20 @@ class _OrdersScreenState extends State<OrdersScreen> {
         surfaceTintColor: Colors.white,
         elevation: 0,
         centerTitle: false,
+        automaticallyImplyLeading: false,
         title: Text(
           widget.adminMode ? 'طلبات العملاء' : 'طلباتي',
           style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
         ),
         leading: widget.adminMode
             ? IconButton(
-                tooltip: 'رجوع',
-                icon: const Icon(Icons.arrow_back_ios_new),
-                onPressed: () => Navigator.maybePop(context),
+                tooltip: 'رجوع إلى لوحة الإدارة',
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  if (Navigator.canPop(context)) {
+                    Navigator.pop(context);
+                  }
+                },
               )
             : null,
         actions: widget.adminMode
