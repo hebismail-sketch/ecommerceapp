@@ -4,7 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerceapp/core/services/location_service.dart';
 import 'package:ecommerceapp/core/services/product_translation_service.dart';
 import 'package:ecommerceapp/core/services/store_settings_service.dart';
+import 'package:ecommerceapp/core/widgets/profile_avatar.dart';
 import 'package:ecommerceapp/features/products/presentation/pages/location_picker_page.dart';
+import 'package:ecommerceapp/features/profile/presentation/pages/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -336,6 +338,23 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
+        leading: Navigator.canPop(context)
+            ? IconButton(
+                tooltip: 'رجوع',
+                icon: const Icon(Icons.arrow_back_ios_new),
+                onPressed: () => Navigator.pop(context),
+              )
+            : null,
+        actions: [
+          Padding(
+            padding: const EdgeInsetsDirectional.only(end: 12),
+            child: ProfileAvatar(
+              size: 32,
+              onTap: () =>
+                  Navigator.pushNamed(context, ProfileScreen.screenRoute),
+            ),
+          ),
+        ],
       ),
       body: Form(
         key: _formKey,

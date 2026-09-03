@@ -1,7 +1,9 @@
 // File: lib/features/products/presentation/pages/mange_products_page.dart
 
 import 'package:ecommerceapp/features/products/presentation/manager/product_cubit.dart';
+import 'package:ecommerceapp/core/widgets/profile_avatar.dart';
 import 'package:ecommerceapp/features/products/presentation/pages/add_product_page.dart';
+import 'package:ecommerceapp/features/profile/presentation/pages/profile_screen.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +13,12 @@ class ManageProductsPage extends StatelessWidget {
 
   static const String screenRoute = 'manageProductPage';
 
-  void _confirmDelete(BuildContext context, String productId, String productName, AppLocalizations l10n) {
+  void _confirmDelete(
+    BuildContext context,
+    String productId,
+    String productName,
+    AppLocalizations l10n,
+  ) {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -62,6 +69,23 @@ class ManageProductsPage extends StatelessWidget {
         title: Text(l10n.manageProducts),
         centerTitle: true,
         elevation: 0,
+        leading: Navigator.canPop(context)
+            ? IconButton(
+                tooltip: 'رجوع',
+                icon: const Icon(Icons.arrow_back_ios_new),
+                onPressed: () => Navigator.pop(context),
+              )
+            : null,
+        actions: [
+          Padding(
+            padding: const EdgeInsetsDirectional.only(end: 12),
+            child: ProfileAvatar(
+              size: 32,
+              onTap: () =>
+                  Navigator.pushNamed(context, ProfileScreen.screenRoute),
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Colors.red.shade600,
@@ -116,7 +140,10 @@ class ManageProductsPage extends StatelessWidget {
                         foregroundColor: Colors.white,
                       ),
                       onPressed: () {
-                        Navigator.pushNamed(context, AddProductPage.screenRoute);
+                        Navigator.pushNamed(
+                          context,
+                          AddProductPage.screenRoute,
+                        );
                       },
                       icon: const Icon(Icons.add),
                       label: Text(l10n.addProduct),
@@ -168,7 +195,10 @@ class ManageProductsPage extends StatelessWidget {
                           width: 70,
                           height: 70,
                           color: Colors.grey.shade100,
-                          child: const Icon(Icons.image_not_supported, color: Colors.grey),
+                          child: const Icon(
+                            Icons.image_not_supported,
+                            color: Colors.grey,
+                          ),
                         ),
                       ),
                     ),
@@ -197,26 +227,38 @@ class ManageProductsPage extends StatelessWidget {
                         Row(
                           children: [
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 2,
+                              ),
                               decoration: BoxDecoration(
                                 color: Colors.grey.shade100,
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: Text(
                                 brand,
-                                style: TextStyle(fontSize: 11, color: Colors.grey.shade700),
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: Colors.grey.shade700,
+                                ),
                               ),
                             ),
                             const SizedBox(width: 6),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 2,
+                              ),
                               decoration: BoxDecoration(
                                 color: Colors.grey.shade100,
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: Text(
                                 '${product.year}',
-                                style: TextStyle(fontSize: 11, color: Colors.grey.shade700),
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: Colors.grey.shade700,
+                                ),
                               ),
                             ),
                           ],
@@ -227,18 +269,25 @@ class ManageProductsPage extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
-                          icon: const Icon(Icons.edit_outlined, color: Colors.blue),
+                          icon: const Icon(
+                            Icons.edit_outlined,
+                            color: Colors.blue,
+                          ),
                           onPressed: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => AddProductPage(product: product),
+                                builder: (_) =>
+                                    AddProductPage(product: product),
                               ),
                             );
                           },
                         ),
                         IconButton(
-                          icon: const Icon(Icons.delete_outline, color: Colors.red),
+                          icon: const Icon(
+                            Icons.delete_outline,
+                            color: Colors.red,
+                          ),
                           onPressed: () {
                             _confirmDelete(context, product.id, name, l10n);
                           },

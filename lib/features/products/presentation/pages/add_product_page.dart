@@ -1,8 +1,10 @@
 // File: lib/features/products/presentation/pages/add_product_page.dart
 
 import 'package:ecommerceapp/core/services/product_translation_service.dart';
+import 'package:ecommerceapp/core/widgets/profile_avatar.dart';
 import 'package:ecommerceapp/features/products/domain/entities/product_entity.dart';
 import 'package:ecommerceapp/features/products/presentation/manager/product_cubit.dart';
+import 'package:ecommerceapp/features/profile/presentation/pages/profile_screen.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -90,8 +92,12 @@ class _AddProductPageState extends State<AddProductPage> {
         texts: [
           _isArabicInput ? _nameArController.text : _nameEnController.text,
           _isArabicInput ? _brandArController.text : _brandEnController.text,
-          _isArabicInput ? _locationArController.text : _locationEnController.text,
-          _isArabicInput ? _descriptionArController.text : _descriptionEnController.text,
+          _isArabicInput
+              ? _locationArController.text
+              : _locationEnController.text,
+          _isArabicInput
+              ? _descriptionArController.text
+              : _descriptionEnController.text,
         ],
         fromArabic: _isArabicInput,
       );
@@ -110,7 +116,9 @@ class _AddProductPageState extends State<AddProductPage> {
     } catch (error) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Translation failed. Please try again.\n$error')),
+          SnackBar(
+            content: Text('Translation failed. Please try again.\n$error'),
+          ),
         );
         setState(() => _isTranslating = false);
       }
@@ -177,6 +185,23 @@ class _AddProductPageState extends State<AddProductPage> {
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
+        leading: Navigator.canPop(context)
+            ? IconButton(
+                tooltip: 'رجوع',
+                icon: const Icon(Icons.arrow_back_ios_new),
+                onPressed: () => Navigator.pop(context),
+              )
+            : null,
+        actions: [
+          Padding(
+            padding: const EdgeInsetsDirectional.only(end: 12),
+            child: ProfileAvatar(
+              size: 32,
+              onTap: () =>
+                  Navigator.pushNamed(context, ProfileScreen.screenRoute),
+            ),
+          ),
+        ],
       ),
       body: Form(
         key: _formKey,
@@ -196,7 +221,10 @@ class _AddProductPageState extends State<AddProductPage> {
                 children: [
                   Text(
                     l10n.chooseImage,
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   TextFormField(
@@ -204,8 +232,13 @@ class _AddProductPageState extends State<AddProductPage> {
                     decoration: InputDecoration(
                       hintText: 'https://example.com/product-image.jpg',
                       prefixIcon: const Icon(Icons.link),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 10,
+                      ),
                     ),
                     onChanged: (_) => setState(() {}),
                   ),
@@ -244,7 +277,9 @@ class _AddProductPageState extends State<AddProductPage> {
               child: Column(
                 children: [
                   _buildTextField(
-                    controller: _isArabicInput ? _nameArController : _nameEnController,
+                    controller: _isArabicInput
+                        ? _nameArController
+                        : _nameEnController,
                     label: l10n.productName,
                     icon: Icons.shopping_bag_outlined,
                   ),
@@ -296,7 +331,9 @@ class _AddProductPageState extends State<AddProductPage> {
               child: Column(
                 children: [
                   _buildTextField(
-                    controller: _isArabicInput ? _brandArController : _brandEnController,
+                    controller: _isArabicInput
+                        ? _brandArController
+                        : _brandEnController,
                     label: l10n.brand,
                     icon: Icons.branding_watermark_outlined,
                   ),
@@ -316,7 +353,9 @@ class _AddProductPageState extends State<AddProductPage> {
               child: Column(
                 children: [
                   _buildTextField(
-                    controller: _isArabicInput ? _locationArController : _locationEnController,
+                    controller: _isArabicInput
+                        ? _locationArController
+                        : _locationEnController,
                     label: l10n.location,
                     icon: Icons.location_on_outlined,
                   ),
@@ -336,7 +375,9 @@ class _AddProductPageState extends State<AddProductPage> {
               child: Column(
                 children: [
                   _buildTextField(
-                    controller: _isArabicInput ? _descriptionArController : _descriptionEnController,
+                    controller: _isArabicInput
+                        ? _descriptionArController
+                        : _descriptionEnController,
                     label: l10n.descriptionLabel,
                     icon: Icons.description_outlined,
                     maxLines: 2,
@@ -353,7 +394,9 @@ class _AddProductPageState extends State<AddProductPage> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red.shade600,
                   foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
                   elevation: 2,
                 ),
                 onPressed: _isTranslating ? null : () => _saveProduct(l10n),
@@ -361,14 +404,20 @@ class _AddProductPageState extends State<AddProductPage> {
                     ? const SizedBox(
                         width: 20,
                         height: 20,
-                        child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
                       )
                     : const Icon(Icons.check_circle_outline),
                 label: Text(
                   _isTranslating
                       ? 'Translating...'
                       : (isEditing ? l10n.saveChanges : l10n.addProductButton),
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
@@ -399,7 +448,10 @@ class _AddProductPageState extends State<AddProductPage> {
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         filled: true,
         fillColor: Colors.grey.shade50,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 14,
+          vertical: 12,
+        ),
       ),
       validator: required
           ? (value) {

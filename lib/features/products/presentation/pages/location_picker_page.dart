@@ -1,6 +1,8 @@
 // File: lib/features/products/presentation/pages/location_picker_page.dart
 
 import 'package:ecommerceapp/core/services/location_service.dart';
+import 'package:ecommerceapp/core/widgets/profile_avatar.dart';
+import 'package:ecommerceapp/features/profile/presentation/pages/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
@@ -185,7 +187,20 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         centerTitle: true,
+        leading: Navigator.canPop(context)
+            ? IconButton(
+                tooltip: 'رجوع',
+                icon: const Icon(Icons.arrow_back_ios_new),
+                onPressed: () => Navigator.pop(context),
+              )
+            : null,
         actions: [
+          ProfileAvatar(
+            size: 32,
+            onTap: () =>
+                Navigator.pushNamed(context, ProfileScreen.screenRoute),
+          ),
+          const SizedBox(width: 8),
           IconButton(
             icon: const Icon(Icons.check, color: Colors.green, size: 28),
             tooltip: 'تأكيد الموقع',
