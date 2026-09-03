@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../domain/entities/order_entity.dart';
 
 class OrderModel {
@@ -25,12 +27,19 @@ class OrderModel {
       userId: json['userId'] as String? ?? '',
       carIds: List<String>.from(json['carIds'] ?? const []),
       totalPrice: (json['totalPrice'] as num?)?.toDouble() ?? 0,
-      orderDate:
-          DateTime.tryParse(json['orderDate'] as String? ?? '') ??
-          DateTime.now(),
+      orderDate: _parseOrderDate(json['orderDate']),
       paymentMethod: json['paymentMethod'] as String? ?? 'cashOnDelivery',
       paymentStatus: json['paymentStatus'] as String? ?? 'pending',
     );
+  }
+
+  static DateTime _parseOrderDate(dynamic value) {
+    if (value is Timestamp) return value.toDate();
+    if (value is DateTime) return value;
+    if (value is String) {
+      return DateTime.tryParse(value) ?? DateTime.now();
+    }
+    return DateTime.now();
   }
 
   Map<String, dynamic> toJson() {
