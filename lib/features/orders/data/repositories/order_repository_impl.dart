@@ -10,9 +10,11 @@ class OrderRepositoryImpl implements OrderRepository {
 
   @override
   Stream<List<OrderEntity>> getOrders(String userId) {
-    return remoteDataSource
-        .getOrders(userId)
-        .map((orders) => orders.map((order) => order.toEntity()).toList());
+    return remoteDataSource.getOrders(userId).map((orders) {
+      final entities = orders.map((order) => order.toEntity()).toList();
+      entities.sort((a, b) => b.orderDate.compareTo(a.orderDate));
+      return entities;
+    });
   }
 
   @override
