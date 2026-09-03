@@ -3,6 +3,7 @@
 import 'package:ecommerceapp/core/services/location_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import 'dart:convert';
@@ -59,13 +60,15 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
         'limit': '1',
         'countrycodes': 'eg',
       });
-      final response = await http.get(
-        uri,
-        headers: {
-          'User-Agent': 'ecommerceapp-store-location/1.0',
-          'Accept-Language': 'ar',
-        },
-      );
+      final response = await http
+          .get(
+            uri,
+            headers: {
+              'User-Agent': 'ecommerceapp-store-location/1.0',
+              'Accept-Language': 'ar',
+            },
+          )
+          .timeout(const Duration(seconds: 10));
       if (!mounted) return;
       if (response.statusCode != 200) throw Exception('Search failed');
 
@@ -86,10 +89,11 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
       _mapController.move(location, 17.0);
       _showSearchMessage('تم تحديد الموقع على الخريطة بنجاح.');
     } catch (_) {
-      if (mounted)
+      if (mounted) {
         _showSearchMessage(
           'تعذر البحث الآن، تحقق من اتصال الإنترنت وحاول مرة أخرى.',
         );
+      }
     } finally {
       if (mounted) setState(() => _isSearching = false);
     }
@@ -103,6 +107,30 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
       );
   }
 
+  Widget _mapControlButton({
+    required IconData icon,
+    required String tooltip,
+    required VoidCallback onPressed,
+  }) {
+    return Material(
+      color: Colors.white,
+      elevation: 4,
+      borderRadius: BorderRadius.circular(10),
+      child: InkWell(
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(10),
+        child: Tooltip(
+          message: tooltip,
+          child: SizedBox(
+            width: 44,
+            height: 44,
+            child: Icon(icon, color: Colors.blueGrey.shade800, size: 22),
+          ),
+        ),
+      ),
+    );
+  }
+
   Future<void> _goToCurrentLocation() async {
     if (_isLocating) return;
     setState(() => _isLocating = true);
@@ -113,9 +141,19 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
 
       if (pos == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             backgroundColor: Colors.red,
-            content: Text('تعذر تحديد موقعك الحالي، يرجى تفعيل الـ GPS'),
+            content: const Text(
+              'تعذر تحديد موقعك. فعّل GPS واسمح للتطبيق بالوصول للموقع.',
+            ),
+            action: SnackBarAction(
+              label: 'الإعدادات',
+              textColor: Colors.white,
+              onPressed: () async {
+                final opened = await Geolocator.openLocationSettings();
+                if (!opened) await Geolocator.openAppSettings();
+              },
+            ),
           ),
         );
         return;
@@ -173,25 +211,105 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
             ),
             children: [
               TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                urlTemplate:
+                    'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+                subdomains: const ['a', 'b', 'c', 'd'],
                 userAgentPackageName: 'com.example.ecommerceapp',
               ),
               MarkerLayer(
                 markers: [
                   Marker(
                     point: _selectedLocation,
-                    width: 60,
-                    height: 60,
-                    child: const Column(
+                    width: 64,
+                    height: 76,
+                    child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.location_on, color: Colors.red, size: 44),
+                        Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: .22),
+                                blurRadius: 7,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.red.shade600,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.storefront_rounded,
+                              color: Colors.white,
+                              size: 22,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: 3,
+                          height: 15,
+                          color: Colors.red.shade600,
+                        ),
+                        Container(
+                          width: 9,
+                          height: 5,
+                          decoration: BoxDecoration(
+                            color: Colors.black.withValues(alpha: .2),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
                       ],
                     ),
                   ),
                 ],
               ),
             ],
+          ),
+
+          // Map controls
+          Positioned(
+            left: 16,
+            bottom: 132,
+            child: Column(
+              children: [
+                _mapControlButton(
+                  icon: Icons.add,
+                  tooltip: 'تكبير الخريطة',
+                  onPressed: () => _mapController.move(
+                    _selectedLocation,
+                    (_mapController.camera.zoom + 1)
+                        .clamp(3.0, 19.0)
+                        .toDouble(),
+                  ),
+                ),
+                const SizedBox(height: 1),
+                _mapControlButton(
+                  icon: Icons.remove,
+                  tooltip: 'تصغير الخريطة',
+                  onPressed: () => _mapController.move(
+                    _selectedLocation,
+                    (_mapController.camera.zoom - 1)
+                        .clamp(3.0, 19.0)
+                        .toDouble(),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                _mapControlButton(
+                  icon: Icons.center_focus_strong_rounded,
+                  tooltip: 'إعادة توسيط الخريطة',
+                  onPressed: () => _mapController.move(
+                    _selectedLocation,
+                    _mapController.camera.zoom,
+                  ),
+                ),
+              ],
+            ),
           ),
 
           // Address search field
@@ -244,17 +362,27 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               decoration: BoxDecoration(
-                color: Colors.black87,
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: .12),
+                    blurRadius: 8,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
               ),
-              child: const Row(
+              child: Row(
                 children: [
-                  Icon(Icons.touch_app, color: Colors.amber, size: 20),
+                  Icon(Icons.touch_app, color: Colors.blue.shade700, size: 20),
                   SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       'اضغط على أي مكان بالخريطة لتثبيت الدبوس وتحديد موقع المتجر',
-                      style: TextStyle(color: Colors.white, fontSize: 12),
+                      style: TextStyle(
+                        color: Colors.blueGrey.shade800,
+                        fontSize: 12,
+                      ),
                     ),
                   ),
                 ],
