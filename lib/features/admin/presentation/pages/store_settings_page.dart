@@ -25,6 +25,7 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
   String _translatedStoreName = '';
   bool _isTranslating = false;
   int _translationRequest = 0;
+  String _translatedSource = '';
 
   double _latitude = _defaultLatitude;
   double _longitude = _defaultLongitude;
@@ -45,8 +46,8 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
   }
 
   Future<void> _loadSettings() async {
-    _nameController.text = _defaultStoreNameAr;
-    _translatedStoreName = _defaultStoreNameEn;
+    _nameController.clear();
+    _translatedStoreName = '';
 
     try {
       final settings = await StoreSettingsService.getStoreSettings().timeout(
@@ -105,11 +106,17 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
         fromArabic: _containsArabic(text),
       );
       if (mounted && request == _translationRequest) {
-        setState(() => _translatedStoreName = translated);
+        setState(() {
+          _translatedStoreName = translated;
+          _translatedSource = text;
+        });
       }
     } catch (_) {
       if (mounted && request == _translationRequest) {
-        setState(() => _translatedStoreName = '');
+        setState(() {
+          _translatedStoreName = '';
+          _translatedSource = '';
+        });
       }
     } finally {
       if (mounted && request == _translationRequest) {
@@ -258,35 +265,48 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
 
   Future<void> _saveSettings() async {
     if (_isSaving || !_formKey.currentState!.validate()) return;
-    if (_translatedStoreName.trim().isEmpty) {
-      await _translateStoreName(_nameController.text);
-    }
-    if (_translatedStoreName.trim().isEmpty) {
-      _showMessage(
-        'تعذر إنشاء الترجمة تلقائيًا. حاول مرة أخرى.',
-        isError: true,
-      );
-      return;
-    }
     if (!_hasValidCoordinates(_latitude, _longitude)) {
       _showMessage('يرجى اختيار موقع صحيح للمتجر.', isError: true);
       return;
     }
     setState(() => _isSaving = true);
     try {
+      final enteredName = _nameController.text.trim();
+      if (enteredName.isNotEmpty &&
+          (_translatedStoreName.trim().isEmpty ||
+              _translatedSource != enteredName)) {
+        await _translateStoreName(
+          enteredName,
+        ).timeout(const Duration(seconds: 20), onTimeout: () {});
+      }
+
+      final hasArabicName = _containsArabic(enteredName);
+      final arabicName = enteredName.isEmpty
+          ? _defaultStoreNameAr
+          : hasArabicName
+          ? enteredName
+          : _translatedStoreName.trim().isEmpty
+          ? _defaultStoreNameAr
+          : _translatedStoreName.trim();
+      final englishName = enteredName.isEmpty
+          ? _defaultStoreNameEn
+          : hasArabicName
+          ? _translatedStoreName.trim().isEmpty
+                ? _defaultStoreNameEn
+                : _translatedStoreName.trim()
+          : enteredName;
+
+      // The location is saved together with the names; translation failure
+      // must never prevent saving valid coordinates.
       await StoreSettingsService.saveStoreSettings(
         StoreSettingsModel(
-          storeNameAr: _containsArabic(_nameController.text.trim())
-              ? _nameController.text.trim()
-              : _translatedStoreName,
-          storeNameEn: _containsArabic(_nameController.text.trim())
-              ? _translatedStoreName
-              : _nameController.text.trim(),
+          storeNameAr: arabicName,
+          storeNameEn: englishName,
           latitude: _latitude,
           longitude: _longitude,
           address: _addressController.text.trim(),
         ),
-      );
+      ).timeout(const Duration(seconds: 20));
       if (!mounted) return;
       _showMessage('تم حفظ إعدادات المتجر بنجاح.');
       Navigator.pop(context);
@@ -404,11 +424,8 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
                         decoration: _fieldDecoration(
                           label: 'اسم المتجر',
                           icon: Icons.storefront,
-                          hint: 'اكتب الاسم بالعربي أو English',
+                          hint: 'المتجر الرئيسي',
                         ),
-                        validator: (val) => val == null || val.trim().isEmpty
-                            ? 'يرجى إدخال اسم المتجر'
-                            : null,
                       ),
                       const SizedBox(height: 8),
                       Row(
