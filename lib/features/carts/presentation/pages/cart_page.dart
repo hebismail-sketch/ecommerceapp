@@ -24,6 +24,7 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   bool _isSubmittingOrder = false;
+  String _selectedPaymentMethod = 'cashOnDelivery';
 
   Future<void> _submitCashOnDeliveryOrder({
     required BuildContext context,
@@ -53,7 +54,7 @@ class _CartPageState extends State<CartPage> {
         carIds: carIds,
         totalPrice: totalPrice,
         orderDate: DateTime.now(),
-        paymentMethod: 'cashOnDelivery',
+        paymentMethod: _selectedPaymentMethod,
         paymentStatus: 'pending',
       );
 
@@ -399,6 +400,61 @@ class _CartPageState extends State<CartPage> {
                           ],
                         ),
                         const SizedBox(height: 16),
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(14),
+                          decoration: BoxDecoration(
+                            color: Colors.red.shade50,
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(color: Colors.red.shade100),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.payments_outlined,
+                                color: Colors.red.shade700,
+                                size: 28,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'طريقة الدفع',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      'الدفع عند الاستلام',
+                                      style: TextStyle(
+                                        color: Colors.grey.shade700,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Radio<String>(
+                                value: 'cashOnDelivery',
+                                groupValue: _selectedPaymentMethod,
+                                activeColor: Colors.red.shade700,
+                                onChanged: _isSubmittingOrder
+                                    ? null
+                                    : (value) {
+                                        if (value == null) return;
+                                        setState(
+                                          () => _selectedPaymentMethod = value,
+                                        );
+                                      },
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 14),
                         SizedBox(
                           width: double.infinity,
                           height: 52,
@@ -435,15 +491,6 @@ class _CartPageState extends State<CartPage> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'طريقة الدفع: الدفع عند الاستلام',
-                          style: TextStyle(
-                            color: Colors.grey.shade700,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ],

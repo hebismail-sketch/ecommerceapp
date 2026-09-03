@@ -28,13 +28,10 @@ class OrderCubit extends Cubit<OrderState> {
   Future<void> loadOrders(String userId) async {
     emit(const OrderLoading());
     await _subscription?.cancel();
-    _subscription = getOrdersUseCase.call(userId).listen(
-      (items) {
-        orders = items;
-        emit(OrderSuccess(List.from(orders)));
-      },
-      onError: (error) => emit(OrderFailure(error.toString())),
-    );
+    _subscription = getOrdersUseCase.call(userId).listen((items) {
+      orders = items;
+      emit(OrderSuccess(List.from(orders)));
+    }, onError: (error) => emit(OrderFailure(error.toString())));
   }
 
   Future<void> addOrder(OrderEntity order) async {
@@ -42,6 +39,7 @@ class OrderCubit extends Cubit<OrderState> {
       await addOrderUseCase.call(order);
     } catch (e) {
       emit(OrderFailure(e.toString()));
+      rethrow;
     }
   }
 

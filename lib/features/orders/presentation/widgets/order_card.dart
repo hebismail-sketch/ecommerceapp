@@ -4,10 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class OrderCard extends StatelessWidget {
-  const OrderCard({
-    super.key,
-    required this.order,
-  });
+  const OrderCard({super.key, required this.order});
 
   final OrderEntity order;
 
@@ -22,9 +19,7 @@ class OrderCard extends StatelessWidget {
     return Card(
       elevation: 3,
       margin: EdgeInsets.zero,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -72,10 +67,7 @@ class OrderCard extends StatelessWidget {
               children: [
                 const Icon(Icons.calendar_today_outlined, size: 18),
                 const SizedBox(width: 8),
-                Text(
-                  formattedDate,
-                  style: const TextStyle(color: Colors.grey),
-                ),
+                Text(formattedDate, style: const TextStyle(color: Colors.grey)),
               ],
             ),
             const SizedBox(height: 10),
@@ -86,6 +78,42 @@ class OrderCard extends StatelessWidget {
                 Text(
                   l10n.carsCount(order.carIds.length),
                   style: const TextStyle(fontWeight: FontWeight.w500),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                const Icon(Icons.payments_outlined, size: 20),
+                const SizedBox(width: 8),
+                const Text(
+                  'الدفع عند الاستلام',
+                  style: TextStyle(fontWeight: FontWeight.w500),
+                ),
+                const Spacer(),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 5,
+                  ),
+                  decoration: BoxDecoration(
+                    color: order.paymentStatus == 'confirmed'
+                        ? Colors.green.shade50
+                        : Colors.orange.shade50,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    order.paymentStatus == 'confirmed'
+                        ? 'تم التأكيد'
+                        : 'قيد المراجعة',
+                    style: TextStyle(
+                      color: order.paymentStatus == 'confirmed'
+                          ? Colors.green.shade700
+                          : Colors.orange.shade800,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ],
             ),
