@@ -507,4 +507,54 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noProductsAvailable => 'No products available';
+
+  @override
+  String get deliveryLocation => 'Delivery Address';
+
+  @override
+  String get searchDeliveryAddress => 'Search for your address...';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get selectDeliveryLocation => 'Select Delivery Address';
+
+  @override
+  String get tapMapToSelectLocation => 'Tap the map to select your address';
+
+  @override
+  String get useCurrentLocation => 'Use Current Location';
+
+  @override
+  String get confirmLocation => 'Confirm Delivery Address';
+
+  @override
+  String get selectedLocation => 'Selected Address';
+
+  @override
+  String get locationSearchNotFound => 'Address not found. Try another search.';
+
+  @override
+  String get locationSearchFailed =>
+      'Search failed. Check your internet connection.';
+
+  @override
+  String get locationPermissionRequired =>
+      'Please enable GPS and allow location access.';
+
+  @override
+  String get openSettings => 'Settings';
+
+  @override
+  String get locationError => 'Unable to get your current location.';
+
+  @override
+  String get zoomIn => 'Zoom in';
+
+  @override
+  String get zoomOut => 'Zoom out';
+
+  @override
+  String get recenterMap => 'Recenter map';
 }

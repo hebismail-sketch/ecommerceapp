@@ -189,6 +189,23 @@
   "addProductButton": "Add Product",
   "addProductSubtitle": "Add a new product to the store inventory",
   "manageProductsSubtitle": "Edit, update prices, or remove products",
-  "noProductsAvailable": "No products available"
+  "noProductsAvailable": "No products available",
+  "deliveryLocation": "Delivery Address",
+  "searchDeliveryAddress": "Search for your address...",
+  "search": "Search",
+  "selectDeliveryLocation": "Select Delivery Address",
+  "tapMapToSelectLocation": "Tap the map to select your address",
+  "useCurrentLocation": "Use Current Location",
+  "confirmLocation": "Confirm Delivery Address",
+  "selectedLocation": "Selected Address",
+  "locationSearchNotFound": "Address not found. Try another search.",
+  "locationSearchFailed": "Search failed. Check your internet connection.",
+  "locationPermissionRequired": "Please enable GPS and allow location access.",
+  "openSettings": "Settings",
+  "locationError": "Unable to get your current location.",
+  "zoomIn": "Zoom in",
+  "zoomOut": "Zoom out",
+  "recenterMap": "Recenter map"
+
 }
 

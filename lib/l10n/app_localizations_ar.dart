@@ -500,4 +500,54 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get noProductsAvailable => 'لا توجد منتجات متوفرة';
+
+  @override
+  String get deliveryLocation => 'عنوان التوصيل';
+
+  @override
+  String get searchDeliveryAddress => 'ابحثي عن عنوانك...';
+
+  @override
+  String get search => 'بحث';
+
+  @override
+  String get selectDeliveryLocation => 'اختيار عنوان التوصيل';
+
+  @override
+  String get tapMapToSelectLocation => 'اضغطي على الخريطة لتحديد عنوانك';
+
+  @override
+  String get useCurrentLocation => 'استخدام موقعي الحالي';
+
+  @override
+  String get confirmLocation => 'تأكيد عنوان التوصيل';
+
+  @override
+  String get selectedLocation => 'العنوان المحدد';
+
+  @override
+  String get locationSearchNotFound =>
+      'لم يتم العثور على العنوان. جربي بحثًا آخر.';
+
+  @override
+  String get locationSearchFailed => 'فشل البحث. تحققي من اتصال الإنترنت.';
+
+  @override
+  String get locationPermissionRequired =>
+      'فعّلي GPS واسمحي للتطبيق بالوصول إلى موقعك.';
+
+  @override
+  String get openSettings => 'الإعدادات';
+
+  @override
+  String get locationError => 'تعذر تحديد موقعك الحالي.';
+
+  @override
+  String get zoomIn => 'تكبير الخريطة';
+
+  @override
+  String get zoomOut => 'تصغير الخريطة';
+
+  @override
+  String get recenterMap => 'إعادة توسيط الخريطة';
 }

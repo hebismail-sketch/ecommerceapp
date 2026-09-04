@@ -1063,6 +1063,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No products available'**
   String get noProductsAvailable;
+
+  /// No description provided for @deliveryLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery Address'**
+  String get deliveryLocation;
+
+  /// No description provided for @searchDeliveryAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for your address...'**
+  String get searchDeliveryAddress;
+
+  /// No description provided for @search.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get search;
+
+  /// No description provided for @selectDeliveryLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Delivery Address'**
+  String get selectDeliveryLocation;
+
+  /// No description provided for @tapMapToSelectLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the map to select your address'**
+  String get tapMapToSelectLocation;
+
+  /// No description provided for @useCurrentLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Use Current Location'**
+  String get useCurrentLocation;
+
+  /// No description provided for @confirmLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Delivery Address'**
+  String get confirmLocation;
+
+  /// No description provided for @selectedLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected Address'**
+  String get selectedLocation;
+
+  /// No description provided for @locationSearchNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Address not found. Try another search.'**
+  String get locationSearchNotFound;
+
+  /// No description provided for @locationSearchFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Search failed. Check your internet connection.'**
+  String get locationSearchFailed;
+
+  /// No description provided for @locationPermissionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enable GPS and allow location access.'**
+  String get locationPermissionRequired;
+
+  /// No description provided for @openSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get openSettings;
+
+  /// No description provided for @locationError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to get your current location.'**
+  String get locationError;
+
+  /// No description provided for @zoomIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Zoom in'**
+  String get zoomIn;
+
+  /// No description provided for @zoomOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Zoom out'**
+  String get zoomOut;
+
+  /// No description provided for @recenterMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Recenter map'**
+  String get recenterMap;
 }
 
 class _AppLocalizationsDelegate
