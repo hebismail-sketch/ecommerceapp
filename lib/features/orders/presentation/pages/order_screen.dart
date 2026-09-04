@@ -57,7 +57,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
         leading: widget.adminMode
             ? IconButton(
                 tooltip: 'رجوع إلى لوحة الإدارة',
-                icon: const Icon(Icons.arrow_back_ios_new),
+                icon: const Icon(
+                  Icons.arrow_back_ios_new,
+                  color: Colors.black87,
+                ),
                 onPressed: () {
                   if (Navigator.canPop(context)) {
                     Navigator.pop(context);
