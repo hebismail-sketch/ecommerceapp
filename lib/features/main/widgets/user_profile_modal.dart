@@ -3,7 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerceapp/core/constants/app_constants.dart';
 import 'package:ecommerceapp/features/chat/domain/entities/conversation_entity.dart';
-import 'package:ecommerceapp/features/chat/presentation/widgets/user_avatar_widget.dart';
+import 'package:ecommerceapp/features/main/widgets/user_avatar_widget.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
