@@ -1309,6 +1309,18 @@ abstract class AppLocalizations {
   String get viewStoreLocationAndDistance;
   String get storeLocationNotSet;
   String get noDescription;
+  String get favoritesEmptyMessage;
+  String get customerOrders;
+  String get ordersLoadFailed;
+  String get checkConnectionAndRetry;
+  String get ordersEmptyMessage;
+  String get incomingCustomerOrders;
+  String get orderHistory;
+  String get orderConfirmedStatus;
+  String get orderPendingStatus;
+  String translationFailed(String error);
+  String get productImageUrlHint;
+  String get translating;
 }
 
 class _AppLocalizationsDelegate

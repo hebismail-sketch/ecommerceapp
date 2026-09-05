@@ -266,6 +266,18 @@
   "viewStoreLocationAndDistance": "اضغط لعرض موقع المتجر والمسافة على الخريطة",
   "storeLocationNotSet": "موقع المتجر غير محدد على الخريطة",
   "noDescription": "---",
+  "favoritesEmptyMessage": "استعرض المنتجات واضغط على القلب لإضافتها هنا",
+  "customerOrders": "طلبات العملاء",
+  "ordersLoadFailed": "تعذر تحميل الطلبات",
+  "checkConnectionAndRetry": "تحقق من اتصال الإنترنت ثم حاول مرة أخرى.",
+  "ordersEmptyMessage": "عند إتمام طلب جديد سيظهر هنا لتتابع حالته.",
+  "incomingCustomerOrders": "طلبات العملاء الواردة",
+  "orderHistory": "سجل الطلبات",
+  "orderConfirmedStatus": "تم التأكيد",
+  "orderPendingStatus": "قيد المراجعة",
+  "translationFailed": "فشلت الترجمة. حاول مرة أخرى.\n{error}",
+  "productImageUrlHint": "https://example.com/product-image.jpg",
+  "translating": "جارٍ الترجمة...",
   "@appVersion": {
     "placeholders": {
       "version": {}
@@ -275,5 +287,6 @@
   ,"@selectedLocationWithCoordinates": {"placeholders": {"latitude": {}, "longitude": {}}}
   ,"@coordinates": {"placeholders": {"latitude": {}, "longitude": {}}}
   ,"@distanceInKilometers": {"placeholders": {"distance": {}}}
+  ,"@translationFailed": {"placeholders": {"error": {}}}
 
 }

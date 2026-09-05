@@ -117,7 +117,9 @@ class _AddProductPageState extends State<AddProductPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Translation failed. Please try again.\n$error'),
+            content: Text(
+              AppLocalizations.of(context)!.translationFailed(error.toString()),
+            ),
           ),
         );
         setState(() => _isTranslating = false);
@@ -187,7 +189,7 @@ class _AddProductPageState extends State<AddProductPage> {
         centerTitle: true,
         leading: Navigator.canPop(context)
             ? IconButton(
-                tooltip: 'رجوع',
+                tooltip: l10n.back,
                 icon: const Icon(Icons.arrow_back_ios_new),
                 onPressed: () => Navigator.pop(context),
               )
@@ -230,7 +232,7 @@ class _AddProductPageState extends State<AddProductPage> {
                   TextFormField(
                     controller: _imageUrlController,
                     decoration: InputDecoration(
-                      hintText: 'https://example.com/product-image.jpg',
+                      hintText: l10n.productImageUrlHint,
                       prefixIcon: const Icon(Icons.link),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -412,7 +414,7 @@ class _AddProductPageState extends State<AddProductPage> {
                     : const Icon(Icons.check_circle_outline),
                 label: Text(
                   _isTranslating
-                      ? 'Translating...'
+                      ? l10n.translating
                       : (isEditing ? l10n.saveChanges : l10n.addProductButton),
                   style: const TextStyle(
                     fontSize: 16,
@@ -456,7 +458,7 @@ class _AddProductPageState extends State<AddProductPage> {
       validator: required
           ? (value) {
               if (value == null || value.trim().isEmpty) {
-                return 'هذا الحقل مطلوب';
+                return AppLocalizations.of(context)!.requiredField;
               }
               return null;
             }

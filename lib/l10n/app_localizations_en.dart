@@ -714,4 +714,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get storeLocationNotSet => 'Store location is not set on the map';
   @override
   String get noDescription => '---';
+  @override
+  String get favoritesEmptyMessage => 'Explore products and tap the heart icon to add them here';
+  @override
+  String get customerOrders => 'Customer Orders';
+  @override
+  String get ordersLoadFailed => 'Unable to load orders';
+  @override
+  String get checkConnectionAndRetry => 'Check your internet connection and try again.';
+  @override
+  String get ordersEmptyMessage => 'New orders will appear here so you can track their status.';
+  @override
+  String get incomingCustomerOrders => 'Incoming Customer Orders';
+  @override
+  String get orderHistory => 'Order History';
+  @override
+  String get orderConfirmedStatus => 'Confirmed';
+  @override
+  String get orderPendingStatus => 'Pending Review';
+  @override
+  String translationFailed(String error) => 'Translation failed. Please try again.\n$error';
+  @override
+  String get productImageUrlHint => 'https://example.com/product-image.jpg';
+  @override
+  String get translating => 'Translating...';
 }

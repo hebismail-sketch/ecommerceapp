@@ -265,6 +265,18 @@
   "viewStoreLocationAndDistance": "Tap to view the store location and distance on the map",
   "storeLocationNotSet": "Store location is not set on the map",
   "noDescription": "---",
+  "favoritesEmptyMessage": "Explore products and tap the heart icon to add them here",
+  "customerOrders": "Customer Orders",
+  "ordersLoadFailed": "Unable to load orders",
+  "checkConnectionAndRetry": "Check your internet connection and try again.",
+  "ordersEmptyMessage": "New orders will appear here so you can track their status.",
+  "incomingCustomerOrders": "Incoming Customer Orders",
+  "orderHistory": "Order History",
+  "orderConfirmedStatus": "Confirmed",
+  "orderPendingStatus": "Pending Review",
+  "translationFailed": "Translation failed. Please try again.\n{error}",
+  "productImageUrlHint": "https://example.com/product-image.jpg",
+  "translating": "Translating...",
   "@appVersion": {
     "placeholders": {
       "version": {}
@@ -274,6 +286,7 @@
   ,"@selectedLocationWithCoordinates": {"placeholders": {"latitude": {}, "longitude": {}}}
   ,"@coordinates": {"placeholders": {"latitude": {}, "longitude": {}}}
   ,"@distanceInKilometers": {"placeholders": {"distance": {}}}
+  ,"@translationFailed": {"placeholders": {"error": {}}}
 
 }
 

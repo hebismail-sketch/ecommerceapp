@@ -63,7 +63,7 @@ class _FavoritePageState extends State<FavoritePage> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Explore items and tap the heart icon to add them here',
+              l10n.favoritesEmptyMessage,
               style: TextStyle(
                 fontSize: 13,
                 color: Colors.grey.shade600,

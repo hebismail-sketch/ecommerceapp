@@ -58,7 +58,7 @@ class OrderCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'طلب رقم #$shortId',
+                        l10n.orderNumber(shortId),
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
@@ -111,7 +111,7 @@ class OrderCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  '${order.carIds.length} منتجات',
+                  l10n.carsCount(order.carIds.length),
                   style: TextStyle(
                     color: Colors.grey.shade700,
                     fontWeight: FontWeight.w500,
@@ -129,7 +129,7 @@ class OrderCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  'الدفع عند الاستلام',
+                  l10n.cashOnDelivery,
                   style: TextStyle(
                     color: Colors.grey.shade700,
                     fontWeight: FontWeight.w500,
@@ -161,7 +161,9 @@ class _OrderStatusChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
-        isConfirmed ? 'تم التأكيد' : 'قيد المراجعة',
+        isConfirmed
+          ? AppLocalizations.of(context)!.orderConfirmedStatus
+          : AppLocalizations.of(context)!.orderPendingStatus,
         style: TextStyle(
           color: color,
           fontSize: 11,

@@ -707,4 +707,28 @@ class AppLocalizationsAr extends AppLocalizations {
   String get storeLocationNotSet => 'موقع المتجر غير محدد على الخريطة';
   @override
   String get noDescription => '---';
+  @override
+  String get favoritesEmptyMessage => 'استعرض المنتجات واضغط على القلب لإضافتها هنا';
+  @override
+  String get customerOrders => 'طلبات العملاء';
+  @override
+  String get ordersLoadFailed => 'تعذر تحميل الطلبات';
+  @override
+  String get checkConnectionAndRetry => 'تحقق من اتصال الإنترنت ثم حاول مرة أخرى.';
+  @override
+  String get ordersEmptyMessage => 'عند إتمام طلب جديد سيظهر هنا لتتابع حالته.';
+  @override
+  String get incomingCustomerOrders => 'طلبات العملاء الواردة';
+  @override
+  String get orderHistory => 'سجل الطلبات';
+  @override
+  String get orderConfirmedStatus => 'تم التأكيد';
+  @override
+  String get orderPendingStatus => 'قيد المراجعة';
+  @override
+  String translationFailed(String error) => 'فشلت الترجمة. حاول مرة أخرى.\n$error';
+  @override
+  String get productImageUrlHint => 'https://example.com/product-image.jpg';
+  @override
+  String get translating => 'جارٍ الترجمة...';
 }

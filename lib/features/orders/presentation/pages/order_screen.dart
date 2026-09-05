@@ -51,12 +51,12 @@ class _OrdersScreenState extends State<OrdersScreen> {
         automaticallyImplyLeading: false,
         leadingWidth: 56,
         title: Text(
-          widget.adminMode ? 'طلبات العملاء' : 'طلباتي',
+          widget.adminMode ? l10n.customerOrders : l10n.orders,
           style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
         ),
         leading: widget.adminMode
             ? IconButton(
-                tooltip: 'رجوع إلى لوحة الإدارة',
+                tooltip: l10n.back,
                 icon: const Icon(
                   Icons.arrow_back_ios_new,
                   color: Colors.black87,
@@ -90,9 +90,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
           if (state is OrderFailure) {
             return _OrdersMessage(
               icon: Icons.cloud_off_outlined,
-              title: 'تعذر تحميل الطلبات',
-              subtitle: 'تحقق من اتصال الإنترنت ثم حاول مرة أخرى.',
-              actionLabel: 'إعادة المحاولة',
+              title: l10n.ordersLoadFailed,
+              subtitle: l10n.checkConnectionAndRetry,
+              actionLabel: l10n.retry,
               onAction: () {
                 final user = FirebaseAuth.instance.currentUser;
                 if (widget.adminMode) {
@@ -109,7 +109,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
             return _OrdersMessage(
               icon: Icons.receipt_long_outlined,
               title: l10n.noOrders,
-              subtitle: 'عند إتمام طلب جديد سيظهر هنا لتتابع حالته.',
+              subtitle: l10n.ordersEmptyMessage,
             );
           }
 
@@ -129,7 +129,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
               itemBuilder: (context, index) {
                 if (index == 0) {
                   return Text(
-                    widget.adminMode ? 'طلبات العملاء الواردة' : 'سجل الطلبات',
+                    widget.adminMode ? l10n.incomingCustomerOrders : l10n.orderHistory,
                     style: TextStyle(
                       color: Colors.grey.shade700,
                       fontSize: 14,
