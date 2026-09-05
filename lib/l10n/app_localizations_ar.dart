@@ -660,102 +660,217 @@ class AppLocalizationsAr extends AppLocalizations {
   String get aboutDescription => 'تطبيق لبيع وشراء السيارات';
 
   @override
-  String appVersion(String version) => 'الإصدار $version';
+  String appVersion(Object version) {
+    return 'الإصدار $version';
+  }
 
   @override
-  String get aboutDetails => 'يمكنك من خلال التطبيق استعراض السيارات والبحث عنها وإضافتها للمفضلة والسلة وإتمام طلب الشراء بسهولة.';
+  String get aboutDetails =>
+      'يمكنك من خلال التطبيق استعراض السيارات والبحث عنها وإضافتها للمفضلة والسلة وإتمام طلب الشراء بسهولة.';
 
   @override
-  String get addressNotFound => 'لم يتم العثور على العنوان. حاول كتابة المنطقة والشارع.';
+  String get addressNotFound =>
+      'لم يتم العثور على العنوان. حاول كتابة المنطقة والشارع.';
+
   @override
-  String get locationSelectedSuccessfully => 'تم تحديد الموقع على الخريطة بنجاح.';
+  String get locationSelectedSuccessfully =>
+      'تم تحديد الموقع على الخريطة بنجاح.';
+
   @override
   String get currentLocationError => 'حدث خطأ أثناء تحديد موقعك الحالي.';
+
   @override
   String get storeLocationPickerTitle => 'تحديد موقع المتجر على الخريطة';
+
   @override
   String get back => 'رجوع';
+
   @override
   String get searchStoreAddressHint => 'ابحث عن عنوان المتجر بالكامل...';
+
   @override
-  String get mapLocationInstructions => 'اضغط على أي مكان بالخريطة لتثبيت موقع المتجر';
+  String get mapLocationInstructions =>
+      'اضغط على أي مكان بالخريطة لتثبيت موقع المتجر';
+
   @override
-  String selectedLocationWithCoordinates(String latitude, String longitude) => 'الموقع المحدد: $latitude، $longitude';
+  String selectedLocationWithCoordinates(Object latitude, Object longitude) {
+    return 'الموقع المحدد: $latitude، $longitude';
+  }
+
   @override
   String get confirmAndSaveStoreLocation => 'تأكيد وحفظ موقع المتجر';
+
   @override
   String get store => 'المتجر';
+
   @override
   String get yourLocation => 'موقعك';
+
   @override
-  String coordinates(String latitude, String longitude) => 'الإحداثيات: $latitude، $longitude';
+  String coordinates(Object latitude, Object longitude) {
+    return 'الإحداثيات: $latitude، $longitude';
+  }
+
   @override
   String get calculatingDistance => 'جاري حساب المسافة...';
+
   @override
-  String distanceInKilometers(String distance) => 'المسافة: $distance كم';
+  String distanceInKilometers(Object distance) {
+    return 'المسافة: $distance كم';
+  }
+
   @override
   String get distanceUnavailable => 'تعذر تحديد المسافة';
+
   @override
   String get focusOnStore => 'التركيز على المتجر';
+
   @override
   String get defaultStoreName => 'المتجر الرئيسي';
+
   @override
-  String get storeCoordinatesUnavailable => 'لم يتم تحديد إحداثيات موقع هذا المتجر على الخريطة من قبل البائع.';
+  String get storeCoordinatesUnavailable =>
+      'لم يتم تحديد إحداثيات موقع هذا المتجر على الخريطة من قبل البائع.';
+
   @override
-  String get viewStoreLocationAndDistance => 'اضغط لعرض موقع المتجر والمسافة على الخريطة';
+  String get viewStoreLocationAndDistance =>
+      'اضغط لعرض موقع المتجر والمسافة على الخريطة';
+
   @override
   String get storeLocationNotSet => 'موقع المتجر غير محدد على الخريطة';
+
   @override
   String get noDescription => '---';
+
   @override
-  String get favoritesEmptyMessage => 'استعرض المنتجات واضغط على القلب لإضافتها هنا';
+  String get favoritesEmptyMessage =>
+      'استعرض المنتجات واضغط على القلب لإضافتها هنا';
+
   @override
   String get customerOrders => 'طلبات العملاء';
+
   @override
   String get ordersLoadFailed => 'تعذر تحميل الطلبات';
+
   @override
-  String get checkConnectionAndRetry => 'تحقق من اتصال الإنترنت ثم حاول مرة أخرى.';
+  String get checkConnectionAndRetry =>
+      'تحقق من اتصال الإنترنت ثم حاول مرة أخرى.';
+
   @override
   String get ordersEmptyMessage => 'عند إتمام طلب جديد سيظهر هنا لتتابع حالته.';
+
   @override
   String get incomingCustomerOrders => 'طلبات العملاء الواردة';
+
   @override
   String get orderHistory => 'سجل الطلبات';
+
   @override
   String get orderConfirmedStatus => 'تم التأكيد';
+
   @override
   String get orderPendingStatus => 'قيد المراجعة';
+
   @override
-  String translationFailed(String error) => 'فشلت الترجمة. حاول مرة أخرى.\n$error';
+  String translationFailed(Object error) {
+    return 'فشلت الترجمة. حاول مرة أخرى.\n$error';
+  }
+
   @override
   String get productImageUrlHint => 'https://example.com/product-image.jpg';
+
   @override
   String get translating => 'جارٍ الترجمة...';
-  @override String get storeLocationSettingsTitle => 'إعدادات موقع المتجر';
-  @override String get manageStoreData => 'إدارة بيانات المتجر';
-  @override String get manageStoreDataSubtitle => 'حدّث بيانات متجرك وموقعه ليظهر للعملاء بشكل دقيق.';
-  @override String get basicStoreData => 'بيانات المتجر الأساسية';
-  @override String get storeDataCustomerVisibility => 'هذه المعلومات تظهر للعملاء داخل التطبيق';
-  @override String get storeName => 'اسم المتجر';
-  @override String get autoTranslationInProgress => 'جاري تجهيز الترجمة تلقائيًا...';
-  @override String get autoTranslationSaved => 'سيتم حفظ الاسم باللغتين تلقائيًا';
-  @override String autoTranslationResult(String name) => 'الترجمة التلقائية: $name';
-  @override String get storeAddressDetailed => 'عنوان المتجر بالتفصيل (اختياري)';
-  @override String get neighborhoodStreetBuilding => 'الحي، الشارع، رقم المبنى';
-  @override String get storeMapLocation => 'موقع المتجر على الخريطة';
-  @override String get storeMapHint => 'ثبّت الدبوس بدقة حتى يتمكن العملاء من الوصول إليك';
-  @override String get editLocationOnMap => 'تعديل الموقع على الخريطة';
-  @override String get locating => 'جاري تحديد الموقع...';
-  @override String get useGps => 'استخدام موقعي الحالي بالـ GPS';
-  @override String get saveStoreSettings => 'حفظ إعدادات المتجر';
-  @override String get customerChangesApplied => 'سيتم تطبيق التغييرات فورًا على واجهة العملاء';
-  @override String get storeLocationPermissionError => 'تعذر تحديد الموقع. تأكد من تفعيل GPS ومنح الصلاحية.';
-  @override String get storeLocationUpdated => 'تم تحديث موقع المتجر بنجاح.';
-  @override String get currentLocationReadError => 'حدث خطأ أثناء قراءة الموقع الحالي.';
-  @override String get invalidStoreLocation => 'يرجى اختيار موقع صحيح للمتجر.';
-  @override String get storeSettingsSaved => 'تم حفظ إعدادات المتجر بنجاح.';
-  @override String get firestorePermissionDenied => 'ليس لديك صلاحية لحفظ إعدادات المتجر. راجع قواعد Firestore.';
-  @override String get firestoreUnavailable => 'خدمة Firestore غير متاحة الآن. تحقق من الإنترنت.';
-  @override String get saveTimedOut => 'استغرق الحفظ وقتًا طويلًا. حاول مرة أخرى.';
-  @override String saveSettingsFailedWithError(String error) => 'تعذر حفظ الإعدادات: $error';
+
+  @override
+  String get storeLocationSettingsTitle => 'إعدادات موقع المتجر';
+
+  @override
+  String get manageStoreData => 'إدارة بيانات المتجر';
+
+  @override
+  String get manageStoreDataSubtitle =>
+      'حدّث بيانات متجرك وموقعه ليظهر للعملاء بشكل دقيق.';
+
+  @override
+  String get basicStoreData => 'بيانات المتجر الأساسية';
+
+  @override
+  String get storeDataCustomerVisibility =>
+      'هذه المعلومات تظهر للعملاء داخل التطبيق';
+
+  @override
+  String get storeName => 'اسم المتجر';
+
+  @override
+  String get autoTranslationInProgress => 'جاري تجهيز الترجمة تلقائيًا...';
+
+  @override
+  String get autoTranslationSaved => 'سيتم حفظ الاسم باللغتين تلقائيًا';
+
+  @override
+  String autoTranslationResult(Object name) {
+    return 'الترجمة التلقائية: $name';
+  }
+
+  @override
+  String get storeAddressDetailed => 'عنوان المتجر بالتفصيل (اختياري)';
+
+  @override
+  String get neighborhoodStreetBuilding => 'الحي، الشارع، رقم المبنى';
+
+  @override
+  String get storeMapLocation => 'موقع المتجر على الخريطة';
+
+  @override
+  String get storeMapHint =>
+      'ثبّت الدبوس بدقة حتى يتمكن العملاء من الوصول إليك';
+
+  @override
+  String get editLocationOnMap => 'تعديل الموقع على الخريطة';
+
+  @override
+  String get locating => 'جاري تحديد الموقع...';
+
+  @override
+  String get useGps => 'استخدام موقعي الحالي بالـ GPS';
+
+  @override
+  String get saveStoreSettings => 'حفظ إعدادات المتجر';
+
+  @override
+  String get customerChangesApplied =>
+      'سيتم تطبيق التغييرات فورًا على واجهة العملاء';
+
+  @override
+  String get storeLocationPermissionError =>
+      'تعذر تحديد الموقع. تأكد من تفعيل GPS ومنح الصلاحية.';
+
+  @override
+  String get storeLocationUpdated => 'تم تحديث موقع المتجر بنجاح.';
+
+  @override
+  String get currentLocationReadError => 'حدث خطأ أثناء قراءة الموقع الحالي.';
+
+  @override
+  String get invalidStoreLocation => 'يرجى اختيار موقع صحيح للمتجر.';
+
+  @override
+  String get storeSettingsSaved => 'تم حفظ إعدادات المتجر بنجاح.';
+
+  @override
+  String get firestorePermissionDenied =>
+      'ليس لديك صلاحية لحفظ إعدادات المتجر. راجع قواعد Firestore.';
+
+  @override
+  String get firestoreUnavailable =>
+      'خدمة Firestore غير متاحة الآن. تحقق من الإنترنت.';
+
+  @override
+  String get saveTimedOut => 'استغرق الحفظ وقتًا طويلًا. حاول مرة أخرى.';
+
+  @override
+  String saveSettingsFailedWithError(Object error) {
+    return 'تعذر حفظ الإعدادات: $error';
+  }
 }

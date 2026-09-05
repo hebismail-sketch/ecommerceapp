@@ -613,7 +613,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get invalidPhoneNumber => 'Enter a valid phone number';
 
   @override
-  String get emptyCartMessage => 'Your shopping cart is waiting to be filled with great items!';
+  String get emptyCartMessage =>
+      'Your shopping cart is waiting to be filled with great items!';
 
   @override
   String get cashOnDelivery => 'Cash on delivery';
@@ -622,13 +623,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paymentMethod => 'Payment method';
 
   @override
-  String get orderCreationFailed => 'Unable to create the order. Please try again.';
+  String get orderCreationFailed =>
+      'Unable to create the order. Please try again.';
 
   @override
   String get defaultUserName => 'User';
 
   @override
-  String get startSupportConversation => 'Send a message to start a conversation with support';
+  String get startSupportConversation =>
+      'Send a message to start a conversation with support';
 
   @override
   String get typeMessageHint => 'Type your message...';
@@ -640,7 +643,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onlineSupport => 'Online Support';
 
   @override
-  String get deliveryLocationSelected => 'Your delivery location has been selected.';
+  String get deliveryLocationSelected =>
+      'Your delivery location has been selected.';
 
   @override
   String get recipientDetails => 'Recipient Details';
@@ -667,102 +671,223 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aboutDescription => 'An application for buying and selling cars';
 
   @override
-  String appVersion(String version) => 'Version $version';
+  String appVersion(Object version) {
+    return 'Version $version';
+  }
 
   @override
-  String get aboutDetails => 'Browse cars, search for them, add them to favorites and cart, and complete your purchase easily.';
+  String get aboutDetails =>
+      'Browse cars, search for them, add them to favorites and cart, and complete your purchase easily.';
 
   @override
-  String get addressNotFound => 'Address not found. Try entering the area and street.';
+  String get addressNotFound =>
+      'Address not found. Try entering the area and street.';
+
   @override
-  String get locationSelectedSuccessfully => 'Location selected successfully on the map.';
+  String get locationSelectedSuccessfully =>
+      'Location selected successfully on the map.';
+
   @override
-  String get currentLocationError => 'An error occurred while finding your current location.';
+  String get currentLocationError =>
+      'An error occurred while finding your current location.';
+
   @override
   String get storeLocationPickerTitle => 'Select Store Location on Map';
+
   @override
   String get back => 'Back';
+
   @override
-  String get searchStoreAddressHint => 'Search for the complete store address...';
+  String get searchStoreAddressHint =>
+      'Search for the complete store address...';
+
   @override
-  String get mapLocationInstructions => 'Tap anywhere on the map to pin the store location';
+  String get mapLocationInstructions =>
+      'Tap anywhere on the map to pin the store location';
+
   @override
-  String selectedLocationWithCoordinates(String latitude, String longitude) => 'Selected location: $latitude, $longitude';
+  String selectedLocationWithCoordinates(Object latitude, Object longitude) {
+    return 'Selected location: $latitude, $longitude';
+  }
+
   @override
   String get confirmAndSaveStoreLocation => 'Confirm and Save Store Location';
+
   @override
   String get store => 'Store';
+
   @override
   String get yourLocation => 'Your location';
+
   @override
-  String coordinates(String latitude, String longitude) => 'Coordinates: $latitude, $longitude';
+  String coordinates(Object latitude, Object longitude) {
+    return 'Coordinates: $latitude, $longitude';
+  }
+
   @override
   String get calculatingDistance => 'Calculating distance...';
+
   @override
-  String distanceInKilometers(String distance) => 'Distance: $distance km';
+  String distanceInKilometers(Object distance) {
+    return 'Distance: $distance km';
+  }
+
   @override
   String get distanceUnavailable => 'Distance unavailable';
+
   @override
   String get focusOnStore => 'Focus on store';
+
   @override
   String get defaultStoreName => 'Main Store';
+
   @override
-  String get storeCoordinatesUnavailable => 'This store has no map coordinates set by the seller.';
+  String get storeCoordinatesUnavailable =>
+      'This store has no map coordinates set by the seller.';
+
   @override
-  String get viewStoreLocationAndDistance => 'Tap to view the store location and distance on the map';
+  String get viewStoreLocationAndDistance =>
+      'Tap to view the store location and distance on the map';
+
   @override
   String get storeLocationNotSet => 'Store location is not set on the map';
+
   @override
   String get noDescription => '---';
+
   @override
-  String get favoritesEmptyMessage => 'Explore products and tap the heart icon to add them here';
+  String get favoritesEmptyMessage =>
+      'Explore products and tap the heart icon to add them here';
+
   @override
   String get customerOrders => 'Customer Orders';
+
   @override
   String get ordersLoadFailed => 'Unable to load orders';
+
   @override
-  String get checkConnectionAndRetry => 'Check your internet connection and try again.';
+  String get checkConnectionAndRetry =>
+      'Check your internet connection and try again.';
+
   @override
-  String get ordersEmptyMessage => 'New orders will appear here so you can track their status.';
+  String get ordersEmptyMessage =>
+      'New orders will appear here so you can track their status.';
+
   @override
   String get incomingCustomerOrders => 'Incoming Customer Orders';
+
   @override
   String get orderHistory => 'Order History';
+
   @override
   String get orderConfirmedStatus => 'Confirmed';
+
   @override
   String get orderPendingStatus => 'Pending Review';
+
   @override
-  String translationFailed(String error) => 'Translation failed. Please try again.\n$error';
+  String translationFailed(Object error) {
+    return 'Translation failed. Please try again.\n$error';
+  }
+
   @override
   String get productImageUrlHint => 'https://example.com/product-image.jpg';
+
   @override
   String get translating => 'Translating...';
-  @override String get storeLocationSettingsTitle => 'Store Location Settings';
-  @override String get manageStoreData => 'Manage Store Data';
-  @override String get manageStoreDataSubtitle => 'Update your store details and location so customers can find you accurately.';
-  @override String get basicStoreData => 'Basic Store Data';
-  @override String get storeDataCustomerVisibility => 'This information appears to customers in the app';
-  @override String get storeName => 'Store Name';
-  @override String get autoTranslationInProgress => 'Preparing translation automatically...';
-  @override String get autoTranslationSaved => 'The name will be saved in both languages automatically';
-  @override String autoTranslationResult(String name) => 'Automatic translation: $name';
-  @override String get storeAddressDetailed => 'Detailed Store Address (optional)';
-  @override String get neighborhoodStreetBuilding => 'District, street, building number';
-  @override String get storeMapLocation => 'Store Location on Map';
-  @override String get storeMapHint => 'Place the pin accurately so customers can reach you';
-  @override String get editLocationOnMap => 'Edit Location on Map';
-  @override String get locating => 'Finding location...';
-  @override String get useGps => 'Use My Current GPS Location';
-  @override String get saveStoreSettings => 'Save Store Settings';
-  @override String get customerChangesApplied => 'Changes will be applied immediately to the customer experience';
-  @override String get storeLocationPermissionError => 'Unable to determine location. Enable GPS and grant permission.';
-  @override String get storeLocationUpdated => 'Store location updated successfully.';
-  @override String get currentLocationReadError => 'An error occurred while reading the current location.';
-  @override String get invalidStoreLocation => 'Please choose a valid store location.';
-  @override String get storeSettingsSaved => 'Store settings saved successfully.';
-  @override String get firestorePermissionDenied => 'You do not have permission to save store settings. Check Firestore rules.';
-  @override String get firestoreUnavailable => 'Firestore is currently unavailable. Check your internet connection.';
-  @override String get saveTimedOut => 'Saving took too long. Please try again.';
-  @override String saveSettingsFailedWithError(String error) => 'Unable to save settings: $error';
+
+  @override
+  String get storeLocationSettingsTitle => 'Store Location Settings';
+
+  @override
+  String get manageStoreData => 'Manage Store Data';
+
+  @override
+  String get manageStoreDataSubtitle =>
+      'Update your store details and location so customers can find you accurately.';
+
+  @override
+  String get basicStoreData => 'Basic Store Data';
+
+  @override
+  String get storeDataCustomerVisibility =>
+      'This information appears to customers in the app';
+
+  @override
+  String get storeName => 'Store Name';
+
+  @override
+  String get autoTranslationInProgress =>
+      'Preparing translation automatically...';
+
+  @override
+  String get autoTranslationSaved =>
+      'The name will be saved in both languages automatically';
+
+  @override
+  String autoTranslationResult(Object name) {
+    return 'Automatic translation: $name';
+  }
+
+  @override
+  String get storeAddressDetailed => 'Detailed Store Address (optional)';
+
+  @override
+  String get neighborhoodStreetBuilding => 'District, street, building number';
+
+  @override
+  String get storeMapLocation => 'Store Location on Map';
+
+  @override
+  String get storeMapHint =>
+      'Place the pin accurately so customers can reach you';
+
+  @override
+  String get editLocationOnMap => 'Edit Location on Map';
+
+  @override
+  String get locating => 'Finding location...';
+
+  @override
+  String get useGps => 'Use My Current GPS Location';
+
+  @override
+  String get saveStoreSettings => 'Save Store Settings';
+
+  @override
+  String get customerChangesApplied =>
+      'Changes will be applied immediately to the customer experience';
+
+  @override
+  String get storeLocationPermissionError =>
+      'Unable to determine location. Enable GPS and grant permission.';
+
+  @override
+  String get storeLocationUpdated => 'Store location updated successfully.';
+
+  @override
+  String get currentLocationReadError =>
+      'An error occurred while reading the current location.';
+
+  @override
+  String get invalidStoreLocation => 'Please choose a valid store location.';
+
+  @override
+  String get storeSettingsSaved => 'Store settings saved successfully.';
+
+  @override
+  String get firestorePermissionDenied =>
+      'You do not have permission to save store settings. Check Firestore rules.';
+
+  @override
+  String get firestoreUnavailable =>
+      'Firestore is currently unavailable. Check your internet connection.';
+
+  @override
+  String get saveTimedOut => 'Saving took too long. Please try again.';
+
+  @override
+  String saveSettingsFailedWithError(Object error) {
+    return 'Unable to save settings: $error';
+  }
 }

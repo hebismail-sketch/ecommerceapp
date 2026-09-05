@@ -1268,86 +1268,485 @@ abstract class AppLocalizations {
   /// **'Enter a valid phone number'**
   String get invalidPhoneNumber;
 
+  /// No description provided for @emptyCartMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your shopping cart is waiting to be filled with great items!'**
   String get emptyCartMessage;
+
+  /// No description provided for @cashOnDelivery.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash on delivery'**
   String get cashOnDelivery;
+
+  /// No description provided for @paymentMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment method'**
   String get paymentMethod;
+
+  /// No description provided for @orderCreationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to create the order. Please try again.'**
   String get orderCreationFailed;
+
+  /// No description provided for @defaultUserName.
+  ///
+  /// In en, this message translates to:
+  /// **'User'**
   String get defaultUserName;
+
+  /// No description provided for @startSupportConversation.
+  ///
+  /// In en, this message translates to:
+  /// **'Send a message to start a conversation with support'**
   String get startSupportConversation;
+
+  /// No description provided for @typeMessageHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Type your message...'**
   String get typeMessageHint;
+
+  /// No description provided for @supportChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Support Chat'**
   String get supportChat;
+
+  /// No description provided for @onlineSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Online Support'**
   String get onlineSupport;
+
+  /// No description provided for @deliveryLocationSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'Your delivery location has been selected.'**
   String get deliveryLocationSelected;
+
+  /// No description provided for @recipientDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Recipient Details'**
   String get recipientDetails;
+
+  /// No description provided for @addressDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Address Details'**
   String get addressDetails;
+
+  /// No description provided for @streetAndArea.
+  ///
+  /// In en, this message translates to:
+  /// **'Street and Area'**
   String get streetAndArea;
+
+  /// No description provided for @phoneHint.
+  ///
+  /// In en, this message translates to:
+  /// **'01xxxxxxxxx'**
   String get phoneHint;
+
+  /// No description provided for @streetHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Street name, district...'**
   String get streetHint;
+
+  /// No description provided for @notesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Nearby landmark or delivery instructions'**
   String get notesHint;
+
+  /// No description provided for @saveOrderDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Order Details'**
   String get saveOrderDetails;
+
+  /// No description provided for @aboutDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'An application for buying and selling cars'**
   String get aboutDescription;
-  String appVersion(String version);
+
+  /// No description provided for @appVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version}'**
+  String appVersion(Object version);
+
+  /// No description provided for @aboutDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse cars, search for them, add them to favorites and cart, and complete your purchase easily.'**
   String get aboutDetails;
+
+  /// No description provided for @addressNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Address not found. Try entering the area and street.'**
   String get addressNotFound;
+
+  /// No description provided for @locationSelectedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Location selected successfully on the map.'**
   String get locationSelectedSuccessfully;
+
+  /// No description provided for @currentLocationError.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred while finding your current location.'**
   String get currentLocationError;
+
+  /// No description provided for @storeLocationPickerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Store Location on Map'**
   String get storeLocationPickerTitle;
+
+  /// No description provided for @back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
   String get back;
+
+  /// No description provided for @searchStoreAddressHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for the complete store address...'**
   String get searchStoreAddressHint;
+
+  /// No description provided for @mapLocationInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap anywhere on the map to pin the store location'**
   String get mapLocationInstructions;
-  String selectedLocationWithCoordinates(String latitude, String longitude);
+
+  /// No description provided for @selectedLocationWithCoordinates.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected location: {latitude}, {longitude}'**
+  String selectedLocationWithCoordinates(Object latitude, Object longitude);
+
+  /// No description provided for @confirmAndSaveStoreLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm and Save Store Location'**
   String get confirmAndSaveStoreLocation;
+
+  /// No description provided for @store.
+  ///
+  /// In en, this message translates to:
+  /// **'Store'**
   String get store;
+
+  /// No description provided for @yourLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Your location'**
   String get yourLocation;
-  String coordinates(String latitude, String longitude);
+
+  /// No description provided for @coordinates.
+  ///
+  /// In en, this message translates to:
+  /// **'Coordinates: {latitude}, {longitude}'**
+  String coordinates(Object latitude, Object longitude);
+
+  /// No description provided for @calculatingDistance.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculating distance...'**
   String get calculatingDistance;
-  String distanceInKilometers(String distance);
+
+  /// No description provided for @distanceInKilometers.
+  ///
+  /// In en, this message translates to:
+  /// **'Distance: {distance} km'**
+  String distanceInKilometers(Object distance);
+
+  /// No description provided for @distanceUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Distance unavailable'**
   String get distanceUnavailable;
+
+  /// No description provided for @focusOnStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus on store'**
   String get focusOnStore;
+
+  /// No description provided for @defaultStoreName.
+  ///
+  /// In en, this message translates to:
+  /// **'Main Store'**
   String get defaultStoreName;
+
+  /// No description provided for @storeCoordinatesUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This store has no map coordinates set by the seller.'**
   String get storeCoordinatesUnavailable;
+
+  /// No description provided for @viewStoreLocationAndDistance.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to view the store location and distance on the map'**
   String get viewStoreLocationAndDistance;
+
+  /// No description provided for @storeLocationNotSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Store location is not set on the map'**
   String get storeLocationNotSet;
+
+  /// No description provided for @noDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'---'**
   String get noDescription;
+
+  /// No description provided for @favoritesEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore products and tap the heart icon to add them here'**
   String get favoritesEmptyMessage;
+
+  /// No description provided for @customerOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer Orders'**
   String get customerOrders;
+
+  /// No description provided for @ordersLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load orders'**
   String get ordersLoadFailed;
+
+  /// No description provided for @checkConnectionAndRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your internet connection and try again.'**
   String get checkConnectionAndRetry;
+
+  /// No description provided for @ordersEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'New orders will appear here so you can track their status.'**
   String get ordersEmptyMessage;
+
+  /// No description provided for @incomingCustomerOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'Incoming Customer Orders'**
   String get incomingCustomerOrders;
+
+  /// No description provided for @orderHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Order History'**
   String get orderHistory;
+
+  /// No description provided for @orderConfirmedStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmed'**
   String get orderConfirmedStatus;
+
+  /// No description provided for @orderPendingStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending Review'**
   String get orderPendingStatus;
-  String translationFailed(String error);
+
+  /// No description provided for @translationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Translation failed. Please try again.\n{error}'**
+  String translationFailed(Object error);
+
+  /// No description provided for @productImageUrlHint.
+  ///
+  /// In en, this message translates to:
+  /// **'https://example.com/product-image.jpg'**
   String get productImageUrlHint;
+
+  /// No description provided for @translating.
+  ///
+  /// In en, this message translates to:
+  /// **'Translating...'**
   String get translating;
+
+  /// No description provided for @storeLocationSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Store Location Settings'**
   String get storeLocationSettingsTitle;
+
+  /// No description provided for @manageStoreData.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Store Data'**
   String get manageStoreData;
+
+  /// No description provided for @manageStoreDataSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Update your store details and location so customers can find you accurately.'**
   String get manageStoreDataSubtitle;
+
+  /// No description provided for @basicStoreData.
+  ///
+  /// In en, this message translates to:
+  /// **'Basic Store Data'**
   String get basicStoreData;
+
+  /// No description provided for @storeDataCustomerVisibility.
+  ///
+  /// In en, this message translates to:
+  /// **'This information appears to customers in the app'**
   String get storeDataCustomerVisibility;
+
+  /// No description provided for @storeName.
+  ///
+  /// In en, this message translates to:
+  /// **'Store Name'**
   String get storeName;
+
+  /// No description provided for @autoTranslationInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing translation automatically...'**
   String get autoTranslationInProgress;
+
+  /// No description provided for @autoTranslationSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'The name will be saved in both languages automatically'**
   String get autoTranslationSaved;
-  String autoTranslationResult(String name);
+
+  /// No description provided for @autoTranslationResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatic translation: {name}'**
+  String autoTranslationResult(Object name);
+
+  /// No description provided for @storeAddressDetailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Detailed Store Address (optional)'**
   String get storeAddressDetailed;
+
+  /// No description provided for @neighborhoodStreetBuilding.
+  ///
+  /// In en, this message translates to:
+  /// **'District, street, building number'**
   String get neighborhoodStreetBuilding;
+
+  /// No description provided for @storeMapLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Store Location on Map'**
   String get storeMapLocation;
+
+  /// No description provided for @storeMapHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Place the pin accurately so customers can reach you'**
   String get storeMapHint;
+
+  /// No description provided for @editLocationOnMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Location on Map'**
   String get editLocationOnMap;
+
+  /// No description provided for @locating.
+  ///
+  /// In en, this message translates to:
+  /// **'Finding location...'**
   String get locating;
+
+  /// No description provided for @useGps.
+  ///
+  /// In en, this message translates to:
+  /// **'Use My Current GPS Location'**
   String get useGps;
+
+  /// No description provided for @saveStoreSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Store Settings'**
   String get saveStoreSettings;
+
+  /// No description provided for @customerChangesApplied.
+  ///
+  /// In en, this message translates to:
+  /// **'Changes will be applied immediately to the customer experience'**
   String get customerChangesApplied;
+
+  /// No description provided for @storeLocationPermissionError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to determine location. Enable GPS and grant permission.'**
   String get storeLocationPermissionError;
+
+  /// No description provided for @storeLocationUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Store location updated successfully.'**
   String get storeLocationUpdated;
+
+  /// No description provided for @currentLocationReadError.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred while reading the current location.'**
   String get currentLocationReadError;
+
+  /// No description provided for @invalidStoreLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Please choose a valid store location.'**
   String get invalidStoreLocation;
+
+  /// No description provided for @storeSettingsSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Store settings saved successfully.'**
   String get storeSettingsSaved;
+
+  /// No description provided for @firestorePermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'You do not have permission to save store settings. Check Firestore rules.'**
   String get firestorePermissionDenied;
+
+  /// No description provided for @firestoreUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Firestore is currently unavailable. Check your internet connection.'**
   String get firestoreUnavailable;
+
+  /// No description provided for @saveTimedOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving took too long. Please try again.'**
   String get saveTimedOut;
-  String saveSettingsFailedWithError(String error);
+
+  /// No description provided for @saveSettingsFailedWithError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to save settings: {error}'**
+  String saveSettingsFailedWithError(Object error);
 }
 
 class _AppLocalizationsDelegate
