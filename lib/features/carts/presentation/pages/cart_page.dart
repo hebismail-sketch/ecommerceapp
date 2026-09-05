@@ -8,9 +8,12 @@ import 'package:ecommerceapp/core/widgets/custom_search_app_bar.dart';
 import 'package:ecommerceapp/features/carts/presentation/manager/cart_cubit.dart';
 import 'package:ecommerceapp/features/orders/domain/entities/order_entity.dart';
 import 'package:ecommerceapp/features/orders/presentation/manager/order_cubit.dart';
+import 'package:ecommerceapp/features/orders/presentation/pages/delivery_details_page.dart';
+import 'package:ecommerceapp/features/orders/presentation/pages/delivery_location_page.dart';
 import 'package:ecommerceapp/features/products/presentation/manager/product_cubit.dart';
 import 'package:ecommerceapp/features/products/presentation/pages/product_details_page.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
+import 'package:latlong2/latlong.dart';
 
 /// Modern eCommerce CartPage with premium card design and seamless checkout
 class CartPage extends StatefulWidget {
@@ -42,10 +45,30 @@ class _CartPageState extends State<CartPage> {
       return;
     }
 
-    final orderCubit = context.read<OrderCubit>();
-    final cartCubit = context.read<CartCubit>();
     setState(() => _isSubmittingOrder = true);
     try {
+      final selectedLocation = await Navigator.push<LatLng>(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const DeliveryLocationPage(),
+        ),
+      );
+
+      if (!mounted || selectedLocation == null) return;
+
+      final deliveryDetails = await Navigator.push<DeliveryDetails>(
+        context,
+        MaterialPageRoute(
+          builder: (_) => DeliveryDetailsPage(
+            selectedLocation: selectedLocation,
+          ),
+        ),
+      );
+
+      if (!mounted || deliveryDetails == null) return;
+
+      final orderCubit = context.read<OrderCubit>();
+      final cartCubit = context.read<CartCubit>();
       final cartItems = cartState.cartItems;
       final carIds = cartItems.map((item) => item.productId).toList();
       final order = OrderEntity(
@@ -56,6 +79,16 @@ class _CartPageState extends State<CartPage> {
         orderDate: DateTime.now(),
         paymentMethod: _selectedPaymentMethod,
         paymentStatus: 'pending',
+        firstName: deliveryDetails.firstName,
+        lastName: deliveryDetails.lastName,
+        phone: deliveryDetails.phone,
+        street: deliveryDetails.street,
+        buildingNumber: deliveryDetails.buildingNumber,
+        floorNumber: deliveryDetails.floorNumber,
+        apartmentNumber: deliveryDetails.apartmentNumber,
+        additionalNotes: deliveryDetails.additionalNotes,
+        latitude: deliveryDetails.latitude,
+        longitude: deliveryDetails.longitude,
       );
 
       await orderCubit.addOrder(order);
