@@ -1321,6 +1321,33 @@ abstract class AppLocalizations {
   String translationFailed(String error);
   String get productImageUrlHint;
   String get translating;
+  String get storeLocationSettingsTitle;
+  String get manageStoreData;
+  String get manageStoreDataSubtitle;
+  String get basicStoreData;
+  String get storeDataCustomerVisibility;
+  String get storeName;
+  String get autoTranslationInProgress;
+  String get autoTranslationSaved;
+  String autoTranslationResult(String name);
+  String get storeAddressDetailed;
+  String get neighborhoodStreetBuilding;
+  String get storeMapLocation;
+  String get storeMapHint;
+  String get editLocationOnMap;
+  String get locating;
+  String get useGps;
+  String get saveStoreSettings;
+  String get customerChangesApplied;
+  String get storeLocationPermissionError;
+  String get storeLocationUpdated;
+  String get currentLocationReadError;
+  String get invalidStoreLocation;
+  String get storeSettingsSaved;
+  String get firestorePermissionDenied;
+  String get firestoreUnavailable;
+  String get saveTimedOut;
+  String saveSettingsFailedWithError(String error);
 }
 
 class _AppLocalizationsDelegate

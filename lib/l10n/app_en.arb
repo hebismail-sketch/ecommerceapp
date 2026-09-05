@@ -277,6 +277,33 @@
   "translationFailed": "Translation failed. Please try again.\n{error}",
   "productImageUrlHint": "https://example.com/product-image.jpg",
   "translating": "Translating...",
+  "storeLocationSettingsTitle": "Store Location Settings",
+  "manageStoreData": "Manage Store Data",
+  "manageStoreDataSubtitle": "Update your store details and location so customers can find you accurately.",
+  "basicStoreData": "Basic Store Data",
+  "storeDataCustomerVisibility": "This information appears to customers in the app",
+  "storeName": "Store Name",
+  "autoTranslationInProgress": "Preparing translation automatically...",
+  "autoTranslationSaved": "The name will be saved in both languages automatically",
+  "autoTranslationResult": "Automatic translation: {name}",
+  "storeAddressDetailed": "Detailed Store Address (optional)",
+  "neighborhoodStreetBuilding": "District, street, building number",
+  "storeMapLocation": "Store Location on Map",
+  "storeMapHint": "Place the pin accurately so customers can reach you",
+  "editLocationOnMap": "Edit Location on Map",
+  "locating": "Finding location...",
+  "useGps": "Use My Current GPS Location",
+  "saveStoreSettings": "Save Store Settings",
+  "customerChangesApplied": "Changes will be applied immediately to the customer experience",
+  "storeLocationPermissionError": "Unable to determine location. Enable GPS and grant permission.",
+  "storeLocationUpdated": "Store location updated successfully.",
+  "currentLocationReadError": "An error occurred while reading the current location.",
+  "invalidStoreLocation": "Please choose a valid store location.",
+  "storeSettingsSaved": "Store settings saved successfully.",
+  "firestorePermissionDenied": "You do not have permission to save store settings. Check Firestore rules.",
+  "firestoreUnavailable": "Firestore is currently unavailable. Check your internet connection.",
+  "saveTimedOut": "Saving took too long. Please try again.",
+  "saveSettingsFailedWithError": "Unable to save settings: {error}",
   "@appVersion": {
     "placeholders": {
       "version": {}
@@ -287,6 +314,8 @@
   ,"@coordinates": {"placeholders": {"latitude": {}, "longitude": {}}}
   ,"@distanceInKilometers": {"placeholders": {"distance": {}}}
   ,"@translationFailed": {"placeholders": {"error": {}}}
+  ,"@autoTranslationResult": {"placeholders": {"name": {}}}
+  ,"@saveSettingsFailedWithError": {"placeholders": {"error": {}}}
 
 }
 

@@ -278,6 +278,33 @@
   "translationFailed": "فشلت الترجمة. حاول مرة أخرى.\n{error}",
   "productImageUrlHint": "https://example.com/product-image.jpg",
   "translating": "جارٍ الترجمة...",
+  "storeLocationSettingsTitle": "إعدادات موقع المتجر",
+  "manageStoreData": "إدارة بيانات المتجر",
+  "manageStoreDataSubtitle": "حدّث بيانات متجرك وموقعه ليظهر للعملاء بشكل دقيق.",
+  "basicStoreData": "بيانات المتجر الأساسية",
+  "storeDataCustomerVisibility": "هذه المعلومات تظهر للعملاء داخل التطبيق",
+  "storeName": "اسم المتجر",
+  "autoTranslationInProgress": "جاري تجهيز الترجمة تلقائيًا...",
+  "autoTranslationSaved": "سيتم حفظ الاسم باللغتين تلقائيًا",
+  "autoTranslationResult": "الترجمة التلقائية: {name}",
+  "storeAddressDetailed": "عنوان المتجر بالتفصيل (اختياري)",
+  "neighborhoodStreetBuilding": "الحي، الشارع، رقم المبنى",
+  "storeMapLocation": "موقع المتجر على الخريطة",
+  "storeMapHint": "ثبّت الدبوس بدقة حتى يتمكن العملاء من الوصول إليك",
+  "editLocationOnMap": "تعديل الموقع على الخريطة",
+  "locating": "جاري تحديد الموقع...",
+  "useGps": "استخدام موقعي الحالي بالـ GPS",
+  "saveStoreSettings": "حفظ إعدادات المتجر",
+  "customerChangesApplied": "سيتم تطبيق التغييرات فورًا على واجهة العملاء",
+  "storeLocationPermissionError": "تعذر تحديد الموقع. تأكد من تفعيل GPS ومنح الصلاحية.",
+  "storeLocationUpdated": "تم تحديث موقع المتجر بنجاح.",
+  "currentLocationReadError": "حدث خطأ أثناء قراءة الموقع الحالي.",
+  "invalidStoreLocation": "يرجى اختيار موقع صحيح للمتجر.",
+  "storeSettingsSaved": "تم حفظ إعدادات المتجر بنجاح.",
+  "firestorePermissionDenied": "ليس لديك صلاحية لحفظ إعدادات المتجر. راجع قواعد Firestore.",
+  "firestoreUnavailable": "خدمة Firestore غير متاحة الآن. تحقق من الإنترنت.",
+  "saveTimedOut": "استغرق الحفظ وقتًا طويلًا. حاول مرة أخرى.",
+  "saveSettingsFailedWithError": "تعذر حفظ الإعدادات: {error}",
   "@appVersion": {
     "placeholders": {
       "version": {}
@@ -288,5 +315,7 @@
   ,"@coordinates": {"placeholders": {"latitude": {}, "longitude": {}}}
   ,"@distanceInKilometers": {"placeholders": {"distance": {}}}
   ,"@translationFailed": {"placeholders": {"error": {}}}
+  ,"@autoTranslationResult": {"placeholders": {"name": {}}}
+  ,"@saveSettingsFailedWithError": {"placeholders": {"error": {}}}
 
 }

@@ -71,7 +71,7 @@ class ManageProductsPage extends StatelessWidget {
         elevation: 0,
         leading: Navigator.canPop(context)
             ? IconButton(
-                tooltip: 'رجوع',
+                tooltip: l10n.back,
                 icon: const Icon(Icons.arrow_back_ios_new),
                 onPressed: () => Navigator.pop(context),
               )

@@ -738,4 +738,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get productImageUrlHint => 'https://example.com/product-image.jpg';
   @override
   String get translating => 'Translating...';
+  @override String get storeLocationSettingsTitle => 'Store Location Settings';
+  @override String get manageStoreData => 'Manage Store Data';
+  @override String get manageStoreDataSubtitle => 'Update your store details and location so customers can find you accurately.';
+  @override String get basicStoreData => 'Basic Store Data';
+  @override String get storeDataCustomerVisibility => 'This information appears to customers in the app';
+  @override String get storeName => 'Store Name';
+  @override String get autoTranslationInProgress => 'Preparing translation automatically...';
+  @override String get autoTranslationSaved => 'The name will be saved in both languages automatically';
+  @override String autoTranslationResult(String name) => 'Automatic translation: $name';
+  @override String get storeAddressDetailed => 'Detailed Store Address (optional)';
+  @override String get neighborhoodStreetBuilding => 'District, street, building number';
+  @override String get storeMapLocation => 'Store Location on Map';
+  @override String get storeMapHint => 'Place the pin accurately so customers can reach you';
+  @override String get editLocationOnMap => 'Edit Location on Map';
+  @override String get locating => 'Finding location...';
+  @override String get useGps => 'Use My Current GPS Location';
+  @override String get saveStoreSettings => 'Save Store Settings';
+  @override String get customerChangesApplied => 'Changes will be applied immediately to the customer experience';
+  @override String get storeLocationPermissionError => 'Unable to determine location. Enable GPS and grant permission.';
+  @override String get storeLocationUpdated => 'Store location updated successfully.';
+  @override String get currentLocationReadError => 'An error occurred while reading the current location.';
+  @override String get invalidStoreLocation => 'Please choose a valid store location.';
+  @override String get storeSettingsSaved => 'Store settings saved successfully.';
+  @override String get firestorePermissionDenied => 'You do not have permission to save store settings. Check Firestore rules.';
+  @override String get firestoreUnavailable => 'Firestore is currently unavailable. Check your internet connection.';
+  @override String get saveTimedOut => 'Saving took too long. Please try again.';
+  @override String saveSettingsFailedWithError(String error) => 'Unable to save settings: $error';
 }

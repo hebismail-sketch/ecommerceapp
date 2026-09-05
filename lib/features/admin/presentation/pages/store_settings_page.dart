@@ -7,6 +7,7 @@ import 'package:ecommerceapp/core/services/store_settings_service.dart';
 import 'package:ecommerceapp/core/widgets/profile_avatar.dart';
 import 'package:ecommerceapp/features/products/presentation/pages/location_picker_page.dart';
 import 'package:ecommerceapp/features/profile/presentation/pages/profile_screen.dart';
+import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -153,6 +154,7 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
   }
 
   Future<void> _fetchCurrentGPS() async {
+    final l10n = AppLocalizations.of(context)!;
     if (_isGettingLocation) return;
     setState(() => _isGettingLocation = true);
     try {
@@ -160,7 +162,7 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
       if (!mounted) return;
       if (pos == null) {
         _showMessage(
-          'تعذر تحديد الموقع. تأكد من تفعيل GPS ومنح الصلاحية.',
+          l10n.storeLocationPermissionError,
           isError: true,
         );
         return;
@@ -171,10 +173,10 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
         _longitude = pos.longitude;
       });
       _mapController.move(newLoc, 14.0);
-      _showMessage('تم تحديث موقع المتجر بنجاح.');
+      _showMessage(l10n.storeLocationUpdated);
     } catch (_) {
       if (mounted)
-        _showMessage('حدث خطأ أثناء قراءة الموقع الحالي.', isError: true);
+        _showMessage(l10n.currentLocationReadError, isError: true);
     } finally {
       if (mounted) setState(() => _isGettingLocation = false);
     }
@@ -264,10 +266,11 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
   }
 
   Future<void> _saveSettings() async {
+    final l10n = AppLocalizations.of(context)!;
     if (_isSaving || !_formKey.currentState!.validate()) return;
     FocusManager.instance.primaryFocus?.unfocus();
     if (!_hasValidCoordinates(_latitude, _longitude)) {
-      _showMessage('يرجى اختيار موقع صحيح للمتجر.', isError: true);
+      _showMessage(l10n.invalidStoreLocation, isError: true);
       return;
     }
     setState(() => _isSaving = true);
@@ -301,21 +304,20 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
         ),
       ).timeout(const Duration(seconds: 20));
       if (!mounted) return;
-      _showMessage('تم حفظ إعدادات المتجر بنجاح.');
+      _showMessage(l10n.storeSettingsSaved);
       Navigator.pop(context);
     } on FirebaseException catch (error) {
       if (!mounted) return;
       final message = switch (error.code) {
-        'permission-denied' =>
-          'ليس لديك صلاحية لحفظ إعدادات المتجر. راجع قواعد Firestore.',
-        'unavailable' => 'خدمة Firestore غير متاحة الآن. تحقق من الإنترنت.',
-        'deadline-exceeded' => 'استغرق الحفظ وقتًا طويلًا. حاول مرة أخرى.',
-        _ => 'تعذر حفظ الإعدادات: ${error.message ?? error.code}',
+        'permission-denied' => l10n.firestorePermissionDenied,
+        'unavailable' => l10n.firestoreUnavailable,
+        'deadline-exceeded' => l10n.saveTimedOut,
+        _ => l10n.saveSettingsFailedWithError(error.message ?? error.code),
       };
       _showMessage(message, isError: true);
     } catch (error) {
       if (mounted) {
-        _showMessage('تعذر حفظ الإعدادات: $error', isError: true);
+        _showMessage(l10n.saveSettingsFailedWithError(error.toString()), isError: true);
       }
     } finally {
       if (mounted) setState(() => _isSaving = false);
@@ -328,19 +330,20 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
+    final l10n = AppLocalizations.of(context)!;
     final storeLocation = LatLng(_latitude, _longitude);
 
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
       appBar: AppBar(
-        title: const Text(
-          'إعدادات موقع المتجر',
+        title: Text(
+          l10n.storeLocationSettingsTitle,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         leading: Navigator.canPop(context)
             ? IconButton(
-                tooltip: 'رجوع',
+                tooltip: l10n.back,
                 icon: const Icon(Icons.arrow_back_ios_new),
                 onPressed: () => Navigator.pop(context),
               )
@@ -388,7 +391,7 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'إدارة بيانات المتجر',
+                                    l10n.manageStoreData,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 19,
@@ -397,7 +400,7 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
                             ),
                             SizedBox(height: 5),
                             Text(
-                              'حدّث بيانات متجرك وموقعه ليظهر للعملاء بشكل دقيق.',
+                              l10n.manageStoreDataSubtitle,
                               style: TextStyle(
                                 color: Colors.white70,
                                 fontSize: 12,
@@ -423,8 +426,8 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
                     children: [
                       _sectionTitle(
                         icon: Icons.storefront_rounded,
-                        title: 'بيانات المتجر الأساسية',
-                        subtitle: 'هذه المعلومات تظهر للعملاء داخل التطبيق',
+                        title: l10n.basicStoreData,
+                        subtitle: l10n.storeDataCustomerVisibility,
                         color: Colors.red.shade700,
                       ),
                       const SizedBox(height: 18),
@@ -443,9 +446,9 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
                           );
                         },
                         decoration: _fieldDecoration(
-                          label: 'اسم المتجر',
+                          label: l10n.storeName,
                           icon: Icons.storefront,
-                          hint: 'المتجر الرئيسي',
+                          hint: l10n.defaultStoreName,
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -460,10 +463,10 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
                           Expanded(
                             child: Text(
                               _isTranslating
-                                  ? 'جاري تجهيز الترجمة تلقائيًا...'
+                                  ? l10n.autoTranslationInProgress
                                   : _translatedStoreName.isEmpty
-                                  ? 'سيتم حفظ الاسم باللغتين تلقائيًا'
-                                  : 'الترجمة التلقائية: $_translatedStoreName',
+                                  ? l10n.autoTranslationSaved
+                                  : l10n.autoTranslationResult(_translatedStoreName),
                               style: TextStyle(
                                 fontSize: 11,
                                 color: Colors.blue.shade700,
@@ -478,9 +481,9 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
                         maxLines: 2,
                         textDirection: TextDirection.rtl,
                         decoration: _fieldDecoration(
-                          label: 'عنوان المتجر بالتفصيل (اختياري)',
+                          label: l10n.storeAddressDetailed,
                           icon: Icons.location_city_outlined,
-                          hint: 'الحي، الشارع، رقم المبنى',
+                          hint: l10n.neighborhoodStreetBuilding,
                         ),
                       ),
                     ],
@@ -501,9 +504,8 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
                     children: [
                       _sectionTitle(
                         icon: Icons.map_outlined,
-                        title: 'موقع المتجر على الخريطة',
-                        subtitle:
-                            'ثبّت الدبوس بدقة حتى يتمكن العملاء من الوصول إليك',
+                        title: l10n.storeMapLocation,
+                        subtitle: l10n.storeMapHint,
                         color: Colors.blue.shade700,
                       ),
                       const SizedBox(height: 14),
@@ -526,7 +528,10 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
                             const SizedBox(width: 8),
                             Expanded(
                               child: Text(
-                                'الإحداثيات الحالية: ${_latitude.toStringAsFixed(5)}, ${_longitude.toStringAsFixed(5)}',
+                                l10n.coordinates(
+                                  _latitude.toStringAsFixed(5),
+                                  _longitude.toStringAsFixed(5),
+                                ),
                                 style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.blue.shade900,
@@ -596,8 +601,8 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
                           ),
                           onPressed: _openMapPicker,
                           icon: const Icon(Icons.map, size: 20),
-                          label: const Text(
-                            'تعديل الموقع على الخريطة',
+                          label: Text(
+                            l10n.editLocationOnMap,
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -633,8 +638,8 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
                               : const Icon(Icons.my_location, size: 18),
                           label: Text(
                             _isGettingLocation
-                                ? 'جاري تحديد الموقع...'
-                                : 'استخدام موقعي الحالي بالـ GPS',
+                                ? l10n.locating
+                                : l10n.useGps,
                             style: const TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
@@ -671,7 +676,7 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
                           )
                         : const Icon(Icons.save),
                     label: Text(
-                      _isSaving ? 'جاري الحفظ...' : 'حفظ إعدادات المتجر',
+                      _isSaving ? l10n.saving : l10n.saveStoreSettings,
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
@@ -682,7 +687,7 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
                 const SizedBox(height: 8),
                 Center(
                   child: Text(
-                    'سيتم تطبيق التغييرات فورًا على واجهة العملاء',
+                    l10n.customerChangesApplied,
                     style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
                   ),
                 ),

@@ -731,4 +731,31 @@ class AppLocalizationsAr extends AppLocalizations {
   String get productImageUrlHint => 'https://example.com/product-image.jpg';
   @override
   String get translating => 'جارٍ الترجمة...';
+  @override String get storeLocationSettingsTitle => 'إعدادات موقع المتجر';
+  @override String get manageStoreData => 'إدارة بيانات المتجر';
+  @override String get manageStoreDataSubtitle => 'حدّث بيانات متجرك وموقعه ليظهر للعملاء بشكل دقيق.';
+  @override String get basicStoreData => 'بيانات المتجر الأساسية';
+  @override String get storeDataCustomerVisibility => 'هذه المعلومات تظهر للعملاء داخل التطبيق';
+  @override String get storeName => 'اسم المتجر';
+  @override String get autoTranslationInProgress => 'جاري تجهيز الترجمة تلقائيًا...';
+  @override String get autoTranslationSaved => 'سيتم حفظ الاسم باللغتين تلقائيًا';
+  @override String autoTranslationResult(String name) => 'الترجمة التلقائية: $name';
+  @override String get storeAddressDetailed => 'عنوان المتجر بالتفصيل (اختياري)';
+  @override String get neighborhoodStreetBuilding => 'الحي، الشارع، رقم المبنى';
+  @override String get storeMapLocation => 'موقع المتجر على الخريطة';
+  @override String get storeMapHint => 'ثبّت الدبوس بدقة حتى يتمكن العملاء من الوصول إليك';
+  @override String get editLocationOnMap => 'تعديل الموقع على الخريطة';
+  @override String get locating => 'جاري تحديد الموقع...';
+  @override String get useGps => 'استخدام موقعي الحالي بالـ GPS';
+  @override String get saveStoreSettings => 'حفظ إعدادات المتجر';
+  @override String get customerChangesApplied => 'سيتم تطبيق التغييرات فورًا على واجهة العملاء';
+  @override String get storeLocationPermissionError => 'تعذر تحديد الموقع. تأكد من تفعيل GPS ومنح الصلاحية.';
+  @override String get storeLocationUpdated => 'تم تحديث موقع المتجر بنجاح.';
+  @override String get currentLocationReadError => 'حدث خطأ أثناء قراءة الموقع الحالي.';
+  @override String get invalidStoreLocation => 'يرجى اختيار موقع صحيح للمتجر.';
+  @override String get storeSettingsSaved => 'تم حفظ إعدادات المتجر بنجاح.';
+  @override String get firestorePermissionDenied => 'ليس لديك صلاحية لحفظ إعدادات المتجر. راجع قواعد Firestore.';
+  @override String get firestoreUnavailable => 'خدمة Firestore غير متاحة الآن. تحقق من الإنترنت.';
+  @override String get saveTimedOut => 'استغرق الحفظ وقتًا طويلًا. حاول مرة أخرى.';
+  @override String saveSettingsFailedWithError(String error) => 'تعذر حفظ الإعدادات: $error';
 }
