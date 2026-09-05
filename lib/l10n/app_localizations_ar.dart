@@ -604,4 +604,107 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get invalidPhoneNumber => 'اكتب رقم هاتف صحيح';
+
+  @override
+  String get emptyCartMessage => 'سلتك في انتظار أن تملأها بمنتجات رائعة!';
+
+  @override
+  String get cashOnDelivery => 'الدفع عند الاستلام';
+
+  @override
+  String get paymentMethod => 'طريقة الدفع';
+
+  @override
+  String get orderCreationFailed => 'تعذر إنشاء الطلب. حاول مرة أخرى.';
+
+  @override
+  String get defaultUserName => 'المستخدم';
+
+  @override
+  String get startSupportConversation => 'أرسل رسالة لبدء محادثة مع الدعم';
+
+  @override
+  String get typeMessageHint => 'اكتب رسالتك...';
+
+  @override
+  String get supportChat => 'محادثة الدعم';
+
+  @override
+  String get onlineSupport => 'الدعم متصل';
+
+  @override
+  String get deliveryLocationSelected => 'تم تحديد عنوان التوصيل.';
+
+  @override
+  String get recipientDetails => 'بيانات المستلم';
+
+  @override
+  String get addressDetails => 'بيانات العنوان';
+
+  @override
+  String get streetAndArea => 'الشارع والمنطقة';
+
+  @override
+  String get phoneHint => '01xxxxxxxxx';
+
+  @override
+  String get streetHint => 'اسم الشارع والمنطقة...';
+
+  @override
+  String get notesHint => 'علامة مميزة أو تعليمات التوصيل';
+
+  @override
+  String get saveOrderDetails => 'حفظ بيانات الطلب';
+
+  @override
+  String get aboutDescription => 'تطبيق لبيع وشراء السيارات';
+
+  @override
+  String appVersion(String version) => 'الإصدار $version';
+
+  @override
+  String get aboutDetails => 'يمكنك من خلال التطبيق استعراض السيارات والبحث عنها وإضافتها للمفضلة والسلة وإتمام طلب الشراء بسهولة.';
+
+  @override
+  String get addressNotFound => 'لم يتم العثور على العنوان. حاول كتابة المنطقة والشارع.';
+  @override
+  String get locationSelectedSuccessfully => 'تم تحديد الموقع على الخريطة بنجاح.';
+  @override
+  String get currentLocationError => 'حدث خطأ أثناء تحديد موقعك الحالي.';
+  @override
+  String get storeLocationPickerTitle => 'تحديد موقع المتجر على الخريطة';
+  @override
+  String get back => 'رجوع';
+  @override
+  String get searchStoreAddressHint => 'ابحث عن عنوان المتجر بالكامل...';
+  @override
+  String get mapLocationInstructions => 'اضغط على أي مكان بالخريطة لتثبيت موقع المتجر';
+  @override
+  String selectedLocationWithCoordinates(String latitude, String longitude) => 'الموقع المحدد: $latitude، $longitude';
+  @override
+  String get confirmAndSaveStoreLocation => 'تأكيد وحفظ موقع المتجر';
+  @override
+  String get store => 'المتجر';
+  @override
+  String get yourLocation => 'موقعك';
+  @override
+  String coordinates(String latitude, String longitude) => 'الإحداثيات: $latitude، $longitude';
+  @override
+  String get calculatingDistance => 'جاري حساب المسافة...';
+  @override
+  String distanceInKilometers(String distance) => 'المسافة: $distance كم';
+  @override
+  String get distanceUnavailable => 'تعذر تحديد المسافة';
+  @override
+  String get focusOnStore => 'التركيز على المتجر';
+  @override
+  String get defaultStoreName => 'المتجر الرئيسي';
+  @override
+  String get storeCoordinatesUnavailable => 'لم يتم تحديد إحداثيات موقع هذا المتجر على الخريطة من قبل البائع.';
+  @override
+  String get viewStoreLocationAndDistance => 'اضغط لعرض موقع المتجر والمسافة على الخريطة';
+  @override
+  String get storeLocationNotSet => 'موقع المتجر غير محدد على الخريطة';
+  @override
+  String get noDescription => '---';
 }

@@ -223,7 +223,57 @@
   "enterAdditionalDetails": "Enter additional details",
   "continueButton": "Continue",
   "requiredField": "This field is required",
-  "invalidPhoneNumber": "Enter a valid phone number"
+  "invalidPhoneNumber": "Enter a valid phone number",
+  "emptyCartMessage": "Your shopping cart is waiting to be filled with great items!",
+  "cashOnDelivery": "Cash on delivery",
+  "paymentMethod": "Payment method",
+  "orderCreationFailed": "Unable to create the order. Please try again.",
+  "defaultUserName": "User",
+  "startSupportConversation": "Send a message to start a conversation with support",
+  "typeMessageHint": "Type your message...",
+  "supportChat": "Support Chat",
+  "onlineSupport": "Online Support",
+  "deliveryLocationSelected": "Your delivery location has been selected.",
+  "recipientDetails": "Recipient Details",
+  "addressDetails": "Address Details",
+  "streetAndArea": "Street and Area",
+  "phoneHint": "01xxxxxxxxx",
+  "streetHint": "Street name, district...",
+  "notesHint": "Nearby landmark or delivery instructions",
+  "saveOrderDetails": "Save Order Details",
+  "aboutDescription": "An application for buying and selling cars",
+  "appVersion": "Version {version}",
+  "aboutDetails": "Browse cars, search for them, add them to favorites and cart, and complete your purchase easily.",
+  "addressNotFound": "Address not found. Try entering the area and street.",
+  "locationSelectedSuccessfully": "Location selected successfully on the map.",
+  "currentLocationError": "An error occurred while finding your current location.",
+  "storeLocationPickerTitle": "Select Store Location on Map",
+  "back": "Back",
+  "searchStoreAddressHint": "Search for the complete store address...",
+  "mapLocationInstructions": "Tap anywhere on the map to pin the store location",
+  "selectedLocationWithCoordinates": "Selected location: {latitude}, {longitude}",
+  "confirmAndSaveStoreLocation": "Confirm and Save Store Location",
+  "store": "Store",
+  "yourLocation": "Your location",
+  "coordinates": "Coordinates: {latitude}, {longitude}",
+  "calculatingDistance": "Calculating distance...",
+  "distanceInKilometers": "Distance: {distance} km",
+  "distanceUnavailable": "Distance unavailable",
+  "focusOnStore": "Focus on store",
+  "defaultStoreName": "Main Store",
+  "storeCoordinatesUnavailable": "This store has no map coordinates set by the seller.",
+  "viewStoreLocationAndDistance": "Tap to view the store location and distance on the map",
+  "storeLocationNotSet": "Store location is not set on the map",
+  "noDescription": "---",
+  "@appVersion": {
+    "placeholders": {
+      "version": {}
+    }
+  }
+
+  ,"@selectedLocationWithCoordinates": {"placeholders": {"latitude": {}, "longitude": {}}}
+  ,"@coordinates": {"placeholders": {"latitude": {}, "longitude": {}}}
+  ,"@distanceInKilometers": {"placeholders": {"distance": {}}}
 
 }
 

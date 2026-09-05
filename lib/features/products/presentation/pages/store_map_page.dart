@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:ecommerceapp/l10n/app_localizations.dart';
 
 class StoreMapPage extends StatefulWidget {
   final String storeName;
@@ -59,6 +60,7 @@ class _StoreMapPageState extends State<StoreMapPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final storeLocation = LatLng(widget.storeLatitude, widget.storeLongitude);
     final userLocation = _userPosition != null
         ? LatLng(_userPosition!.latitude, _userPosition!.longitude)
@@ -79,7 +81,7 @@ class _StoreMapPageState extends State<StoreMapPage> {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
-                widget.storeName.isNotEmpty ? widget.storeName : 'المتجر',
+                widget.storeName.isNotEmpty ? widget.storeName : l10n.store,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 10,
@@ -113,8 +115,8 @@ class _StoreMapPageState extends State<StoreMapPage> {
                   color: Colors.blue.shade700,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Text(
-                  'موقعك',
+                child: Text(
+                  l10n.yourLocation,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 10,
@@ -136,7 +138,7 @@ class _StoreMapPageState extends State<StoreMapPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.storeName.isNotEmpty ? widget.storeName : 'موقع المتجر',
+          widget.storeName.isNotEmpty ? widget.storeName : l10n.storeLocation,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -193,7 +195,7 @@ class _StoreMapPageState extends State<StoreMapPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                widget.storeName.isNotEmpty ? widget.storeName : 'متجر المنتج',
+                                widget.storeName.isNotEmpty ? widget.storeName : l10n.store,
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -201,7 +203,10 @@ class _StoreMapPageState extends State<StoreMapPage> {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                'الإحداثيات: ${widget.storeLatitude.toStringAsFixed(4)}, ${widget.storeLongitude.toStringAsFixed(4)}',
+                                l10n.coordinates(
+                                  widget.storeLatitude.toStringAsFixed(4),
+                                  widget.storeLongitude.toStringAsFixed(4),
+                                ),
                                 style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                               ),
                             ],
@@ -219,10 +224,12 @@ class _StoreMapPageState extends State<StoreMapPage> {
                             const SizedBox(width: 6),
                             Text(
                               _isLoadingUserLocation
-                                  ? 'جاري حساب المسافة...'
+                                  ? l10n.calculatingDistance
                                   : (_distanceKm != null
-                                      ? 'المسافة: ${_distanceKm!.toStringAsFixed(2)} كم'
-                                      : 'تعذر تحديد المسافة'),
+                                      ? l10n.distanceInKilometers(
+                                          _distanceKm!.toStringAsFixed(2),
+                                        )
+                                      : l10n.distanceUnavailable),
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
@@ -233,7 +240,7 @@ class _StoreMapPageState extends State<StoreMapPage> {
                         ),
                         IconButton(
                           icon: const Icon(Icons.center_focus_strong, color: Colors.blue),
-                          tooltip: 'التركيز على المتجر',
+                          tooltip: l10n.focusOnStore,
                           onPressed: () {
                             _mapController.move(storeLocation, 14.0);
                           },

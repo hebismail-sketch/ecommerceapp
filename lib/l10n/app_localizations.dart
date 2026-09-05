@@ -1267,6 +1267,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter a valid phone number'**
   String get invalidPhoneNumber;
+
+  String get emptyCartMessage;
+  String get cashOnDelivery;
+  String get paymentMethod;
+  String get orderCreationFailed;
+  String get defaultUserName;
+  String get startSupportConversation;
+  String get typeMessageHint;
+  String get supportChat;
+  String get onlineSupport;
+  String get deliveryLocationSelected;
+  String get recipientDetails;
+  String get addressDetails;
+  String get streetAndArea;
+  String get phoneHint;
+  String get streetHint;
+  String get notesHint;
+  String get saveOrderDetails;
+  String get aboutDescription;
+  String appVersion(String version);
+  String get aboutDetails;
+  String get addressNotFound;
+  String get locationSelectedSuccessfully;
+  String get currentLocationError;
+  String get storeLocationPickerTitle;
+  String get back;
+  String get searchStoreAddressHint;
+  String get mapLocationInstructions;
+  String selectedLocationWithCoordinates(String latitude, String longitude);
+  String get confirmAndSaveStoreLocation;
+  String get store;
+  String get yourLocation;
+  String coordinates(String latitude, String longitude);
+  String get calculatingDistance;
+  String distanceInKilometers(String distance);
+  String get distanceUnavailable;
+  String get focusOnStore;
+  String get defaultStoreName;
+  String get storeCoordinatesUnavailable;
+  String get viewStoreLocationAndDistance;
+  String get storeLocationNotSet;
+  String get noDescription;
 }
 
 class _AppLocalizationsDelegate

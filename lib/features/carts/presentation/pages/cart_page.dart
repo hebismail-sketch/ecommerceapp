@@ -101,7 +101,7 @@ class _CartPageState extends State<CartPage> {
           SnackBar(
             backgroundColor: Colors.green.shade600,
             content: Text(
-              '${l10n.orderConfirmedSuccessfully} - الدفع عند الاستلام',
+              '${l10n.orderConfirmedSuccessfully} - ${l10n.cashOnDelivery}',
               style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -115,7 +115,7 @@ class _CartPageState extends State<CartPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             backgroundColor: Colors.red,
-            content: Text('تعذر إنشاء الطلب. حاول مرة أخرى.'),
+            content: Text(l10n.orderCreationFailed),
           ),
         );
       }
@@ -163,7 +163,7 @@ class _CartPageState extends State<CartPage> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Your shopping cart is waiting to be filled with great items!',
+              l10n.emptyCartMessage,
               style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
               textAlign: TextAlign.center,
             ),
@@ -453,8 +453,8 @@ class _CartPageState extends State<CartPage> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
-                                      'طريقة الدفع',
+                                    Text(
+                                      l10n.paymentMethod,
                                       style: TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold,
@@ -462,7 +462,7 @@ class _CartPageState extends State<CartPage> {
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
-                                      'الدفع عند الاستلام',
+                                      l10n.cashOnDelivery,
                                       style: TextStyle(
                                         color: Colors.grey.shade700,
                                         fontSize: 13,

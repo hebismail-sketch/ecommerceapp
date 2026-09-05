@@ -224,6 +224,56 @@
   "enterAdditionalDetails": "اكتب أي تفاصيل إضافية",
   "continueButton": "متابعة",
   "requiredField": "هذا الحقل مطلوب",
-  "invalidPhoneNumber": "اكتب رقم هاتف صحيح"
+  "invalidPhoneNumber": "اكتب رقم هاتف صحيح",
+  "emptyCartMessage": "سلتك في انتظار أن تملأها بمنتجات رائعة!",
+  "cashOnDelivery": "الدفع عند الاستلام",
+  "paymentMethod": "طريقة الدفع",
+  "orderCreationFailed": "تعذر إنشاء الطلب. حاول مرة أخرى.",
+  "defaultUserName": "المستخدم",
+  "startSupportConversation": "أرسل رسالة لبدء محادثة مع الدعم",
+  "typeMessageHint": "اكتب رسالتك...",
+  "supportChat": "محادثة الدعم",
+  "onlineSupport": "الدعم متصل",
+  "deliveryLocationSelected": "تم تحديد عنوان التوصيل.",
+  "recipientDetails": "بيانات المستلم",
+  "addressDetails": "بيانات العنوان",
+  "streetAndArea": "الشارع والمنطقة",
+  "phoneHint": "01xxxxxxxxx",
+  "streetHint": "اسم الشارع والمنطقة...",
+  "notesHint": "علامة مميزة أو تعليمات التوصيل",
+  "saveOrderDetails": "حفظ بيانات الطلب",
+  "aboutDescription": "تطبيق لبيع وشراء السيارات",
+  "appVersion": "الإصدار {version}",
+  "aboutDetails": "يمكنك من خلال التطبيق استعراض السيارات والبحث عنها وإضافتها للمفضلة والسلة وإتمام طلب الشراء بسهولة.",
+  "addressNotFound": "لم يتم العثور على العنوان. حاول كتابة المنطقة والشارع.",
+  "locationSelectedSuccessfully": "تم تحديد الموقع على الخريطة بنجاح.",
+  "currentLocationError": "حدث خطأ أثناء تحديد موقعك الحالي.",
+  "storeLocationPickerTitle": "تحديد موقع المتجر على الخريطة",
+  "back": "رجوع",
+  "searchStoreAddressHint": "ابحث عن عنوان المتجر بالكامل...",
+  "mapLocationInstructions": "اضغط على أي مكان بالخريطة لتثبيت موقع المتجر",
+  "selectedLocationWithCoordinates": "الموقع المحدد: {latitude}، {longitude}",
+  "confirmAndSaveStoreLocation": "تأكيد وحفظ موقع المتجر",
+  "store": "المتجر",
+  "yourLocation": "موقعك",
+  "coordinates": "الإحداثيات: {latitude}، {longitude}",
+  "calculatingDistance": "جاري حساب المسافة...",
+  "distanceInKilometers": "المسافة: {distance} كم",
+  "distanceUnavailable": "تعذر تحديد المسافة",
+  "focusOnStore": "التركيز على المتجر",
+  "defaultStoreName": "المتجر الرئيسي",
+  "storeCoordinatesUnavailable": "لم يتم تحديد إحداثيات موقع هذا المتجر على الخريطة من قبل البائع.",
+  "viewStoreLocationAndDistance": "اضغط لعرض موقع المتجر والمسافة على الخريطة",
+  "storeLocationNotSet": "موقع المتجر غير محدد على الخريطة",
+  "noDescription": "---",
+  "@appVersion": {
+    "placeholders": {
+      "version": {}
+    }
+  }
+
+  ,"@selectedLocationWithCoordinates": {"placeholders": {"latitude": {}, "longitude": {}}}
+  ,"@coordinates": {"placeholders": {"latitude": {}, "longitude": {}}}
+  ,"@distanceInKilometers": {"placeholders": {"distance": {}}}
 
 }

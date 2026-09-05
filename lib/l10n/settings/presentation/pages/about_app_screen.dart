@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:ecommerceapp/l10n/app_localizations.dart';
 
 class AboutAppScreen extends StatelessWidget {
   const AboutAppScreen({super.key});
@@ -8,9 +9,11 @@ class AboutAppScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('عن التطبيق'),
+        title: Text(l10n.aboutApp),
         centerTitle: true,
       ),
       body: Center(
@@ -26,8 +29,8 @@ class AboutAppScreen extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              const Text(
-                'Car Store',
+              Text(
+                l10n.carStore,
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
@@ -36,8 +39,8 @@ class AboutAppScreen extends StatelessWidget {
 
               const SizedBox(height: 10),
 
-              const Text(
-                'تطبيق لبيع وشراء السيارات',
+              Text(
+                l10n.aboutDescription,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18,
@@ -46,8 +49,8 @@ class AboutAppScreen extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              const Text(
-                'الإصدار 1.0.0',
+              Text(
+                l10n.appVersion('1.0.0'),
                 style: TextStyle(
                   fontSize: 15,
                 ),
@@ -55,10 +58,8 @@ class AboutAppScreen extends StatelessWidget {
 
               const SizedBox(height: 30),
 
-              const Text(
-                'يمكنك من خلال التطبيق استعراض السيارات '
-                    'والبحث عنها وإضافتها للمفضلة والسلة '
-                    'وإتمام طلب الشراء بسهولة.',
+              Text(
+                l10n.aboutDetails,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,

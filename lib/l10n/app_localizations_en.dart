@@ -611,4 +611,107 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get invalidPhoneNumber => 'Enter a valid phone number';
+
+  @override
+  String get emptyCartMessage => 'Your shopping cart is waiting to be filled with great items!';
+
+  @override
+  String get cashOnDelivery => 'Cash on delivery';
+
+  @override
+  String get paymentMethod => 'Payment method';
+
+  @override
+  String get orderCreationFailed => 'Unable to create the order. Please try again.';
+
+  @override
+  String get defaultUserName => 'User';
+
+  @override
+  String get startSupportConversation => 'Send a message to start a conversation with support';
+
+  @override
+  String get typeMessageHint => 'Type your message...';
+
+  @override
+  String get supportChat => 'Support Chat';
+
+  @override
+  String get onlineSupport => 'Online Support';
+
+  @override
+  String get deliveryLocationSelected => 'Your delivery location has been selected.';
+
+  @override
+  String get recipientDetails => 'Recipient Details';
+
+  @override
+  String get addressDetails => 'Address Details';
+
+  @override
+  String get streetAndArea => 'Street and Area';
+
+  @override
+  String get phoneHint => '01xxxxxxxxx';
+
+  @override
+  String get streetHint => 'Street name, district...';
+
+  @override
+  String get notesHint => 'Nearby landmark or delivery instructions';
+
+  @override
+  String get saveOrderDetails => 'Save Order Details';
+
+  @override
+  String get aboutDescription => 'An application for buying and selling cars';
+
+  @override
+  String appVersion(String version) => 'Version $version';
+
+  @override
+  String get aboutDetails => 'Browse cars, search for them, add them to favorites and cart, and complete your purchase easily.';
+
+  @override
+  String get addressNotFound => 'Address not found. Try entering the area and street.';
+  @override
+  String get locationSelectedSuccessfully => 'Location selected successfully on the map.';
+  @override
+  String get currentLocationError => 'An error occurred while finding your current location.';
+  @override
+  String get storeLocationPickerTitle => 'Select Store Location on Map';
+  @override
+  String get back => 'Back';
+  @override
+  String get searchStoreAddressHint => 'Search for the complete store address...';
+  @override
+  String get mapLocationInstructions => 'Tap anywhere on the map to pin the store location';
+  @override
+  String selectedLocationWithCoordinates(String latitude, String longitude) => 'Selected location: $latitude, $longitude';
+  @override
+  String get confirmAndSaveStoreLocation => 'Confirm and Save Store Location';
+  @override
+  String get store => 'Store';
+  @override
+  String get yourLocation => 'Your location';
+  @override
+  String coordinates(String latitude, String longitude) => 'Coordinates: $latitude, $longitude';
+  @override
+  String get calculatingDistance => 'Calculating distance...';
+  @override
+  String distanceInKilometers(String distance) => 'Distance: $distance km';
+  @override
+  String get distanceUnavailable => 'Distance unavailable';
+  @override
+  String get focusOnStore => 'Focus on store';
+  @override
+  String get defaultStoreName => 'Main Store';
+  @override
+  String get storeCoordinatesUnavailable => 'This store has no map coordinates set by the seller.';
+  @override
+  String get viewStoreLocationAndDistance => 'Tap to view the store location and distance on the map';
+  @override
+  String get storeLocationNotSet => 'Store location is not set on the map';
+  @override
+  String get noDescription => '---';
 }

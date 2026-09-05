@@ -3,6 +3,7 @@
 import 'package:ecommerceapp/core/services/location_service.dart';
 import 'package:ecommerceapp/core/widgets/profile_avatar.dart';
 import 'package:ecommerceapp/features/profile/presentation/pages/profile_screen.dart';
+import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
@@ -50,6 +51,7 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
   }
 
   Future<void> _searchLocation() async {
+    final l10n = AppLocalizations.of(context)!;
     final query = _searchController.text.trim();
     if (query.isEmpty || _isSearching) return;
 
@@ -77,7 +79,7 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
       final results = jsonDecode(response.body) as List<dynamic>;
       if (results.isEmpty) {
         _showSearchMessage(
-          'لم يتم العثور على هذا العنوان، جرّب كتابة اسم المنطقة والشارع.',
+          l10n.addressNotFound,
         );
         return;
       }
@@ -89,11 +91,11 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
       );
       setState(() => _selectedLocation = location);
       _mapController.move(location, 17.0);
-      _showSearchMessage('تم تحديد الموقع على الخريطة بنجاح.');
+      _showSearchMessage(l10n.locationSelectedSuccessfully);
     } catch (_) {
       if (mounted) {
         _showSearchMessage(
-          'تعذر البحث الآن، تحقق من اتصال الإنترنت وحاول مرة أخرى.',
+          l10n.locationSearchFailed,
         );
       }
     } finally {
@@ -134,6 +136,7 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
   }
 
   Future<void> _goToCurrentLocation() async {
+    final l10n = AppLocalizations.of(context)!;
     if (_isLocating) return;
     setState(() => _isLocating = true);
 
@@ -145,11 +148,9 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: Colors.red,
-            content: const Text(
-              'تعذر تحديد موقعك. فعّل GPS واسمح للتطبيق بالوصول للموقع.',
-            ),
+            content: Text(l10n.locationPermissionRequired),
             action: SnackBarAction(
-              label: 'الإعدادات',
+              label: l10n.openSettings,
               textColor: Colors.white,
               onPressed: () async {
                 final opened = await Geolocator.openLocationSettings();
@@ -169,7 +170,7 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             backgroundColor: Colors.red,
-            content: Text('حدث خطأ أثناء تحديد موقعك الحالي'),
+            content: Text(l10n.currentLocationError),
           ),
         );
       }
@@ -180,16 +181,18 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'تحديد موقع المتجر على الخريطة',
+          l10n.storeLocationPickerTitle,
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         centerTitle: true,
         leading: Navigator.canPop(context)
             ? IconButton(
-                tooltip: 'رجوع',
+                tooltip: l10n.back,
                 icon: const Icon(Icons.arrow_back_ios_new),
                 onPressed: () => Navigator.pop(context),
               )
@@ -203,7 +206,7 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
           const SizedBox(width: 8),
           IconButton(
             icon: const Icon(Icons.check, color: Colors.green, size: 28),
-            tooltip: 'تأكيد الموقع',
+            tooltip: l10n.confirmLocation,
             onPressed: () {
               Navigator.pop(context, _selectedLocation);
             },
@@ -293,7 +296,7 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
               children: [
                 _mapControlButton(
                   icon: Icons.add,
-                  tooltip: 'تكبير الخريطة',
+                  tooltip: l10n.zoomIn,
                   onPressed: () => _mapController.move(
                     _selectedLocation,
                     (_mapController.camera.zoom + 1)
@@ -304,7 +307,7 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
                 const SizedBox(height: 1),
                 _mapControlButton(
                   icon: Icons.remove,
-                  tooltip: 'تصغير الخريطة',
+                  tooltip: l10n.zoomOut,
                   onPressed: () => _mapController.move(
                     _selectedLocation,
                     (_mapController.camera.zoom - 1)
@@ -315,7 +318,7 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
                 const SizedBox(height: 10),
                 _mapControlButton(
                   icon: Icons.center_focus_strong_rounded,
-                  tooltip: 'إعادة توسيط الخريطة',
+                  tooltip: l10n.recenterMap,
                   onPressed: () => _mapController.move(
                     _selectedLocation,
                     _mapController.camera.zoom,
@@ -339,7 +342,7 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
                 textInputAction: TextInputAction.search,
                 onSubmitted: (_) => _searchLocation(),
                 decoration: InputDecoration(
-                  hintText: 'ابحث عن عنوان المتجر بالكامل...',
+                  hintText: l10n.searchStoreAddressHint,
                   prefixIcon: _isSearching
                       ? const Padding(
                           padding: EdgeInsets.all(13),
@@ -351,7 +354,7 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
                         )
                       : const Icon(Icons.search),
                   suffixIcon: IconButton(
-                    tooltip: 'بحث',
+                    tooltip: l10n.search,
                     onPressed: _isSearching ? null : _searchLocation,
                     icon: const Icon(Icons.arrow_forward_rounded),
                   ),
@@ -391,7 +394,7 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
                   SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      'اضغط على أي مكان بالخريطة لتثبيت الدبوس وتحديد موقع المتجر',
+                      l10n.mapLocationInstructions,
                       style: TextStyle(
                         color: Colors.blueGrey.shade800,
                         fontSize: 12,
@@ -443,7 +446,10 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
-                            'الموقع المحدد: ${_selectedLocation.latitude.toStringAsFixed(5)}, ${_selectedLocation.longitude.toStringAsFixed(5)}',
+                            l10n.selectedLocationWithCoordinates(
+                              _selectedLocation.latitude.toStringAsFixed(5),
+                              _selectedLocation.longitude.toStringAsFixed(5),
+                            ),
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 13,
@@ -468,8 +474,8 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
                           Navigator.pop(context, _selectedLocation);
                         },
                         icon: const Icon(Icons.check_circle_outline, size: 20),
-                        label: const Text(
-                          'تأكيد وحفظ موقع المتجر',
+                        label: Text(
+                          l10n.confirmAndSaveStoreLocation,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 14,

@@ -11,6 +11,7 @@ import 'package:ecommerceapp/features/chat/data/models/conversation_model.dart';
 import 'package:ecommerceapp/features/chat/domain/entities/chat_message_entity.dart';
 import 'package:ecommerceapp/features/chat/presentation/manager/chat_cubit.dart';
 import 'package:ecommerceapp/features/chat/presentation/manager/chat_state.dart';
+import 'package:ecommerceapp/l10n/app_localizations.dart';
 
 class UserChatPage extends StatefulWidget {
   const UserChatPage({super.key});
@@ -54,7 +55,7 @@ class _UserChatPageState extends State<UserChatPage> {
     if (user.email != null && user.email!.trim().isNotEmpty) {
       return user.email!.split('@').first;
     }
-    return 'User';
+    return AppLocalizations.of(context)!.defaultUserName;
   }
 
   Future<void> _sendMessage(ChatLoaded state) async {
@@ -215,7 +216,7 @@ class _UserChatPageState extends State<UserChatPage> {
   Widget _buildMessages(ChatLoaded state) {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      return const Center(child: Text('Please log in first'));
+      return Center(child: Text(AppLocalizations.of(context)!.pleaseLoginFirst));
     }
     if (state.messages.isEmpty) {
       return Center(
@@ -229,7 +230,7 @@ class _UserChatPageState extends State<UserChatPage> {
             ),
             const SizedBox(height: 12),
             Text(
-              'No messages yet',
+              AppLocalizations.of(context)!.noMessagesPreview,
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey.shade600,
@@ -237,7 +238,7 @@ class _UserChatPageState extends State<UserChatPage> {
             ),
             const SizedBox(height: 4),
             Text(
-              'Send a message to start conversation with support',
+              AppLocalizations.of(context)!.startSupportConversation,
               style: TextStyle(
                 fontSize: 13,
                 color: Colors.grey.shade500,
@@ -292,8 +293,8 @@ class _UserChatPageState extends State<UserChatPage> {
                   textInputAction: TextInputAction.send,
                   onSubmitted: (_) => _sendMessage(state),
                   maxLines: null,
-                  decoration: const InputDecoration(
-                    hintText: 'Type your message...',
+                  decoration: InputDecoration(
+                    hintText: AppLocalizations.of(context)!.typeMessageHint,
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.symmetric(
                       horizontal: 18,
@@ -331,8 +332,8 @@ class _UserChatPageState extends State<UserChatPage> {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Support Chat')),
-        body: const Center(child: Text('Please log in first')),
+        appBar: AppBar(title: Text(AppLocalizations.of(context)!.supportChat)),
+        body: Center(child: Text(AppLocalizations.of(context)!.pleaseLoginFirst)),
       );
     }
 
@@ -349,9 +350,12 @@ class _UserChatPageState extends State<UserChatPage> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [
-                Text('Support Chat', style: TextStyle(fontSize: 16)),
                 Text(
-                  'Online Support',
+                  AppLocalizations.of(context)!.supportChat,
+                  style: TextStyle(fontSize: 16),
+                ),
+                Text(
+                  AppLocalizations.of(context)!.onlineSupport,
                   style: TextStyle(fontSize: 11, color: Colors.green),
                 ),
               ],

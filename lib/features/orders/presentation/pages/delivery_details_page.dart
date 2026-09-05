@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:ecommerceapp/l10n/app_localizations.dart';
 
 class DeliveryDetails {
   final String firstName;
@@ -75,14 +76,15 @@ class _DeliveryDetailsPageState extends State<DeliveryDetailsPage> {
   }
 
   String? _phoneValidator(String? value) {
+    final l10n = AppLocalizations.of(context)!;
     final phone = value?.trim() ?? '';
 
     if (phone.isEmpty) {
-      return 'Please enter your phone number';
+      return l10n.enterPhoneNumber;
     }
 
     if (phone.length < 8) {
-      return 'Please enter a valid phone number';
+      return l10n.invalidPhoneNumber;
     }
 
     return null;
@@ -141,10 +143,12 @@ class _DeliveryDetailsPageState extends State<DeliveryDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Delivery Details',
+        title: Text(
+          l10n.deliveryDetails,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -171,7 +175,7 @@ class _DeliveryDetailsPageState extends State<DeliveryDetailsPage> {
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        'Your delivery location has been selected.',
+                        l10n.deliveryLocationSelected,
                         style: TextStyle(
                           color: Colors.red.shade900,
                           fontWeight: FontWeight.w600,
@@ -182,8 +186,8 @@ class _DeliveryDetailsPageState extends State<DeliveryDetailsPage> {
                 ),
               ),
               const SizedBox(height: 24),
-              const Text(
-                'Recipient Details',
+              Text(
+                l10n.recipientDetails,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -197,11 +201,11 @@ class _DeliveryDetailsPageState extends State<DeliveryDetailsPage> {
                       controller: _firstNameController,
                       textInputAction: TextInputAction.next,
                       decoration: _inputDecoration(
-                        label: 'First Name',
+                        label: l10n.firstName,
                         icon: Icons.person_outline,
                       ),
                       validator: (value) =>
-                          _requiredValidator(value, 'Please enter your first name'),
+                          _requiredValidator(value, l10n.enterFirstName),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -210,11 +214,11 @@ class _DeliveryDetailsPageState extends State<DeliveryDetailsPage> {
                       controller: _lastNameController,
                       textInputAction: TextInputAction.next,
                       decoration: _inputDecoration(
-                        label: 'Last Name',
+                        label: l10n.lastName,
                         icon: Icons.person_outline,
                       ),
                       validator: (value) =>
-                          _requiredValidator(value, 'Please enter your last name'),
+                          _requiredValidator(value, l10n.enterLastName),
                     ),
                   ),
                 ],
@@ -225,15 +229,15 @@ class _DeliveryDetailsPageState extends State<DeliveryDetailsPage> {
                 keyboardType: TextInputType.phone,
                 textInputAction: TextInputAction.next,
                 decoration: _inputDecoration(
-                  label: 'Phone Number',
-                  hint: '01xxxxxxxxx',
+                  label: l10n.phoneNumber,
+                  hint: l10n.phoneHint,
                   icon: Icons.phone_outlined,
                 ),
                 validator: _phoneValidator,
               ),
               const SizedBox(height: 24),
-              const Text(
-                'Address Details',
+              Text(
+                l10n.addressDetails,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -244,12 +248,12 @@ class _DeliveryDetailsPageState extends State<DeliveryDetailsPage> {
                 controller: _streetController,
                 textInputAction: TextInputAction.next,
                 decoration: _inputDecoration(
-                  label: 'Street and Area',
-                  hint: 'Street name, district...',
+                  label: l10n.streetAndArea,
+                  hint: l10n.streetHint,
                   icon: Icons.route_outlined,
                 ),
                 validator: (value) =>
-                    _requiredValidator(value, 'Please enter your street and area'),
+                    _requiredValidator(value, l10n.requiredField),
               ),
               const SizedBox(height: 16),
               Row(
@@ -260,12 +264,12 @@ class _DeliveryDetailsPageState extends State<DeliveryDetailsPage> {
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
                       decoration: _inputDecoration(
-                        label: 'Building',
+                        label: l10n.buildingNumber,
                         icon: Icons.apartment_outlined,
                       ),
                       validator: (value) => _requiredValidator(
                         value,
-                        'Please enter the building number',
+                        l10n.enterBuildingNumber,
                       ),
                     ),
                   ),
@@ -276,11 +280,11 @@ class _DeliveryDetailsPageState extends State<DeliveryDetailsPage> {
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
                       decoration: _inputDecoration(
-                        label: 'Floor',
+                        label: l10n.floorNumber,
                         icon: Icons.stairs_outlined,
                       ),
                       validator: (value) =>
-                          _requiredValidator(value, 'Please enter the floor'),
+                          _requiredValidator(value, l10n.enterFloorNumber),
                     ),
                   ),
                 ],
@@ -291,11 +295,11 @@ class _DeliveryDetailsPageState extends State<DeliveryDetailsPage> {
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.next,
                 decoration: _inputDecoration(
-                  label: 'Apartment Number',
+                  label: l10n.apartmentNumber,
                   icon: Icons.door_front_door_outlined,
                 ),
                 validator: (value) =>
-                    _requiredValidator(value, 'Please enter the apartment number'),
+                    _requiredValidator(value, l10n.enterApartmentNumber),
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -303,8 +307,8 @@ class _DeliveryDetailsPageState extends State<DeliveryDetailsPage> {
                 textInputAction: TextInputAction.done,
                 maxLines: 3,
                 decoration: _inputDecoration(
-                  label: 'Additional Notes',
-                  hint: 'Nearby landmark or delivery instructions',
+                  label: l10n.additionalDetails,
+                  hint: l10n.notesHint,
                   icon: Icons.notes_outlined,
                 ),
               ),
@@ -314,8 +318,8 @@ class _DeliveryDetailsPageState extends State<DeliveryDetailsPage> {
                 child: ElevatedButton.icon(
                   onPressed: _saveDeliveryDetails,
                   icon: const Icon(Icons.save_outlined),
-                  label: const Text(
-                    'Save Order Details',
+                  label: Text(
+                    l10n.saveOrderDetails,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,

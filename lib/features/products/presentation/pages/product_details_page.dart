@@ -31,7 +31,7 @@ class ProductDetailsPage extends StatelessWidget {
 
     final storeNameDisplay = product.storeName.isNotEmpty
         ? product.storeName
-        : (location.isNotEmpty ? location : (isArabic ? 'المتجر الرئيسي' : 'Main Store'));
+        : (location.isNotEmpty ? location : l10n.defaultStoreName);
 
     return Scaffold(
       appBar: AppBar(
@@ -102,7 +102,7 @@ class ProductDetailsPage extends StatelessWidget {
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('لم يتم تحديد إحداثيات موقع هذا المتجر على الخريطة من قبل البائع'),
+                      content: Text(l10n.storeCoordinatesUnavailable),
                     ),
                   );
                 }
@@ -146,8 +146,8 @@ class ProductDetailsPage extends StatelessWidget {
                           const SizedBox(height: 2),
                           Text(
                             product.latitude != null
-                                ? (isArabic ? 'اضغط لعرض موقع المتجر والمسافة على الخريطة' : 'Tap to view store location & distance on map')
-                                : (isArabic ? 'موقع المتجر غير محدد على الخريطة' : 'Map location not set'),
+                                ? l10n.viewStoreLocationAndDistance
+                                : l10n.storeLocationNotSet,
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.blue.shade700,
@@ -219,7 +219,7 @@ class ProductDetailsPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    description.isNotEmpty ? description : '---',
+                    description.isNotEmpty ? description : l10n.noDescription,
                     style: TextStyle(fontSize: 14, color: Colors.grey.shade700, height: 1.5),
                   ),
                 ],
