@@ -221,7 +221,7 @@
   "enterBuildingNumber": "Enter your building number",
   "enterFloorNumber": "Enter your floor number",
   "enterAdditionalDetails": "Enter additional details",
-  "continue": "Continue",
+  "continueButton": "Continue",
   "requiredField": "This field is required",
   "invalidPhoneNumber": "Enter a valid phone number"
 

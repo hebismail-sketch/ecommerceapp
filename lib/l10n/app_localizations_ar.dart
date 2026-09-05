@@ -526,13 +526,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get selectedLocation => 'العنوان المحدد';
 
   @override
-  String get locationSearchNotFound => 'لم يتم العثور على العنوان. جرّب بحثًا آخر.';
+  String get locationSearchNotFound =>
+      'لم يتم العثور على العنوان. جرّب بحثًا آخر.';
 
   @override
   String get locationSearchFailed => 'فشل البحث. تحقق من اتصال الإنترنت.';
 
   @override
-  String get locationPermissionRequired => 'فعّل GPS واسمح للتطبيق بالوصول إلى موقعك.';
+  String get locationPermissionRequired =>
+      'فعّل GPS واسمح للتطبيق بالوصول إلى موقعك.';
 
   @override
   String get openSettings => 'الإعدادات';
@@ -595,7 +597,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get enterAdditionalDetails => 'اكتب أي تفاصيل إضافية';
 
   @override
-  String get continue => 'Continue';
+  String get continueButton => 'متابعة';
 
   @override
   String get requiredField => 'هذا الحقل مطلوب';
