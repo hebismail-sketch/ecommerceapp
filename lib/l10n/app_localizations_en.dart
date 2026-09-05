@@ -234,8 +234,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteCar => 'Delete Product';
 
   @override
-  String get deleteCarConfirmation =>
-      'Are you sure you want to delete this product?';
+  String get deleteCarConfirmation => 'Are you sure you want to delete this product?';
 
   @override
   String get carDeletedSuccessfully => 'Product deleted successfully';
@@ -381,19 +380,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get customerChats => 'Customer Inquiries & Support';
 
   @override
-  String get customerChatsSubtitle =>
-      'Live chat and support conversation center';
+  String get customerChatsSubtitle => 'Live chat and support conversation center';
 
   @override
   String get storeLocation => 'Store Location';
 
   @override
-  String get storeLocationSubtitle =>
-      'Pin and save your store location on the map';
+  String get storeLocationSubtitle => 'Pin and save your store location on the map';
 
   @override
-  String get customerOrdersSubtitle =>
-      'View and track incoming customer orders';
+  String get customerOrdersSubtitle => 'View and track incoming customer orders';
 
   @override
   String get supportChats => 'Support Chats';
@@ -458,8 +454,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noNotifications => 'No notifications right now';
 
   @override
-  String get notificationsSubtitle =>
-      'You will receive updates and alerts here';
+  String get notificationsSubtitle => 'You will receive updates and alerts here';
 
   @override
   String get manageProducts => 'Manage Products';
@@ -486,8 +481,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteProduct => 'Delete Product';
 
   @override
-  String get deleteProductConfirmation =>
-      'Are you sure you want to delete this product?';
+  String get deleteProductConfirmation => 'Are you sure you want to delete this product?';
 
   @override
   String get productDeletedSuccessfully => 'Product deleted successfully';
@@ -502,8 +496,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addProductSubtitle => 'Add a new product to the store inventory';
 
   @override
-  String get manageProductsSubtitle =>
-      'Edit, update prices, or remove products';
+  String get manageProductsSubtitle => 'Edit, update prices, or remove products';
 
   @override
   String get noProductsAvailable => 'No products available';
@@ -536,12 +529,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get locationSearchNotFound => 'Address not found. Try another search.';
 
   @override
-  String get locationSearchFailed =>
-      'Search failed. Check your internet connection.';
+  String get locationSearchFailed => 'Search failed. Check your internet connection.';
 
   @override
-  String get locationPermissionRequired =>
-      'Please enable GPS and allow location access.';
+  String get locationPermissionRequired => 'Please enable GPS and allow location access.';
 
   @override
   String get openSettings => 'Settings';
@@ -557,4 +548,58 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get recenterMap => 'Recenter map';
+
+  @override
+  String get deliveryDetails => 'Delivery Details';
+
+  @override
+  String get firstName => 'First Name';
+
+  @override
+  String get lastName => 'Last Name';
+
+  @override
+  String get phoneNumber => 'Phone Number';
+
+  @override
+  String get apartmentNumber => 'Apartment Number';
+
+  @override
+  String get buildingNumber => 'Building Number';
+
+  @override
+  String get floorNumber => 'Floor Number';
+
+  @override
+  String get additionalDetails => 'Additional Details';
+
+  @override
+  String get enterFirstName => 'Enter your first name';
+
+  @override
+  String get enterLastName => 'Enter your last name';
+
+  @override
+  String get enterPhoneNumber => 'Enter your phone number';
+
+  @override
+  String get enterApartmentNumber => 'Enter your apartment number';
+
+  @override
+  String get enterBuildingNumber => 'Enter your building number';
+
+  @override
+  String get enterFloorNumber => 'Enter your floor number';
+
+  @override
+  String get enterAdditionalDetails => 'Enter additional details';
+
+  @override
+  String get continue => 'Continue';
+
+  @override
+  String get requiredField => 'This field is required';
+
+  @override
+  String get invalidPhoneNumber => 'Enter a valid phone number';
 }

@@ -205,7 +205,25 @@
   "locationError": "Unable to get your current location.",
   "zoomIn": "Zoom in",
   "zoomOut": "Zoom out",
-  "recenterMap": "Recenter map"
+  "recenterMap": "Recenter map",
+  "deliveryDetails": "Delivery Details",
+  "firstName": "First Name",
+  "lastName": "Last Name",
+  "phoneNumber": "Phone Number",
+  "apartmentNumber": "Apartment Number",
+  "buildingNumber": "Building Number",
+  "floorNumber": "Floor Number",
+  "additionalDetails": "Additional Details",
+  "enterFirstName": "Enter your first name",
+  "enterLastName": "Enter your last name",
+  "enterPhoneNumber": "Enter your phone number",
+  "enterApartmentNumber": "Enter your apartment number",
+  "enterBuildingNumber": "Enter your building number",
+  "enterFloorNumber": "Enter your floor number",
+  "enterAdditionalDetails": "Enter additional details",
+  "continue": "Continue",
+  "requiredField": "This field is required",
+  "invalidPhoneNumber": "Enter a valid phone number"
 
 }
 

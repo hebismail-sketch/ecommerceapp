@@ -189,7 +189,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get enterDescription => 'ادخل الوصف';
 
   @override
-  String get chooseImageFirst => 'اختاري صورة أولاً';
+  String get chooseImageFirst => 'اختر صورة أولاً';
 
   @override
   String get carAddedSuccessfully => 'تمت إضافة السيارة بنجاح';
@@ -505,7 +505,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get deliveryLocation => 'عنوان التوصيل';
 
   @override
-  String get searchDeliveryAddress => 'ابحثي عن عنوانك...';
+  String get searchDeliveryAddress => 'ابحث عن عنوانك...';
 
   @override
   String get search => 'بحث';
@@ -514,7 +514,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get selectDeliveryLocation => 'اختيار عنوان التوصيل';
 
   @override
-  String get tapMapToSelectLocation => 'اضغطي على الخريطة لتحديد عنوانك';
+  String get tapMapToSelectLocation => 'اضغط على الخريطة لتحديد عنوانك';
 
   @override
   String get useCurrentLocation => 'استخدام موقعي الحالي';
@@ -526,15 +526,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get selectedLocation => 'العنوان المحدد';
 
   @override
-  String get locationSearchNotFound =>
-      'لم يتم العثور على العنوان. جربي بحثًا آخر.';
+  String get locationSearchNotFound => 'لم يتم العثور على العنوان. جرّب بحثًا آخر.';
 
   @override
-  String get locationSearchFailed => 'فشل البحث. تحققي من اتصال الإنترنت.';
+  String get locationSearchFailed => 'فشل البحث. تحقق من اتصال الإنترنت.';
 
   @override
-  String get locationPermissionRequired =>
-      'فعّلي GPS واسمحي للتطبيق بالوصول إلى موقعك.';
+  String get locationPermissionRequired => 'فعّل GPS واسمح للتطبيق بالوصول إلى موقعك.';
 
   @override
   String get openSettings => 'الإعدادات';
@@ -550,4 +548,58 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get recenterMap => 'إعادة توسيط الخريطة';
+
+  @override
+  String get deliveryDetails => 'بيانات التوصيل';
+
+  @override
+  String get firstName => 'الاسم الأول';
+
+  @override
+  String get lastName => 'اسم العائلة';
+
+  @override
+  String get phoneNumber => 'رقم الهاتف';
+
+  @override
+  String get apartmentNumber => 'رقم الشقة';
+
+  @override
+  String get buildingNumber => 'رقم العمارة';
+
+  @override
+  String get floorNumber => 'رقم الدور';
+
+  @override
+  String get additionalDetails => 'تفاصيل إضافية';
+
+  @override
+  String get enterFirstName => 'اكتب الاسم الأول';
+
+  @override
+  String get enterLastName => 'اكتب اسم العائلة';
+
+  @override
+  String get enterPhoneNumber => 'اكتب رقم الهاتف';
+
+  @override
+  String get enterApartmentNumber => 'اكتب رقم الشقة';
+
+  @override
+  String get enterBuildingNumber => 'اكتب رقم العمارة';
+
+  @override
+  String get enterFloorNumber => 'اكتب رقم الدور';
+
+  @override
+  String get enterAdditionalDetails => 'اكتب أي تفاصيل إضافية';
+
+  @override
+  String get continue => 'Continue';
+
+  @override
+  String get requiredField => 'هذا الحقل مطلوب';
+
+  @override
+  String get invalidPhoneNumber => 'اكتب رقم هاتف صحيح';
 }
