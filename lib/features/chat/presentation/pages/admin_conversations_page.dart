@@ -5,8 +5,8 @@ import 'package:ecommerceapp/features/chat/domain/entities/conversation_entity.d
 import 'package:ecommerceapp/features/chat/presentation/manager/chat_cubit.dart';
 import 'package:ecommerceapp/features/chat/presentation/manager/chat_state.dart';
 import 'package:ecommerceapp/features/chat/presentation/pages/admin_chat_detail_page.dart';
-import 'package:ecommerceapp/features/chat/presentation/widgets/user_avatar_widget.dart';
-import 'package:ecommerceapp/features/chat/presentation/widgets/user_profile_modal.dart';
+import 'package:ecommerceapp/features/main/widgets/user_avatar_widget.dart';
+import 'package:ecommerceapp/features/main/widgets/user_profile_modal.dart';
 import 'package:ecommerceapp/features/profile/presentation/pages/profile_screen.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
