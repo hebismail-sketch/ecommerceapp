@@ -42,9 +42,9 @@ class ChatCubit extends Cubit<ChatState> {
             ? state as ChatLoaded
             : const ChatLoaded();
         emit(ChatLoaded(
-          conversation: conversation,
-          adminConversations: currentState.adminConversations,
-          messages: currentState.messages,
+            conversation: conversation,
+            adminConversations: currentState.adminConversations,
+            messages: currentState.messages,
         ));
       },
       onError: (error) => emit(ChatFailure(error.toString())),
@@ -60,9 +60,9 @@ class ChatCubit extends Cubit<ChatState> {
             ? state as ChatLoaded
             : const ChatLoaded();
         emit(ChatLoaded(
-          conversation: currentState.conversation,
-          adminConversations: conversations,
-          messages: currentState.messages,
+            conversation: currentState.conversation,
+            adminConversations: conversations,
+            messages: currentState.messages,
         ));
       },
       onError: (error) => emit(ChatFailure(error.toString())),
@@ -76,9 +76,9 @@ class ChatCubit extends Cubit<ChatState> {
             ? state as ChatLoaded
             : const ChatLoaded();
         emit(ChatLoaded(
-          conversation: currentState.conversation,
-          adminConversations: currentState.adminConversations,
-          messages: messages,
+            conversation: currentState.conversation,
+            adminConversations: currentState.adminConversations,
+            messages: messages,
         ));
       },
       onError: (error) => emit(ChatFailure(error.toString())),
