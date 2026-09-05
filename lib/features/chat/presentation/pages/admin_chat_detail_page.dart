@@ -12,8 +12,8 @@ import 'package:ecommerceapp/features/chat/domain/entities/chat_message_entity.d
 import 'package:ecommerceapp/features/chat/domain/entities/conversation_entity.dart';
 import 'package:ecommerceapp/features/chat/presentation/manager/chat_cubit.dart';
 import 'package:ecommerceapp/features/chat/presentation/manager/chat_state.dart';
-import 'package:ecommerceapp/features/chat/presentation/widgets/user_avatar_widget.dart';
-import 'package:ecommerceapp/features/chat/presentation/widgets/user_profile_modal.dart';
+import 'package:ecommerceapp/features/main/widgets/user_avatar_widget.dart';
+import 'package:ecommerceapp/features/main/widgets/user_profile_modal.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 
 class AdminChatDetailPage extends StatefulWidget {
