@@ -11,6 +11,17 @@ class OrderModel {
   final String paymentMethod;
   final String paymentStatus;
 
+  final String firstName;
+  final String lastName;
+  final String phone;
+  final String street;
+  final String buildingNumber;
+  final String floorNumber;
+  final String apartmentNumber;
+  final String additionalNotes;
+  final double latitude;
+  final double longitude;
+
   const OrderModel({
     required this.id,
     required this.userId,
@@ -19,6 +30,16 @@ class OrderModel {
     required this.orderDate,
     this.paymentMethod = 'cashOnDelivery',
     this.paymentStatus = 'pending',
+    this.firstName = '',
+    this.lastName = '',
+    this.phone = '',
+    this.street = '',
+    this.buildingNumber = '',
+    this.floorNumber = '',
+    this.apartmentNumber = '',
+    this.additionalNotes = '',
+    this.latitude = 0,
+    this.longitude = 0,
   });
 
   factory OrderModel.fromJson(String id, Map<String, dynamic> json) {
@@ -30,15 +51,27 @@ class OrderModel {
       orderDate: _parseOrderDate(json['orderDate']),
       paymentMethod: json['paymentMethod'] as String? ?? 'cashOnDelivery',
       paymentStatus: json['paymentStatus'] as String? ?? 'pending',
+      firstName: json['firstName'] as String? ?? '',
+      lastName: json['lastName'] as String? ?? '',
+      phone: json['phone'] as String? ?? '',
+      street: json['street'] as String? ?? '',
+      buildingNumber: json['buildingNumber'] as String? ?? '',
+      floorNumber: json['floorNumber'] as String? ?? '',
+      apartmentNumber: json['apartmentNumber'] as String? ?? '',
+      additionalNotes: json['additionalNotes'] as String? ?? '',
+      latitude: (json['latitude'] as num?)?.toDouble() ?? 0,
+      longitude: (json['longitude'] as num?)?.toDouble() ?? 0,
     );
   }
 
   static DateTime _parseOrderDate(dynamic value) {
     if (value is Timestamp) return value.toDate();
     if (value is DateTime) return value;
+
     if (value is String) {
       return DateTime.tryParse(value) ?? DateTime.now();
     }
+
     return DateTime.now();
   }
 
@@ -50,6 +83,16 @@ class OrderModel {
       'orderDate': orderDate.toIso8601String(),
       'paymentMethod': paymentMethod,
       'paymentStatus': paymentStatus,
+      'firstName': firstName,
+      'lastName': lastName,
+      'phone': phone,
+      'street': street,
+      'buildingNumber': buildingNumber,
+      'floorNumber': floorNumber,
+      'apartmentNumber': apartmentNumber,
+      'additionalNotes': additionalNotes,
+      'latitude': latitude,
+      'longitude': longitude,
     };
   }
 
@@ -62,6 +105,16 @@ class OrderModel {
       orderDate: orderDate,
       paymentMethod: paymentMethod,
       paymentStatus: paymentStatus,
+      firstName: firstName,
+      lastName: lastName,
+      phone: phone,
+      street: street,
+      buildingNumber: buildingNumber,
+      floorNumber: floorNumber,
+      apartmentNumber: apartmentNumber,
+      additionalNotes: additionalNotes,
+      latitude: latitude,
+      longitude: longitude,
     );
   }
 
@@ -74,6 +127,16 @@ class OrderModel {
       orderDate: entity.orderDate,
       paymentMethod: entity.paymentMethod,
       paymentStatus: entity.paymentStatus,
+      firstName: entity.firstName,
+      lastName: entity.lastName,
+      phone: entity.phone,
+      street: entity.street,
+      buildingNumber: entity.buildingNumber,
+      floorNumber: entity.floorNumber,
+      apartmentNumber: entity.apartmentNumber,
+      additionalNotes: entity.additionalNotes,
+      latitude: entity.latitude,
+      longitude: entity.longitude,
     );
   }
 }
