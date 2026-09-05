@@ -113,7 +113,7 @@ class _CartPageState extends State<CartPage> {
     } catch (_) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             backgroundColor: Colors.red,
             content: Text(l10n.orderCreationFailed),
           ),

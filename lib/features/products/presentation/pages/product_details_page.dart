@@ -101,7 +101,7 @@ class ProductDetailsPage extends StatelessWidget {
                   );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
+                    SnackBar(
                       content: Text(l10n.storeCoordinatesUnavailable),
                     ),
                   );

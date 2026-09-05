@@ -382,7 +382,7 @@ class _StoreSettingsPageState extends State<StoreSettingsPage> {
                       ),
                     ],
                   ),
-                  child: const Row(
+                  child: Row(
                     children: [
                       Icon(Icons.tune_rounded, color: Colors.white, size: 34),
                       SizedBox(width: 14),

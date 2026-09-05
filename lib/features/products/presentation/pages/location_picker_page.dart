@@ -168,7 +168,7 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             backgroundColor: Colors.red,
             content: Text(l10n.currentLocationError),
           ),
@@ -185,7 +185,7 @@ class _LocationPickerPageState extends State<LocationPickerPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           l10n.storeLocationPickerTitle,
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
