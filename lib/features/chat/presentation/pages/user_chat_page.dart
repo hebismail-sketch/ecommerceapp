@@ -349,7 +349,7 @@ class _UserChatPageState extends State<UserChatPage> {
             const SizedBox(width: 10),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text(
                   AppLocalizations.of(context)!.supportChat,
                   style: TextStyle(fontSize: 16),
