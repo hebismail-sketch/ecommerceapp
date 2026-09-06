@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ecommerceapp/core/notifications/notification_service.dart';
 import 'package:ecommerceapp/features/authentication/domain/entities/user_entity.dart';
 import 'package:ecommerceapp/features/authentication/domain/usecases/get_current_user_usecase.dart';
 import 'package:ecommerceapp/features/authentication/domain/usecases/login_usecase.dart';
@@ -12,6 +13,8 @@ part 'authentication_state.dart';
 
 /// Authentication BLoC
 /// Handles all authentication business logic
+/// Authentication flow manager.
+/// It handles login, registration, logout, and current session restoration.
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   final LoginUseCase loginUseCase;
@@ -33,7 +36,7 @@ class AuthenticationBloc
     on<CheckAuthStatusEvent>(_onCheckAuthStatus);
   }
 
-  /// Handle login event
+  /// Logs the user in and registers them with OneSignal for role-based pushes.
   Future<void> _onLoginPressed(
     LoginPressedEvent event,
     Emitter<AuthenticationState> emit,
@@ -48,6 +51,7 @@ class AuthenticationBloc
 
       // Save device token
       await saveDeviceTokenUseCase.call(userId: user.uid);
+      await NotificationService.identifyUser(user.uid, role: user.role);
 
       emit(AuthenticationSuccess(
         user: user,
@@ -59,7 +63,7 @@ class AuthenticationBloc
     }
   }
 
-  /// Handle register event
+  /// Creates a new account and binds the new user to OneSignal immediately.
   Future<void> _onRegisterPressed(
     RegisterPressedEvent event,
     Emitter<AuthenticationState> emit,
@@ -75,6 +79,7 @@ class AuthenticationBloc
 
       // Save device token
       await saveDeviceTokenUseCase.call(userId: user.uid);
+      await NotificationService.identifyUser(user.uid, role: user.role);
 
       emit(AuthenticationSuccess(
         user: user,
@@ -110,6 +115,7 @@ class AuthenticationBloc
       final user = await getCurrentUserUseCase.call();
 
       if (user != null) {
+        await NotificationService.identifyUser(user.uid, role: user.role);
         emit(UserLoggedIn(user: user));
       } else {
         emit(const UserLoggedOut());

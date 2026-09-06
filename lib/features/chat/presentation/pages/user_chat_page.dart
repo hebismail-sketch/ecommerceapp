@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import 'package:ecommerceapp/core/constants/app_constants.dart';
+import 'package:ecommerceapp/core/notifications/notification_service.dart';
 import 'package:ecommerceapp/features/chat/data/models/chat_message_model.dart';
 import 'package:ecommerceapp/features/chat/data/models/conversation_model.dart';
 import 'package:ecommerceapp/features/chat/domain/entities/chat_message_entity.dart';
@@ -94,10 +95,23 @@ class _UserChatPageState extends State<UserChatPage> {
     );
 
     _messageController.clear();
+
+    // Send a chat notification to the admin after the user sends a message.
     await context.read<ChatCubit>().sendMessage(
       conversationId: conversationId,
       message: message,
       conversation: updatedConversation,
+    );
+
+    await NotificationService.sendToRole(
+      role: AppConstants.adminRole,
+      title: 'New chat message',
+      body: '$userName: $text',
+      data: {
+        'type': 'chat_message',
+        'conversationId': conversationId,
+        'senderId': user.uid,
+      },
     );
     _scrollToBottom();
   }

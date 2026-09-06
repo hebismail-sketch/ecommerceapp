@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Flutter App (OneSignal)",
+      "request": "launch",
+      "type": "dart",
+      "args": [
+        "--dart-define=ONE_SIGNAL_REST_API_KEY=REPLACE_WITH_YOUR_KEY"
+      ]
+    }
+  ]
+}
