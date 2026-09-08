@@ -13,6 +13,7 @@ import 'package:ecommerceapp/features/chat/presentation/pages/user_chat_page.dar
 import 'package:ecommerceapp/features/favorites/presentation/pages/favorite_page.dart';
 import 'package:ecommerceapp/features/home/presentation/pages/home_page.dart';
 import 'package:ecommerceapp/features/main/presentation/pages/main_screen.dart';
+import 'package:ecommerceapp/features/notifications/presentation/pages/notifications_page.dart';
 import 'package:ecommerceapp/features/orders/presentation/pages/order_screen.dart';
 import 'package:ecommerceapp/features/products/presentation/pages/add_product_page.dart';
 import 'package:ecommerceapp/features/products/presentation/pages/mange_products_page.dart';
@@ -36,6 +37,20 @@ Future<void> firebaseMessagingBackgroundHandler(
 ) async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  final title =
+      message.notification?.title ?? message.data['title']?.toString() ?? '';
+  final body =
+      message.notification?.body ?? message.data['body']?.toString() ?? '';
+
+  if (title.isEmpty && body.isEmpty) return;
+
+  await NotificationService.initializeLocalNotifications();
+  await NotificationService.showNotification(
+    title: title,
+    body: body,
+    data: message.data,
   );
 }
 
@@ -172,6 +187,7 @@ class MyApp extends StatelessWidget {
         FavoritePage.screenRoute:
             (_) => const FavoritePage(),
         MainScreen.screenRoute: (_) => const MainScreen(),
+        NotificationsPage.screenRoute: (_) => const NotificationsPage(),
         OrdersScreen.screenRoute: (_) => const OrdersScreen(),
         SettingsScreen.screenRoute:
             (_) => const SettingsScreen(),
