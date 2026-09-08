@@ -4,7 +4,6 @@ import 'package:ecommerceapp/core/services/location_service.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 
@@ -32,24 +31,18 @@ class _DeliveryLocationPageState extends State<DeliveryLocationPage> {
     super.initState();
 
     _selectedLocation = const LatLng(
-      30.0444,
-      31.2357,
+      LocationService.defaultLatitude,
+      LocationService.defaultLongitude,
     );
-
-    _checkInitialLocation();
   }
 
-  Future<void> _checkInitialLocation() async {
-    try {
-      final isServiceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!isServiceEnabled) return;
-
-      final permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.always ||
-          permission == LocationPermission.whileInUse) {
-        _useCurrentLocation();
-      }
-    } catch (_) {}
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_detectedAddress.isEmpty) {
+      final isAr = Localizations.localeOf(context).languageCode == 'ar';
+      _detectedAddress = isAr ? 'القاهرة، مصر' : 'Cairo, Egypt';
+    }
   }
 
   @override
@@ -182,40 +175,7 @@ class _DeliveryLocationPageState extends State<DeliveryLocationPage> {
     setState(() => _isLocating = true);
 
     try {
-      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) {
-        if (!mounted) return;
-        _showEnableGpsMessage();
-        return;
-      }
-
-      var permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          if (!mounted) return;
-          _showLocationPermissionMessage();
-          return;
-        }
-      }
-
-      if (permission == LocationPermission.deniedForever) {
-        if (!mounted) return;
-        _showLocationPermissionMessage(isPermanentlyDenied: true);
-        return;
-      }
-
-      Position? position;
-      try {
-        position = await Geolocator.getCurrentPosition(
-          locationSettings: const LocationSettings(
-            accuracy: LocationAccuracy.high,
-            timeLimit: Duration(seconds: 10),
-          ),
-        );
-      } catch (_) {
-        position = await LocationService.getCurrentLocation();
-      }
+      final position = await LocationService.getCurrentLocation();
 
       if (!mounted) return;
 
@@ -236,9 +196,11 @@ class _DeliveryLocationPageState extends State<DeliveryLocationPage> {
         _selectedLocation = currentLocation;
       });
 
-      _mapController.move(currentLocation, 17.5);
+      _mapController.move(currentLocation, 17.0);
 
-      _reverseGeocode(currentLocation);
+      await _reverseGeocode(currentLocation);
+
+      if (!mounted) return;
 
       _showMessage(
         AppLocalizations.of(context)!.gpsLocationDetected,
@@ -255,56 +217,6 @@ class _DeliveryLocationPageState extends State<DeliveryLocationPage> {
         setState(() => _isLocating = false);
       }
     }
-  }
-
-  void _showEnableGpsMessage() {
-    final l10n = AppLocalizations.of(context)!;
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.orange.shade800,
-          behavior: SnackBarBehavior.floating,
-          content: Text(l10n.enableGpsToLocate),
-          action: SnackBarAction(
-            label: l10n.activateGps,
-            textColor: Colors.white,
-            onPressed: () async {
-              await Geolocator.openLocationSettings();
-            },
-          ),
-        ),
-      );
-  }
-
-  void _showLocationPermissionMessage({bool isPermanentlyDenied = false}) {
-    final l10n = AppLocalizations.of(context)!;
-
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.red.shade700,
-          behavior: SnackBarBehavior.floating,
-          content: Text(l10n.locationPermissionRequired),
-          action: SnackBarAction(
-            label: l10n.openSettings,
-            textColor: Colors.white,
-            onPressed: () async {
-              if (isPermanentlyDenied) {
-                await Geolocator.openAppSettings();
-              } else {
-                final opened =
-                    await Geolocator.openLocationSettings();
-
-                if (!opened) {
-                  await Geolocator.openAppSettings();
-                }
-              }
-            },
-          ),
-        ),
-      );
   }
 
   void _showMessage(
