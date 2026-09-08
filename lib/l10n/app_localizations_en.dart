@@ -354,6 +354,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accessories => 'Accessories';
 
   @override
+  String get games => 'Games';
+
+  @override
+  String get furniture => 'Furniture';
+
+  @override
+  String get shoes => 'Shoes';
+
+  @override
+  String get medicine => 'Medicine';
+
+  @override
   String get cars => 'Cars';
 
   @override

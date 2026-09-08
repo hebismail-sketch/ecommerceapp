@@ -353,6 +353,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get accessories => 'إكسسوارات';
 
   @override
+  String get games => 'ألعاب';
+
+  @override
+  String get furniture => 'أثاث';
+
+  @override
+  String get shoes => 'أحذية';
+
+  @override
+  String get medicine => 'أدوية';
+
+  @override
   String get cars => 'سيارات';
 
   @override

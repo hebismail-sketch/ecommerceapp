@@ -770,6 +770,30 @@ abstract class AppLocalizations {
   /// **'Accessories'**
   String get accessories;
 
+  /// No description provided for @games.
+  ///
+  /// In en, this message translates to:
+  /// **'Games'**
+  String get games;
+
+  /// No description provided for @furniture.
+  ///
+  /// In en, this message translates to:
+  /// **'Furniture'**
+  String get furniture;
+
+  /// No description provided for @shoes.
+  ///
+  /// In en, this message translates to:
+  /// **'Shoes'**
+  String get shoes;
+
+  /// No description provided for @medicine.
+  ///
+  /// In en, this message translates to:
+  /// **'Medicine'**
+  String get medicine;
+
   /// No description provided for @cars.
   ///
   /// In en, this message translates to:
