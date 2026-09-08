@@ -36,7 +36,7 @@ class AuthenticationBloc
     on<CheckAuthStatusEvent>(_onCheckAuthStatus);
   }
 
-  /// Logs the user in and registers them with OneSignal for role-based pushes.
+  /// Logs the user in and stores the role and device token for push notifications.
   Future<void> _onLoginPressed(
     LoginPressedEvent event,
     Emitter<AuthenticationState> emit,
@@ -63,7 +63,7 @@ class AuthenticationBloc
     }
   }
 
-  /// Creates a new account and binds the new user to OneSignal immediately.
+  /// Creates a new account and stores the new user's token and role.
   Future<void> _onRegisterPressed(
     RegisterPressedEvent event,
     Emitter<AuthenticationState> emit,

@@ -1,6 +1,7 @@
 // File: lib/features/products/presentation/pages/add_product_page.dart
 
 import 'package:ecommerceapp/core/services/product_translation_service.dart';
+import 'package:ecommerceapp/core/notifications/notification_api.dart';
 import 'package:ecommerceapp/core/widgets/profile_avatar.dart';
 import 'package:ecommerceapp/features/products/domain/entities/product_entity.dart';
 import 'package:ecommerceapp/features/products/presentation/manager/product_cubit.dart';
@@ -148,6 +149,12 @@ class _AddProductPageState extends State<AddProductPage> {
 
     if (widget.product == null) {
       await productCubit.addProduct(product);
+      await NotificationApi.notify(
+        action: 'notify_users',
+        title: 'New Product',
+        body: '${product.nameEn} is now available in the store.',
+        data: {'type': 'new_product'},
+      );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

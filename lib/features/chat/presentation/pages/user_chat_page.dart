@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import 'package:ecommerceapp/core/constants/app_constants.dart';
-import 'package:ecommerceapp/core/notifications/notification_service.dart';
+import 'package:ecommerceapp/core/notifications/notification_api.dart';
 import 'package:ecommerceapp/features/chat/data/models/chat_message_model.dart';
 import 'package:ecommerceapp/features/chat/data/models/conversation_model.dart';
 import 'package:ecommerceapp/features/chat/domain/entities/chat_message_entity.dart';
@@ -96,21 +96,19 @@ class _UserChatPageState extends State<UserChatPage> {
 
     _messageController.clear();
 
-    // Send a chat notification to the admin after the user sends a message.
+    // The Cloud Function notifies the recipient after Firestore writes the message.
     await context.read<ChatCubit>().sendMessage(
       conversationId: conversationId,
       message: message,
       conversation: updatedConversation,
     );
-
-    await NotificationService.sendToRole(
-      role: AppConstants.adminRole,
-      title: 'New chat message',
+    await NotificationApi.notify(
+      action: 'notify_admins',
+      title: 'New Customer Message',
       body: '$userName: $text',
       data: {
         'type': 'chat_message',
         'conversationId': conversationId,
-        'senderId': user.uid,
       },
     );
     _scrollToBottom();
@@ -184,8 +182,9 @@ class _UserChatPageState extends State<UserChatPage> {
           ],
         ),
         child: Column(
-          crossAxisAlignment:
-              isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          crossAxisAlignment: isMine
+              ? CrossAxisAlignment.end
+              : CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
@@ -208,7 +207,9 @@ class _UserChatPageState extends State<UserChatPage> {
                     fontSize: 11,
                     color: isMine
                         ? Colors.white70
-                        : (isDark ? Colors.grey.shade400 : Colors.grey.shade600),
+                        : (isDark
+                              ? Colors.grey.shade400
+                              : Colors.grey.shade600),
                   ),
                 ),
                 if (isMine) ...[
@@ -216,7 +217,9 @@ class _UserChatPageState extends State<UserChatPage> {
                   Icon(
                     message.isRead ? Icons.done_all : Icons.done,
                     size: 14,
-                    color: message.isRead ? Colors.lightBlueAccent : Colors.white70,
+                    color: message.isRead
+                        ? Colors.lightBlueAccent
+                        : Colors.white70,
                   ),
                 ],
               ],
@@ -230,7 +233,9 @@ class _UserChatPageState extends State<UserChatPage> {
   Widget _buildMessages(ChatLoaded state) {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      return Center(child: Text(AppLocalizations.of(context)!.pleaseLoginFirst));
+      return Center(
+        child: Text(AppLocalizations.of(context)!.pleaseLoginFirst),
+      );
     }
     if (state.messages.isEmpty) {
       return Center(
@@ -245,18 +250,12 @@ class _UserChatPageState extends State<UserChatPage> {
             const SizedBox(height: 12),
             Text(
               AppLocalizations.of(context)!.noMessagesPreview,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey.shade600,
-              ),
+              style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
             ),
             const SizedBox(height: 4),
             Text(
               AppLocalizations.of(context)!.startSupportConversation,
-              style: TextStyle(
-                fontSize: 13,
-                color: Colors.grey.shade500,
-              ),
+              style: TextStyle(fontSize: 13, color: Colors.grey.shade500),
             ),
           ],
         ),
@@ -327,11 +326,7 @@ class _UserChatPageState extends State<UserChatPage> {
                 onTap: () => _sendMessage(state),
                 child: const Padding(
                   padding: EdgeInsets.all(12),
-                  child: Icon(
-                    Icons.send,
-                    color: Colors.white,
-                    size: 20,
-                  ),
+                  child: Icon(Icons.send, color: Colors.white, size: 20),
                 ),
               ),
             ),
@@ -347,7 +342,9 @@ class _UserChatPageState extends State<UserChatPage> {
     if (user == null) {
       return Scaffold(
         appBar: AppBar(title: Text(AppLocalizations.of(context)!.supportChat)),
-        body: Center(child: Text(AppLocalizations.of(context)!.pleaseLoginFirst)),
+        body: Center(
+          child: Text(AppLocalizations.of(context)!.pleaseLoginFirst),
+        ),
       );
     }
 
@@ -384,9 +381,9 @@ class _UserChatPageState extends State<UserChatPage> {
             _scrollToBottom();
           }
           if (state is ChatFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
           }
         },
         builder: (context, state) {

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ecommerceapp/core/notifications/notification_api.dart';
 import '../../domain/entities/order_entity.dart';
 import '../../domain/usecases/add_order.dart';
 import '../../domain/usecases/delete_order.dart';
@@ -55,6 +56,17 @@ class OrderCubit extends Cubit<OrderState> {
   Future<void> updateOrder(OrderEntity order) async {
     try {
       await updateOrderUseCase.call(order);
+      await NotificationApi.notify(
+        action: 'notify_user',
+        recipientUserId: order.userId,
+        title: 'Order Updated',
+        body: 'Your order status has been updated to ${order.paymentStatus}.',
+        data: {
+          'type': 'order_status',
+          'status': order.paymentStatus,
+          'orderId': order.id,
+        },
+      );
     } catch (e) {
       emit(OrderFailure(e.toString()));
     }

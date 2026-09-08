@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import 'package:ecommerceapp/core/constants/app_constants.dart';
-import 'package:ecommerceapp/core/notifications/notification_service.dart';
 import 'package:ecommerceapp/features/chat/data/models/chat_message_model.dart';
 import 'package:ecommerceapp/features/chat/data/models/conversation_model.dart';
 import 'package:ecommerceapp/features/chat/domain/entities/chat_message_entity.dart';
@@ -99,22 +98,11 @@ class _AdminChatDetailPageState extends State<AdminChatDetailPage> {
 
     _messageController.clear();
 
-    // Notify the end user when the admin replies to their conversation.
+    // The Cloud Function notifies the user after Firestore writes the message.
     await context.read<ChatCubit>().sendMessage(
       conversationId: conversationId,
       message: message,
       conversation: updatedConversation,
-    );
-
-    await NotificationService.sendToUser(
-      userId: _conversation!.userId,
-      title: 'Reply from admin',
-      body: '$senderName: $text',
-      data: {
-        'type': 'chat_reply',
-        'conversationId': conversationId,
-        'senderId': user.uid,
-      },
     );
     _scrollToBottom();
   }

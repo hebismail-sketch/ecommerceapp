@@ -9,6 +9,8 @@ import 'package:ecommerceapp/features/products/presentation/manager/product_cubi
 import 'package:ecommerceapp/features/products/presentation/pages/add_product_page.dart';
 import 'package:ecommerceapp/features/products/presentation/pages/mange_products_page.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -112,27 +114,44 @@ class _AdminHomeState extends State<AdminHome> {
         elevation: 0,
         backgroundColor: Colors.white,
         actions: [
-          // Notification Action Button
-          IconButton(
-            icon: Stack(
-              children: [
-                const Icon(Icons.notifications_outlined, color: Colors.black87),
-                Positioned(
-                  top: 0,
-                  right: 0,
-                  child: Container(
-                    width: 8,
-                    height: 8,
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
+          StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+            stream: _unreadNotificationsStream(),
+            builder: (context, snapshot) {
+              final hasUnread = (snapshot.data?.docs.length ?? 0) > 0;
+              return IconButton(
+                icon: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    const Icon(
+                      Icons.notifications_outlined,
+                      color: Colors.black87,
                     ),
-                  ),
+                    if (hasUnread)
+                      Positioned(
+                        top: -1,
+                        right: -1,
+                        child: Container(
+                          width: 9,
+                          height: 9,
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
-              ],
-            ),
-            onPressed: () {
-              Navigator.pushNamed(context, NotificationsPage.screenRoute);
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const NotificationsPage(),
+                      settings: const RouteSettings(
+                        name: NotificationsPage.screenRoute,
+                      ),
+                    ),
+                  );
+                },
+              );
             },
           ),
           const SizedBox(width: 8),
@@ -399,5 +418,19 @@ class _AdminHomeState extends State<AdminHome> {
         },
       ),
     );
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> _unreadNotificationsStream() {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      return const Stream.empty();
+    }
+
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .collection('notifications')
+        .where('read', isEqualTo: false)
+        .snapshots();
   }
 }

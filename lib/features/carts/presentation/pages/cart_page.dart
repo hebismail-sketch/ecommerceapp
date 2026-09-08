@@ -4,9 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:ecommerceapp/core/constants/app_constants.dart';
-import 'package:ecommerceapp/core/notifications/notification_service.dart';
 import 'package:ecommerceapp/core/widgets/custom_search_app_bar.dart';
+import 'package:ecommerceapp/core/notifications/notification_api.dart';
 import 'package:ecommerceapp/features/carts/presentation/manager/cart_cubit.dart';
 import 'package:ecommerceapp/features/orders/domain/entities/order_entity.dart';
 import 'package:ecommerceapp/features/orders/presentation/manager/order_cubit.dart';
@@ -51,9 +50,7 @@ class _CartPageState extends State<CartPage> {
     try {
       final selectedLocation = await Navigator.push<LatLng>(
         context,
-        MaterialPageRoute(
-          builder: (_) => const DeliveryLocationPage(),
-        ),
+        MaterialPageRoute(builder: (_) => const DeliveryLocationPage()),
       );
 
       if (!mounted || selectedLocation == null) return;
@@ -61,9 +58,8 @@ class _CartPageState extends State<CartPage> {
       final deliveryDetails = await Navigator.push<DeliveryDetails>(
         context,
         MaterialPageRoute(
-          builder: (_) => DeliveryDetailsPage(
-            selectedLocation: selectedLocation,
-          ),
+          builder: (_) =>
+              DeliveryDetailsPage(selectedLocation: selectedLocation),
         ),
       );
 
@@ -94,18 +90,13 @@ class _CartPageState extends State<CartPage> {
       );
 
       await orderCubit.addOrder(order);
-
-      // Notify the admin team when a user creates a new purchase.
-      await NotificationService.sendToRole(
-        role: AppConstants.adminRole,
-        title: 'New order received',
-        body: 'A new order has been created by ${user.email ?? 'a customer'}',
-        data: {
-          'type': 'new_order',
-          'userId': user.uid,
-          'orderTotal': totalPrice.toString(),
-        },
+      await NotificationApi.notify(
+        action: 'notify_admins',
+        title: 'New Order',
+        body: 'A new order has been created by a customer.',
+        data: {'type': 'new_order'},
       );
+
       for (final item in cartItems) {
         await cartCubit.removeItem(item.id);
       }
