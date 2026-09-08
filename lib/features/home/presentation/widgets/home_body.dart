@@ -41,6 +41,10 @@ class _HomeBodyState extends State<HomeBody> {
       {'icon': Icons.auto_awesome, 'title': l10n.beauty},
       {'icon': Icons.checkroom, 'title': l10n.clothing},
       {'icon': Icons.diamond_outlined, 'title': l10n.accessories},
+      {'icon': Icons.sports_esports_outlined, 'title': l10n.games},
+      {'icon': Icons.chair_outlined, 'title': l10n.furniture},
+      {'icon': Icons.shopping_cart_outlined, 'title': l10n.shoes},
+      {'icon': Icons.medical_services_outlined, 'title': l10n.medicine},
       {'icon': Icons.directions_car, 'title': l10n.cars},
     ];
   }
