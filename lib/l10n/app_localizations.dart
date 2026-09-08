@@ -1166,6 +1166,36 @@ abstract class AppLocalizations {
   /// **'Unable to get your current location.'**
   String get locationError;
 
+  /// No description provided for @activateGps.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate GPS'**
+  String get activateGps;
+
+  /// No description provided for @enableGpsToLocate.
+  ///
+  /// In en, this message translates to:
+  /// **'Please turn on GPS to locate your address automatically'**
+  String get enableGpsToLocate;
+
+  /// No description provided for @gpsLocationDetected.
+  ///
+  /// In en, this message translates to:
+  /// **'GPS location detected successfully'**
+  String get gpsLocationDetected;
+
+  /// No description provided for @confirmAndSaveLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm and Save Location'**
+  String get confirmAndSaveLocation;
+
+  /// No description provided for @gpsOrSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap GPS to go to your location, search for an address, or tap on the map'**
+  String get gpsOrSearchHint;
+
   /// No description provided for @zoomIn.
   ///
   /// In en, this message translates to:

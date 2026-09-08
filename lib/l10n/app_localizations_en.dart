@@ -562,6 +562,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get locationError => 'Unable to get your current location.';
 
   @override
+  String get activateGps => 'Activate GPS';
+
+  @override
+  String get enableGpsToLocate =>
+      'Please turn on GPS to locate your address automatically';
+
+  @override
+  String get gpsLocationDetected => 'GPS location detected successfully';
+
+  @override
+  String get confirmAndSaveLocation => 'Confirm and Save Location';
+
+  @override
+  String get gpsOrSearchHint =>
+      'Tap GPS to go to your location, search for an address, or tap on the map';
+
+  @override
   String get zoomIn => 'Zoom in';
 
   @override

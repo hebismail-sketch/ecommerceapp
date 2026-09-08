@@ -555,6 +555,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get locationError => 'تعذر تحديد موقعك الحالي.';
 
   @override
+  String get activateGps => 'تفعيل الـ GPS';
+
+  @override
+  String get enableGpsToLocate => 'يرجى تشغيل الـ GPS لتحديد عنوانك تلقائياً';
+
+  @override
+  String get gpsLocationDetected => 'تم تحديد موقعك بالـ GPS بنجاح';
+
+  @override
+  String get confirmAndSaveLocation => 'تأكيد وحفظ الموقع';
+
+  @override
+  String get gpsOrSearchHint =>
+      'اضغط على GPS للانتقال لموقعك، أو ابحث عن العنوان أو حدده على الخريطة';
+
+  @override
   String get zoomIn => 'تكبير الخريطة';
 
   @override
