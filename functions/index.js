@@ -7,89 +7,84 @@ const admin = require("firebase-admin");
 admin.initializeApp();
 
 const db = admin.firestore();
-const messaging = admin.messaging();
 
-async function getUserToken(userId) {
-  if (!userId) return null;
+const WORKER_URL = process.env.CLOUDFLARE_WORKER_URL || "";
+const WORKER_API_SECRET = process.env.WORKER_API_SECRET || "";
 
-  const userSnapshot = await db
-    .collection("users")
-    .doc(userId)
-    .get();
-
-  if (!userSnapshot.exists) return null;
-
-  const userData = userSnapshot.data() || {};
-  const notificationsEnabled =
-    userData.notificationsEnabled !== false;
-
-  if (!notificationsEnabled) return null;
-
-  const token = userData.fcmToken;
-
-  if (
-    typeof token !== "string" ||
-    token.trim().length === 0
-  ) {
-    return null;
-  }
-
-  return token;
-}
-
-async function getAdminTokens() {
-  const adminSnapshot = await db
-    .collection("users")
+async function getAdminUserIds() {
+  const snapshot = await db.collection("users")
     .where("role", "==", "admin")
     .get();
 
-  const tokens = [];
-
-  for (const doc of adminSnapshot.docs) {
-    const data = doc.data() || {};
-    const notificationsEnabled =
-      data.notificationsEnabled !== false;
-
-    const token = data.fcmToken;
-
-    if (
-      notificationsEnabled &&
-      typeof token === "string" &&
-      token.trim().length > 0
-    ) {
-      tokens.push(token);
-    }
-  }
-
-  return tokens;
+  return snapshot.docs
+    .filter((doc) => doc.data()?.notificationsEnabled !== false)
+    .map((doc) => doc.id);
 }
 
-async function sendToTokens({
-  tokens,
+async function sendToCloudflareWorker({
+  userIds,
   title,
   body,
   data = {},
 }) {
-  if (!tokens || tokens.length === 0) {
+  if (!userIds || userIds.length === 0) return;
+  if (!WORKER_URL) {
+    console.error("CLOUDFLARE_WORKER_URL is not configured.");
+    return;
+  }
+  if (!WORKER_API_SECRET) {
+    console.error("WORKER_API_SECRET is not configured.");
     return;
   }
 
-  const messages = tokens.map((token) => ({
-    token,
-    notification: {
-      title,
-      body,
-    },
-    data: {
-      ...data,
-    },
-  }));
+  const uniqueUserIds = [...new Set(userIds)];
 
-  const response = await messaging.sendEach(messages);
+  for (const userId of uniqueUserIds) {
+    const userDoc = await db.collection("users").doc(userId).get();
+    const userData = userDoc.data() || {};
 
-  console.log(
-    `Notification sent. Success: ${response.successCount}, Failure: ${response.failureCount}`,
-  );
+    await db
+      .collection("users")
+      .doc(userId)
+      .collection("notifications")
+      .add({
+        title,
+        body,
+        data,
+        type: data.type || "general",
+        read: false,
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      });
+
+    const token = userData.fcmToken;
+
+    if (!token) {
+      console.warn(`No FCM token found for user ${userId}`);
+      continue;
+    }
+
+    const response = await fetch(WORKER_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Worker-Secret": WORKER_API_SECRET,
+      },
+      body: JSON.stringify({
+        token,
+        title,
+        body,
+        data,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`Worker send failed for ${userId}: ${response.status} ${errorText}`);
+      continue;
+    }
+
+    console.log(`FCM notification sent to ${userId}`);
+  }
 }
 
 exports.notifyAdminWhenOrderCreated = onDocumentCreated(
@@ -101,15 +96,38 @@ exports.notifyAdminWhenOrderCreated = onDocumentCreated(
       return;
     }
 
-    const tokens = await getAdminTokens();
+    const userIds = await getAdminUserIds();
 
-    await sendToTokens({
-      tokens,
+    await sendToCloudflareWorker({
+      userIds,
       title: "New Order",
       body: "A new order has been created by a customer.",
       data: {
         type: "new_order",
         orderId: event.params.orderId,
+      },
+    });
+  },
+);
+
+exports.notifyUsersWhenProductCreated = onDocumentCreated(
+  "products/{productId}",
+  async (event) => {
+    const product = event.data?.data();
+
+    if (!product) {
+      return;
+    }
+
+    const productName = product.nameEn || product.nameAr || "New product";
+
+    await sendToCloudflareWorker({
+      userIds: await getUserIdsByRole("user"),
+      title: "New Product",
+      body: `${productName} is now available in the store.`,
+      data: {
+        type: "new_product",
+        productId: event.params.productId,
       },
     });
   },
@@ -142,29 +160,22 @@ exports.notifyRecipientWhenChatMessageCreated =
       const conversation =
         conversationSnapshot.data() || {};
 
-      let tokens = [];
+      let userIds = [];
       let title = "";
       let body = "";
 
       if (senderRole === "admin") {
-        const userToken = await getUserToken(
-          conversation.userId,
-        );
-
-        if (userToken) {
-          tokens = [userToken];
-        }
-
+        userIds = [conversation.userId];
         title = "New Support Reply";
         body = `${senderName}: ${messageText}`;
       } else {
-        tokens = await getAdminTokens();
+        userIds = await getAdminUserIds();
         title = "New Customer Message";
         body = `${senderName}: ${messageText}`;
       }
 
-      await sendToTokens({
-        tokens,
+      await sendToCloudflareWorker({
+        userIds,
         title,
         body,
         data: {
@@ -194,11 +205,8 @@ exports.notifyUserWhenOrderStatusUpdated =
         return;
       }
 
-      const token = await getUserToken(after.userId);
-
-      if (!token) {
-        return;
-      }
+      const userIds = after.userId ? [after.userId] : [];
+      if (userIds.length === 0) return;
 
       const statusMessages = {
         confirmed: {
@@ -229,8 +237,8 @@ exports.notifyUserWhenOrderStatusUpdated =
           body: "Your order status has been updated.",
         };
 
-      await sendToTokens({
-        tokens: [token],
+      await sendToCloudflareWorker({
+        userIds,
         title: notification.title,
         body: notification.body,
         data: {
@@ -241,3 +249,13 @@ exports.notifyUserWhenOrderStatusUpdated =
       });
     },
   );
+
+async function getUserIdsByRole(role) {
+  const snapshot = await db.collection("users")
+    .where("role", "==", role)
+    .get();
+
+  return snapshot.docs
+    .filter((doc) => doc.data()?.notificationsEnabled !== false)
+    .map((doc) => doc.id);
+}
