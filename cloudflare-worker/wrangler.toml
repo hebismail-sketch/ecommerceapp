@@ -1,0 +1,12 @@
+name = "ecommerce-notificationsf"
+main = "src/index.js"
+compatibility_date = "2026-08-19"
+
+[vars]
+FIREBASE_PROJECT_ID = "ecommerceapp-b13d3"
+ALLOWED_ORIGIN = "*"
+
+# Add these as encrypted Cloudflare Secrets, not in this file:
+# npx wrangler secret put FIREBASE_CLIENT_EMAIL
+# npx wrangler secret put FIREBASE_PRIVATE_KEY
+# npx wrangler secret put WORKER_API_SECRET
