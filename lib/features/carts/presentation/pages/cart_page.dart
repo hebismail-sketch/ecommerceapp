@@ -31,7 +31,6 @@ class _CartPageState extends State<CartPage> {
   String _selectedPaymentMethod = 'cashOnDelivery';
 
   Future<void> _submitCashOnDeliveryOrder({
-    required BuildContext context,
     required CartSuccess cartState,
     required double totalPrice,
     required AppLocalizations l10n,
@@ -40,6 +39,7 @@ class _CartPageState extends State<CartPage> {
 
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
+      if (!mounted) return;
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(l10n.pleaseLoginFirst)));
@@ -508,7 +508,6 @@ class _CartPageState extends State<CartPage> {
                             onPressed: _isSubmittingOrder
                                 ? null
                                 : () => _submitCashOnDeliveryOrder(
-                                    context: context,
                                     cartState: state,
                                     totalPrice: totalPrice,
                                     l10n: l10n,

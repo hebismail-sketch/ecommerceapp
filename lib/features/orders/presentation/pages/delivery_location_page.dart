@@ -4,6 +4,7 @@ import 'package:ecommerceapp/core/services/location_service.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 
@@ -19,6 +20,7 @@ class DeliveryLocationPage extends StatefulWidget {
 class _DeliveryLocationPageState extends State<DeliveryLocationPage> {
   final MapController _mapController = MapController();
   final TextEditingController _searchController = TextEditingController();
+  final FocusNode _searchFocusNode = FocusNode();
 
   late LatLng _selectedLocation;
   String _detectedAddress = '';
@@ -34,6 +36,35 @@ class _DeliveryLocationPageState extends State<DeliveryLocationPage> {
       LocationService.defaultLatitude,
       LocationService.defaultLongitude,
     );
+
+    // Auto-detect user's real location quietly on page open if GPS is enabled and permitted
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _autoDetectInitialLocation();
+    });
+  }
+
+  Future<void> _autoDetectInitialLocation() async {
+    try {
+      final isServiceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!isServiceEnabled) return;
+
+      final permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied ||
+          permission == LocationPermission.deniedForever) {
+        return;
+      }
+
+      final position =
+          await LocationService.getDeviceGpsPosition(fallbackToCairo: false);
+      if (position != null && mounted) {
+        final loc = LatLng(position.latitude, position.longitude);
+        setState(() {
+          _selectedLocation = loc;
+        });
+        _mapController.move(loc, 17.5);
+        _reverseGeocode(loc);
+      }
+    } catch (_) {}
   }
 
   @override
@@ -48,6 +79,7 @@ class _DeliveryLocationPageState extends State<DeliveryLocationPage> {
   @override
   void dispose() {
     _searchController.dispose();
+    _searchFocusNode.dispose();
     super.dispose();
   }
 
@@ -154,12 +186,31 @@ class _DeliveryLocationPageState extends State<DeliveryLocationPage> {
           'User-Agent': 'ecommerceapp-delivery-location/1.0',
           'Accept-Language': languageCode,
         },
-      ).timeout(const Duration(seconds: 6));
+      ).timeout(const Duration(seconds: 8));
 
       if (response.statusCode == 200 && mounted) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
-        final displayName = data['display_name'] as String?;
-        if (displayName != null && displayName.isNotEmpty) {
+        String displayName = '';
+        if (data['address'] != null && data['address'] is Map) {
+          final addr = data['address'] as Map<String, dynamic>;
+          final houseNumber = addr['house_number'] ?? '';
+          final road = addr['road'] ?? addr['residential'] ?? addr['suburb'] ?? addr['neighbourhood'] ?? '';
+          final city = addr['city'] ?? addr['town'] ?? addr['county'] ?? addr['state'] ?? '';
+
+          final List<String> parts = [];
+          if (houseNumber.toString().isNotEmpty) parts.add(houseNumber.toString());
+          if (road.toString().isNotEmpty) parts.add(road.toString());
+          if (city.toString().isNotEmpty) parts.add(city.toString());
+
+          if (parts.isNotEmpty) {
+            displayName = parts.join(', ');
+          }
+        }
+        if (displayName.isEmpty) {
+          displayName = data['display_name'] as String? ?? '';
+        }
+
+        if (displayName.isNotEmpty) {
           setState(() {
             _detectedAddress = displayName;
             _searchController.text = displayName;
@@ -175,11 +226,40 @@ class _DeliveryLocationPageState extends State<DeliveryLocationPage> {
     setState(() => _isLocating = true);
 
     try {
-      final position = await LocationService.getCurrentLocation();
+      // 1. Check if device location service (GPS) is enabled on the phone
+      final isServiceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!isServiceEnabled) {
+        if (!mounted) return;
+        await _showEnableGpsDialog();
+        return;
+      }
 
-      if (!mounted) return;
+      // 2. Check and request location permission
+      var permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
 
-      if (position == null) {
+      if (permission == LocationPermission.deniedForever) {
+        if (!mounted) return;
+        await _showPermissionPermanentlyDeniedDialog();
+        return;
+      }
+
+      if (permission == LocationPermission.denied) {
+        if (!mounted) return;
+        _showMessage(
+          AppLocalizations.of(context)!.locationPermissionRequired,
+          isError: true,
+        );
+        return;
+      }
+
+      // 3. Fetch exact device GPS position from hardware sensors
+      final rawPosition = await LocationService.getRawDevicePosition();
+
+      if (rawPosition == null) {
+        if (!mounted) return;
         _showMessage(
           AppLocalizations.of(context)!.locationError,
           isError: true,
@@ -187,16 +267,26 @@ class _DeliveryLocationPageState extends State<DeliveryLocationPage> {
         return;
       }
 
+      // 4. Check if device is an Android emulator with default US/Mountain View coordinates
+      if (LocationService.isUsOrEmulatorLocation(
+          rawPosition.latitude, rawPosition.longitude)) {
+        if (!mounted) return;
+        await _showEmulatorNoticeDialog();
+        return;
+      }
+
+      // 5. This is the user's REAL physical location (building / house level)
       final currentLocation = LatLng(
-        position.latitude,
-        position.longitude,
+        rawPosition.latitude,
+        rawPosition.longitude,
       );
 
       setState(() {
         _selectedLocation = currentLocation;
       });
 
-      _mapController.move(currentLocation, 17.0);
+      // Move camera directly to the exact house coordinates with building-level zoom (18.0)
+      _mapController.move(currentLocation, 18.0);
 
       await _reverseGeocode(currentLocation);
 
@@ -217,6 +307,141 @@ class _DeliveryLocationPageState extends State<DeliveryLocationPage> {
         setState(() => _isLocating = false);
       }
     }
+  }
+
+  Future<void> _showEmulatorNoticeDialog() async {
+    final l10n = AppLocalizations.of(context)!;
+    final isAr = Localizations.localeOf(context).languageCode == 'ar';
+
+    await showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.devices, color: Colors.blue.shade700),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                isAr
+                    ? 'تنبيه: أنت تعمل على محاكي (Emulator)'
+                    : 'Notice: Running on Android Emulator',
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          isAr
+              ? 'المحاكي لا يحتوي على شريحة GPS حقيقية، وإحداثياته الافتراضية مضبوطة على كاليفورنيا (أمريكا).\n\n'
+                '• على الهاتف الحقيقي: سيحدد الـ GPS موقع منزلك بدقة متناهية فوراً.\n\n'
+                '• على المحاكي: يمكنك البحث عن اسم شارعك أو منطقتك في شريط البحث بالأعلى، أو النقر مباشرة على الخريطة لتحديد مكانك بدقة.'
+              : 'The emulator has no physical GPS hardware and defaults to California, USA.\n\n'
+                '• On a real device: GPS will pinpoint your exact home location accurately.\n\n'
+                '• On emulator: Please search your street/area using the search bar above or tap on the map to place your pin.',
+          style: const TextStyle(fontSize: 14, height: 1.4),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(l10n.cancel),
+          ),
+          ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue.shade700,
+              foregroundColor: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pop(ctx);
+              _searchFocusNode.requestFocus();
+            },
+            icon: const Icon(Icons.search, size: 18),
+            label: Text(isAr ? 'البحث عن عنواني' : 'Search Address'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _showEnableGpsDialog() async {
+    final l10n = AppLocalizations.of(context)!;
+    final isAr = Localizations.localeOf(context).languageCode == 'ar';
+
+    await showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.location_off, color: Colors.orange.shade800),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                isAr ? 'خدمة الموقع (GPS) مغلقة' : 'Location Service Disabled',
+                style: const TextStyle(fontSize: 16),
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          isAr
+              ? 'يرجى تشغيل الـ GPS من إعدادات الهاتف لتتمكن من تحديد موقعك الحالي بدقة.'
+              : 'Please enable GPS location service in your device settings to detect your current location.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(l10n.cancel),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              Navigator.pop(ctx);
+              await Geolocator.openLocationSettings();
+            },
+            child: Text(isAr ? 'تشغيل الـ GPS' : 'Enable GPS'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _showPermissionPermanentlyDeniedDialog() async {
+    final l10n = AppLocalizations.of(context)!;
+    final isAr = Localizations.localeOf(context).languageCode == 'ar';
+
+    await showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Row(
+          children: [
+            const Icon(Icons.security, color: Colors.red),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                isAr ? 'إذن الموقع مطلوب' : 'Location Permission Required',
+                style: const TextStyle(fontSize: 16),
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          isAr
+              ? 'تم رفض إذن الوصول إلى الموقع. يرجى تفعيل الإذن من إعدادات التطبيق لتحديد موقعك.'
+              : 'Location permission is required to detect your location. Please grant permission in App Settings.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(l10n.cancel),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              Navigator.pop(ctx);
+              await Geolocator.openAppSettings();
+            },
+            child: Text(l10n.openSettings),
+          ),
+        ],
+      ),
+    );
   }
 
   void _showMessage(
@@ -354,6 +579,7 @@ class _DeliveryLocationPageState extends State<DeliveryLocationPage> {
                     borderRadius: BorderRadius.circular(14),
                     child: TextField(
                       controller: _searchController,
+                      focusNode: _searchFocusNode,
                       textInputAction: TextInputAction.search,
                       onSubmitted: (_) => _searchLocation(),
                       decoration: InputDecoration(
