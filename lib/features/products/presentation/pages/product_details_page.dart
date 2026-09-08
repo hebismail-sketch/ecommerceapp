@@ -204,10 +204,11 @@ class ProductDetailsPage extends StatelessWidget {
                         avatar: const Icon(Icons.calendar_today, size: 16),
                         label: Text('${product.year}'),
                       ),
-                      Chip(
-                        avatar: const Icon(Icons.location_on, size: 16),
-                        label: Text(location),
-                      ),
+                      if (location.isNotEmpty)
+                        Chip(
+                          avatar: const Icon(Icons.location_on, size: 16),
+                          label: Text(location),
+                        ),
                     ],
                   ),
                   const SizedBox(height: 16),

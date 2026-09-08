@@ -31,8 +31,6 @@ class _AddProductPageState extends State<AddProductPage> {
   final _yearController = TextEditingController();
   final _brandArController = TextEditingController();
   final _brandEnController = TextEditingController();
-  final _locationArController = TextEditingController();
-  final _locationEnController = TextEditingController();
   final _descriptionArController = TextEditingController();
   final _descriptionEnController = TextEditingController();
   final _imageUrlController = TextEditingController();
@@ -50,8 +48,6 @@ class _AddProductPageState extends State<AddProductPage> {
       _yearController.text = widget.product!.year.toString();
       _brandArController.text = widget.product!.brandAr;
       _brandEnController.text = widget.product!.brandEn;
-      _locationArController.text = widget.product!.locationAr;
-      _locationEnController.text = widget.product!.locationEn;
       _descriptionArController.text = widget.product!.descriptionAr;
       _descriptionEnController.text = widget.product!.descriptionEn;
       _imageUrlController.text = widget.product!.image;
@@ -75,8 +71,6 @@ class _AddProductPageState extends State<AddProductPage> {
     _yearController.dispose();
     _brandArController.dispose();
     _brandEnController.dispose();
-    _locationArController.dispose();
-    _locationEnController.dispose();
     _descriptionArController.dispose();
     _descriptionEnController.dispose();
     _imageUrlController.dispose();
@@ -94,9 +88,6 @@ class _AddProductPageState extends State<AddProductPage> {
           _isArabicInput ? _nameArController.text : _nameEnController.text,
           _isArabicInput ? _brandArController.text : _brandEnController.text,
           _isArabicInput
-              ? _locationArController.text
-              : _locationEnController.text,
-          _isArabicInput
               ? _descriptionArController.text
               : _descriptionEnController.text,
         ],
@@ -106,13 +97,11 @@ class _AddProductPageState extends State<AddProductPage> {
       if (_isArabicInput) {
         _nameEnController.text = translated[0];
         _brandEnController.text = translated[1];
-        _locationEnController.text = translated[2];
-        _descriptionEnController.text = translated[3];
+        _descriptionEnController.text = translated[2];
       } else {
         _nameArController.text = translated[0];
         _brandArController.text = translated[1];
-        _locationArController.text = translated[2];
-        _descriptionArController.text = translated[3];
+        _descriptionArController.text = translated[2];
       }
     } catch (error) {
       if (mounted) {
@@ -138,8 +127,6 @@ class _AddProductPageState extends State<AddProductPage> {
       nameEn: _nameEnController.text.trim(),
       brandAr: _brandArController.text.trim(),
       brandEn: _brandEnController.text.trim(),
-      locationAr: _locationArController.text.trim(),
-      locationEn: _locationEnController.text.trim(),
       descriptionAr: _descriptionArController.text.trim(),
       descriptionEn: _descriptionEnController.text.trim(),
       price: double.tryParse(_priceController.text.trim()) ?? 0,
@@ -345,28 +332,6 @@ class _AddProductPageState extends State<AddProductPage> {
                         : _brandEnController,
                     label: l10n.brand,
                     icon: Icons.branding_watermark_outlined,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Location
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.grey.shade200),
-              ),
-              child: Column(
-                children: [
-                  _buildTextField(
-                    controller: _isArabicInput
-                        ? _locationArController
-                        : _locationEnController,
-                    label: l10n.location,
-                    icon: Icons.location_on_outlined,
                   ),
                 ],
               ),
