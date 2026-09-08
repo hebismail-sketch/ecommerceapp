@@ -174,12 +174,25 @@ class _DeliveryDetailsPageState extends State<DeliveryDetailsPage> {
                     ),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: Text(
-                        l10n.deliveryLocationSelected,
-                        style: TextStyle(
-                          color: Colors.red.shade900,
-                          fontWeight: FontWeight.w600,
-                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            l10n.deliveryLocationSelected,
+                            style: TextStyle(
+                              color: Colors.red.shade900,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            '${widget.selectedLocation.latitude.toStringAsFixed(5)}, ${widget.selectedLocation.longitude.toStringAsFixed(5)}',
+                            style: TextStyle(
+                              color: Colors.red.shade700,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
