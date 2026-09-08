@@ -147,13 +147,6 @@ class _HomeBodyState extends State<HomeBody> {
                             l10n.categories,
                             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                           ),
-                          TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              l10n.seeMore,
-                              style: const TextStyle(color: Colors.red, fontSize: 13),
-                            ),
-                          ),
                         ],
                       ),
                     ),
@@ -162,6 +155,9 @@ class _HomeBodyState extends State<HomeBody> {
                       height: 62,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
+                        // Keep the list direction consistent with the app language:
+                        // Arabic scrolls from right to left, English from left to right.
+                        reverse: isArabic,
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         itemCount: categories.length,
                         itemBuilder: (context, index) {
