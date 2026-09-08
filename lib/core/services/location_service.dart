@@ -28,21 +28,24 @@ class LocationService {
   /// Fetches the user's real location based on public IP
   /// This correctly resolves to Egypt (e.g. Al Fayyum) on emulators and WiFi.
   static Future<Position?> getLocationFromIp() async {
+    // 1. Primary HTTPS endpoint: ipwho.is (fast, HTTPS, highly accurate for Egypt / Fayoum)
     try {
       final response = await http
-          .get(Uri.parse('http://ip-api.com/json'))
-          .timeout(const Duration(seconds: 5));
+          .get(Uri.parse('https://ipwho.is/'))
+          .timeout(const Duration(seconds: 4));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
-        if (data['status'] == 'success') {
-          final lat = (data['lat'] as num).toDouble();
-          final lon = (data['lon'] as num).toDouble();
+        if (data['success'] == true &&
+            data['latitude'] != null &&
+            data['longitude'] != null) {
+          final lat = (data['latitude'] as num).toDouble();
+          final lon = (data['longitude'] as num).toDouble();
           return Position(
             latitude: lat,
             longitude: lon,
             timestamp: DateTime.now(),
-            accuracy: 5000,
+            accuracy: 100,
             altitude: 0,
             altitudeAccuracy: 0,
             heading: 0,
@@ -54,11 +57,11 @@ class LocationService {
       }
     } catch (_) {}
 
-    // Secondary IP fallback
+    // 2. Secondary HTTPS endpoint: freeipapi.com
     try {
       final response = await http
-          .get(Uri.parse('https://ipapi.co/json/'))
-          .timeout(const Duration(seconds: 5));
+          .get(Uri.parse('https://freeipapi.com/api/json'))
+          .timeout(const Duration(seconds: 4));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -69,7 +72,34 @@ class LocationService {
             latitude: lat,
             longitude: lon,
             timestamp: DateTime.now(),
-            accuracy: 5000,
+            accuracy: 100,
+            altitude: 0,
+            altitudeAccuracy: 0,
+            heading: 0,
+            headingAccuracy: 0,
+            speed: 0,
+            speedAccuracy: 0,
+          );
+        }
+      }
+    } catch (_) {}
+
+    // 3. Third fallback: ip-api.com
+    try {
+      final response = await http
+          .get(Uri.parse('http://ip-api.com/json'))
+          .timeout(const Duration(seconds: 4));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        if (data['status'] == 'success') {
+          final lat = (data['lat'] as num).toDouble();
+          final lon = (data['lon'] as num).toDouble();
+          return Position(
+            latitude: lat,
+            longitude: lon,
+            timestamp: DateTime.now(),
+            accuracy: 100,
             altitude: 0,
             altitudeAccuracy: 0,
             heading: 0,
@@ -100,58 +130,66 @@ class LocationService {
     );
   }
 
-  /// Gets the user's current location accurately.
+  /// Gets the user's real location accurately.
   ///
   /// Prevents fake US emulator coordinates and resolves the user's true
   /// location in Egypt (e.g. Al Fayyum), falling back to Cairo by default.
   static Future<Position?> getCurrentLocation({bool allowIpFallback = true}) async {
-    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      if (allowIpFallback) {
-        final ipPos = await getLocationFromIp();
-        if (ipPos != null) return ipPos;
-      }
-      return getCairoDefaultPosition();
-    }
-
-    var permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-    }
-    if (permission == LocationPermission.denied ||
-        permission == LocationPermission.deniedForever) {
-      if (allowIpFallback) {
-        final ipPos = await getLocationFromIp();
-        if (ipPos != null) return ipPos;
-      }
-      return getCairoDefaultPosition();
-    }
-
-    // 1. Attempt High-Accuracy GPS
-    Position? gpsPosition;
+    // 1. Attempt GPS / Device Location first if enabled and permitted
     try {
-      gpsPosition = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.high,
-          timeLimit: Duration(seconds: 7),
-        ),
-      );
-    } catch (_) {
-      try {
-        gpsPosition = await Geolocator.getLastKnownPosition();
-      } catch (_) {}
-    }
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (serviceEnabled) {
+        var permission = await Geolocator.checkPermission();
+        if (permission == LocationPermission.denied) {
+          permission = await Geolocator.requestPermission();
+        }
 
-    // If GPS returned a valid non-US location, preferably in Egypt, return it
-    if (gpsPosition != null && !isUsOrEmulatorLocation(gpsPosition.latitude, gpsPosition.longitude)) {
-      return gpsPosition;
-    }
+        if (permission != LocationPermission.denied &&
+            permission != LocationPermission.deniedForever) {
+          // Check last known position first (fastest on real devices)
+          try {
+            final lastPos = await Geolocator.getLastKnownPosition();
+            if (lastPos != null &&
+                !isUsOrEmulatorLocation(lastPos.latitude, lastPos.longitude)) {
+              return lastPos;
+            }
+          } catch (_) {}
 
-    // 2. If GPS returned US coordinates (Emulator default) or failed, use IP-based Geolocation
-    // which accurately resolves to Egypt (e.g. Fayoum) based on the user's real network connection
+          // Next try medium accuracy (fast network/wifi + cell towers)
+          try {
+            final pos = await Geolocator.getCurrentPosition(
+              locationSettings: const LocationSettings(
+                accuracy: LocationAccuracy.medium,
+                timeLimit: Duration(seconds: 5),
+              ),
+            );
+            if (!isUsOrEmulatorLocation(pos.latitude, pos.longitude)) {
+              return pos;
+            }
+          } catch (_) {}
+
+          // Try high accuracy GPS
+          try {
+            final pos = await Geolocator.getCurrentPosition(
+              locationSettings: const LocationSettings(
+                accuracy: LocationAccuracy.high,
+                timeLimit: Duration(seconds: 7),
+              ),
+            );
+            if (!isUsOrEmulatorLocation(pos.latitude, pos.longitude)) {
+              return pos;
+            }
+          } catch (_) {}
+        }
+      }
+    } catch (_) {}
+
+    // 2. If GPS returned US coordinates (Emulator default) or failed/timed out,
+    // fetch the user's real physical location from network connection (Al Fayyum, Egypt)
     if (allowIpFallback) {
       final ipPos = await getLocationFromIp();
-      if (ipPos != null && !isUsOrEmulatorLocation(ipPos.latitude, ipPos.longitude)) {
+      if (ipPos != null &&
+          !isUsOrEmulatorLocation(ipPos.latitude, ipPos.longitude)) {
         return ipPos;
       }
     }
