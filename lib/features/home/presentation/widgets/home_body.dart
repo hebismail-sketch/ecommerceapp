@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ecommerceapp/features/products/presentation/pages/product_details_page.dart';
 
+import 'package:ecommerceapp/core/constants/app_categories.dart';
 import 'package:ecommerceapp/features/favorites/presentation/manager/favorite_cubit.dart';
 import 'package:ecommerceapp/features/products/presentation/manager/product_cubit.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
@@ -18,7 +19,7 @@ class HomeBody extends StatefulWidget {
 }
 
 class _HomeBodyState extends State<HomeBody> {
-  int selectedCategoryIndex = 0;
+  String _selectedCategoryId = ProductCategoryHelper.all;
 
   @override
   void initState() {
@@ -33,27 +34,11 @@ class _HomeBodyState extends State<HomeBody> {
     }
   }
 
-  // Helper method to retrieve localized category list
-  List<Map<String, dynamic>> _getCategories(AppLocalizations l10n) {
-    return [
-      {'icon': Icons.watch, 'title': l10n.watches},
-      {'icon': Icons.shopping_bag_outlined, 'title': l10n.bags},
-      {'icon': Icons.auto_awesome, 'title': l10n.beauty},
-      {'icon': Icons.checkroom, 'title': l10n.clothing},
-      {'icon': Icons.diamond_outlined, 'title': l10n.accessories},
-      {'icon': Icons.sports_esports_outlined, 'title': l10n.games},
-      {'icon': Icons.chair_outlined, 'title': l10n.furniture},
-      {'icon': Icons.shopping_cart_outlined, 'title': l10n.shoes},
-      {'icon': Icons.medical_services_outlined, 'title': l10n.medicine},
-      {'icon': Icons.directions_car, 'title': l10n.cars},
-    ];
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final isArabic = Localizations.localeOf(context).languageCode == 'ar';
-    final categories = _getCategories(l10n);
+    final categories = ProductCategoryHelper.getCategories();
 
     return NestedScrollView(
       headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -152,37 +137,80 @@ class _HomeBodyState extends State<HomeBody> {
                     ),
                     const SizedBox(height: 4),
                     SizedBox(
-                      height: 62,
+                      height: 72,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        // Keep the list direction consistent with the app language:
-                        // Arabic scrolls from right to left, English from left to right.
-                        reverse: isArabic,
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         itemCount: categories.length,
                         itemBuilder: (context, index) {
                           final cat = categories[index];
+                          final isSelected = _selectedCategoryId == cat.id;
+
                           return Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 6),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.shade100,
-                                    shape: BoxShape.circle,
-                                    border: Border.all(color: Colors.grey.shade300),
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  if (_selectedCategoryId == cat.id &&
+                                      cat.id != ProductCategoryHelper.all) {
+                                    _selectedCategoryId =
+                                        ProductCategoryHelper.all;
+                                  } else {
+                                    _selectedCategoryId = cat.id;
+                                  }
+                                });
+                              },
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  AnimatedContainer(
+                                    duration: const Duration(milliseconds: 200),
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      color: isSelected
+                                          ? Colors.red.shade600
+                                          : Colors.grey.shade100,
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: isSelected
+                                            ? Colors.red.shade600
+                                            : Colors.grey.shade300,
+                                        width: isSelected ? 1.5 : 1.0,
+                                      ),
+                                      boxShadow: isSelected
+                                          ? [
+                                              BoxShadow(
+                                                color: Colors.red
+                                                    .withOpacity(0.35),
+                                                blurRadius: 6,
+                                                offset: const Offset(0, 2),
+                                              ),
+                                            ]
+                                          : null,
+                                    ),
+                                    child: Icon(
+                                      cat.icon,
+                                      size: 20,
+                                      color: isSelected
+                                          ? Colors.white
+                                          : Colors.black87,
+                                    ),
                                   ),
-                                  child: Icon(cat['icon'], size: 20, color: Colors.black87),
-                                ),
-                                const SizedBox(height: 2),
-                                Text(
-                                  cat['title'],
-                                  style: const TextStyle(fontSize: 10, color: Colors.black87),
-                                ),
-                              ],
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    cat.getTitle(l10n),
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: isSelected
+                                          ? FontWeight.bold
+                                          : FontWeight.normal,
+                                      color: isSelected
+                                          ? Colors.red.shade700
+                                          : Colors.black87,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           );
                         },
@@ -202,9 +230,42 @@ class _HomeBodyState extends State<HomeBody> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              l10n.recommended,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  _selectedCategoryId == ProductCategoryHelper.all
+                      ? l10n.recommended
+                      : ProductCategoryHelper.getCategoryName(
+                          _selectedCategoryId,
+                          l10n,
+                        ),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                if (_selectedCategoryId != ProductCategoryHelper.all)
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: const Size(50, 30),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    onPressed: () {
+                      setState(() =>
+                          _selectedCategoryId = ProductCategoryHelper.all);
+                    },
+                    child: Text(
+                      l10n.allCategories,
+                      style: TextStyle(
+                        color: Colors.red.shade700,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+              ],
             ),
             const SizedBox(height: 12),
             Expanded(
@@ -219,8 +280,80 @@ class _HomeBodyState extends State<HomeBody> {
                   }
 
                   if (state is ProductSuccess) {
-                    if (state.products.isEmpty) {
-                      return Center(child: Text(l10n.noCars));
+                    final filteredProducts = _selectedCategoryId ==
+                            ProductCategoryHelper.all
+                        ? state.products
+                        : state.products
+                            .where((p) => p.category == _selectedCategoryId)
+                            .toList();
+
+                    if (filteredProducts.isEmpty) {
+                      final catName = ProductCategoryHelper.getCategoryName(
+                        _selectedCategoryId,
+                        l10n,
+                      );
+                      final catIcon = ProductCategoryHelper.getCategoryIcon(
+                        _selectedCategoryId,
+                      );
+
+                      return Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24.0,
+                            vertical: 32.0,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  color: Colors.red.shade50,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  catIcon,
+                                  size: 48,
+                                  color: Colors.red.shade600,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                l10n.noProductsInCategory(catName),
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red.shade600,
+                                  foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 10,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  setState(() => _selectedCategoryId =
+                                      ProductCategoryHelper.all);
+                                },
+                                icon: const Icon(
+                                  Icons.grid_view_rounded,
+                                  size: 18,
+                                ),
+                                label: Text(l10n.allCategories),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
                     }
 
                     // Product Grid View layout matching modern e-commerce cards
@@ -231,9 +364,9 @@ class _HomeBodyState extends State<HomeBody> {
                         crossAxisSpacing: 12,
                         mainAxisSpacing: 12,
                       ),
-                      itemCount: state.products.length,
+                      itemCount: filteredProducts.length,
                       itemBuilder: (context, index) {
-                        final product = state.products[index];
+                        final product = filteredProducts[index];
                         final productName = isArabic ? product.nameAr : product.nameEn;
 
                         return GestureDetector(
