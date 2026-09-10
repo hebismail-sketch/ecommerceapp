@@ -1,6 +1,7 @@
 // File: lib/features/products/presentation/pages/product_details_page.dart
 
 import 'package:ecommerceapp/core/constants/app_categories.dart';
+import 'package:ecommerceapp/core/theme/app_colors.dart';
 import 'package:ecommerceapp/features/carts/domain/entities/cart_entity.dart';
 import 'package:ecommerceapp/features/carts/presentation/manager/cart_cubit.dart';
 import 'package:ecommerceapp/features/favorites/presentation/manager/favorite_cubit.dart';
@@ -25,6 +26,7 @@ class ProductDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final name = isArabic ? product.nameAr : product.nameEn;
     final brand = isArabic ? product.brandAr : product.brandEn;
     final location = isArabic ? product.locationAr : product.locationEn;
@@ -62,11 +64,16 @@ class ProductDetailsPage extends StatelessWidget {
                     builder: (context, state) {
                       final isFav = context.read<FavoriteCubit>().isFavorite(product.id);
                       return CircleAvatar(
-                        backgroundColor: Colors.white,
+                        backgroundColor:
+                            isDark ? AppColors.darkSurface : Colors.white,
                         child: IconButton(
                           icon: Icon(
                             isFav ? Icons.favorite : Icons.favorite_border,
-                            color: isFav ? Colors.red : Colors.grey.shade700,
+                            color: isFav
+                                ? Colors.red
+                                : (isDark
+                                    ? AppColors.gold
+                                    : Colors.grey.shade700),
                           ),
                           onPressed: () {
                             final user = FirebaseAuth.instance.currentUser;
@@ -112,9 +119,13 @@ class ProductDetailsPage extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
-                  color: Colors.blue.shade50,
+                  color: isDark ? AppColors.darkCard : Colors.blue.shade50,
                   border: Border(
-                    bottom: BorderSide(color: Colors.blue.shade100),
+                    bottom: BorderSide(
+                      color: isDark
+                          ? AppColors.darkBorder
+                          : Colors.blue.shade100,
+                    ),
                   ),
                 ),
                 child: Row(
@@ -122,12 +133,12 @@ class ProductDetailsPage extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: Colors.blue.shade600,
+                        color: isDark ? AppColors.gold : Colors.blue.shade600,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.location_on,
-                        color: Colors.white,
+                        color: isDark ? const Color(0xFF0B0E14) : Colors.white,
                         size: 20,
                       ),
                     ),
@@ -141,7 +152,7 @@ class ProductDetailsPage extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
-                              color: Colors.blue.shade900,
+                              color: isDark ? Colors.white : Colors.blue.shade900,
                             ),
                           ),
                           const SizedBox(height: 2),
@@ -151,7 +162,9 @@ class ProductDetailsPage extends StatelessWidget {
                                 : l10n.storeLocationNotSet,
                             style: TextStyle(
                               fontSize: 12,
-                              color: Colors.blue.shade700,
+                              color: isDark
+                                  ? AppColors.goldLight
+                                  : Colors.blue.shade700,
                             ),
                           ),
                         ],
@@ -159,7 +172,7 @@ class ProductDetailsPage extends StatelessWidget {
                     ),
                     Icon(
                       isArabic ? Icons.chevron_left : Icons.chevron_right,
-                      color: Colors.blue.shade700,
+                      color: isDark ? AppColors.gold : Colors.blue.shade700,
                     ),
                   ],
                 ),
@@ -183,10 +196,10 @@ class ProductDetailsPage extends StatelessWidget {
                       ),
                       Text(
                         '${product.price}${l10n.egp}',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Colors.red,
+                          color: isDark ? AppColors.gold : Colors.red,
                         ),
                       ),
                     ],
@@ -204,7 +217,9 @@ class ProductDetailsPage extends StatelessWidget {
                               product.category,
                             ),
                             size: 16,
-                            color: Colors.red.shade700,
+                            color: isDark
+                                ? AppColors.gold
+                                : Colors.red.shade700,
                           ),
                           label: Text(
                             ProductCategoryHelper.getCategoryName(
@@ -212,12 +227,20 @@ class ProductDetailsPage extends StatelessWidget {
                               l10n,
                             ),
                             style: TextStyle(
-                              color: Colors.red.shade700,
+                              color: isDark
+                                  ? AppColors.gold
+                                  : Colors.red.shade700,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          backgroundColor: Colors.red.shade50,
-                          side: BorderSide(color: Colors.red.shade200),
+                          backgroundColor: isDark
+                              ? AppColors.darkCard
+                              : Colors.red.shade50,
+                          side: BorderSide(
+                            color: isDark
+                                ? AppColors.darkBorderGold
+                                : Colors.red.shade200,
+                          ),
                         ),
                       Chip(
                         avatar: const Icon(Icons.branding_watermark, size: 16),
@@ -244,7 +267,13 @@ class ProductDetailsPage extends StatelessWidget {
                   const SizedBox(height: 6),
                   Text(
                     description.isNotEmpty ? description : l10n.noDescription,
-                    style: TextStyle(fontSize: 14, color: Colors.grey.shade700, height: 1.5),
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: isDark
+                          ? AppColors.darkTextSecondary
+                          : Colors.grey.shade700,
+                      height: 1.5,
+                    ),
                   ),
                 ],
               ),
@@ -259,10 +288,14 @@ class ProductDetailsPage extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: ElevatedButton.icon(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red.shade600,
-              foregroundColor: Colors.white,
+              backgroundColor: isDark ? AppColors.gold : Colors.red.shade600,
+              foregroundColor: isDark ? const Color(0xFF0B0E14) : Colors.white,
               padding: const EdgeInsets.symmetric(vertical: 14),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+              elevation: isDark ? 4 : 2,
+              shadowColor: isDark ? AppColors.goldGlow : Colors.transparent,
             ),
             icon: const Icon(Icons.shopping_cart_outlined),
             label: Text(

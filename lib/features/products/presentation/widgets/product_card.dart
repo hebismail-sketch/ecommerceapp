@@ -1,3 +1,4 @@
+import 'package:ecommerceapp/core/theme/app_colors.dart';
 import 'package:ecommerceapp/features/products/domain/entities/product_entity.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -16,12 +17,19 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final productName = isArabic ? product.nameAr : product.nameEn;
     final productBrand = isArabic ? product.brandAr : product.brandEn;
 
     return Card(
-      elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      elevation: isDark ? 0 : 3,
+      color: isDark ? AppColors.darkCard : Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+        side: BorderSide(
+          color: isDark ? AppColors.darkBorder : Colors.transparent,
+        ),
+      ),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(15),
@@ -49,7 +57,11 @@ class ProductCard extends StatelessWidget {
                   // Product Name
                   Text(
                     productName,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: isDark ? Colors.white : Colors.black87,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -58,10 +70,21 @@ class ProductCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(productBrand, style: TextStyle(color: Colors.grey[600])),
+                      Text(
+                        productBrand,
+                        style: TextStyle(
+                          color: isDark
+                              ? AppColors.darkTextSecondary
+                              : Colors.grey[600],
+                        ),
+                      ),
                       Text(
                         "${product.price} ${l10n.egp}",
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.green),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: isDark ? AppColors.gold : Colors.green,
+                        ),
                       ),
                     ],
                   ),
