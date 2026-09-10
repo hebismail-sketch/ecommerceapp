@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 
 import 'package:ecommerceapp/core/constants/app_constants.dart';
 import 'package:ecommerceapp/core/notifications/notification_api.dart';
+import 'package:ecommerceapp/core/theme/app_colors.dart';
 import 'package:ecommerceapp/features/chat/data/models/chat_message_model.dart';
 import 'package:ecommerceapp/features/chat/data/models/conversation_model.dart';
 import 'package:ecommerceapp/features/chat/domain/entities/chat_message_entity.dart';
@@ -166,13 +167,16 @@ class _UserChatPageState extends State<UserChatPage> {
         decoration: BoxDecoration(
           color: isMine
               ? theme.colorScheme.primary
-              : (isDark ? Colors.grey.shade800 : Colors.grey.shade200),
+              : (isDark ? AppColors.darkCard : Colors.grey.shade200),
           borderRadius: BorderRadius.only(
             topLeft: const Radius.circular(16),
             topRight: const Radius.circular(16),
             bottomLeft: Radius.circular(isMine ? 16 : 4),
             bottomRight: Radius.circular(isMine ? 4 : 16),
           ),
+          border: isDark && !isMine
+              ? Border.all(color: AppColors.darkBorder)
+              : null,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.04),
@@ -191,9 +195,10 @@ class _UserChatPageState extends State<UserChatPage> {
               message.text,
               style: TextStyle(
                 color: isMine
-                    ? Colors.white
+                    ? (isDark ? const Color(0xFF0B0E14) : Colors.white)
                     : (isDark ? Colors.white : Colors.black87),
                 fontSize: 15,
+                fontWeight: isMine && isDark ? FontWeight.w600 : FontWeight.normal,
                 height: 1.3,
               ),
             ),
@@ -283,7 +288,8 @@ class _UserChatPageState extends State<UserChatPage> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
-        color: isDark ? Colors.grey.shade900 : Colors.white,
+        color: isDark ? AppColors.darkBackground : Colors.white,
+        border: isDark ? const Border(top: BorderSide(color: AppColors.darkBorder)) : null,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -298,18 +304,20 @@ class _UserChatPageState extends State<UserChatPage> {
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
-                  color: isDark ? Colors.grey.shade800 : Colors.grey.shade100,
+                  color: isDark ? AppColors.darkSurface : Colors.grey.shade100,
                   borderRadius: BorderRadius.circular(24),
+                  border: isDark ? Border.all(color: AppColors.darkBorder) : null,
                 ),
                 child: TextField(
                   controller: _messageController,
                   textInputAction: TextInputAction.send,
                   onSubmitted: (_) => _sendMessage(state),
                   maxLines: null,
+                  style: TextStyle(color: isDark ? Colors.white : Colors.black87),
                   decoration: InputDecoration(
                     hintText: AppLocalizations.of(context)!.typeMessageHint,
                     border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(
+                    contentPadding: const EdgeInsets.symmetric(
                       horizontal: 18,
                       vertical: 10,
                     ),
@@ -324,9 +332,13 @@ class _UserChatPageState extends State<UserChatPage> {
               child: InkWell(
                 customBorder: const CircleBorder(),
                 onTap: () => _sendMessage(state),
-                child: const Padding(
-                  padding: EdgeInsets.all(12),
-                  child: Icon(Icons.send, color: Colors.white, size: 20),
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Icon(
+                    Icons.send,
+                    color: isDark ? const Color(0xFF0B0E14) : Colors.white,
+                    size: 20,
+                  ),
                 ),
               ),
             ),

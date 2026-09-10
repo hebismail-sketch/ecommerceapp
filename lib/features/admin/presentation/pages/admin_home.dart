@@ -1,5 +1,6 @@
 // File: lib/features/admin/presentation/pages/admin_home.dart
 
+import 'package:ecommerceapp/core/theme/app_colors.dart';
 import 'package:ecommerceapp/features/admin/presentation/widgets/dashboard_card.dart';
 import 'package:ecommerceapp/features/admin/presentation/pages/store_settings_page.dart';
 import 'package:ecommerceapp/features/chat/presentation/pages/admin_conversations_page.dart';
@@ -42,15 +43,21 @@ class _AdminHomeState extends State<AdminHome> {
     required Color color,
     required VoidCallback onTap,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.darkCard : Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.shade100),
+        border: Border.all(
+          color: isDark ? AppColors.darkBorder : Colors.grey.shade100,
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: isDark
+                ? Colors.black.withOpacity(0.3)
+                : Colors.black.withOpacity(0.03),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -69,29 +76,36 @@ class _AdminHomeState extends State<AdminHome> {
           leading: Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withOpacity(0.12),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(icon, color: color, size: 24),
           ),
           title: Text(
             title,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+              color: isDark ? Colors.white : Colors.black87,
+            ),
           ),
           subtitle: Text(
             subtitle,
-            style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+            style: TextStyle(
+              fontSize: 12,
+              color: isDark ? AppColors.darkTextSecondary : Colors.grey.shade600,
+            ),
           ),
           trailing: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.grey.shade50,
+              color: isDark ? AppColors.darkSurface : Colors.grey.shade50,
               shape: BoxShape.circle,
             ),
-            child: const Icon(
+            child: Icon(
               Icons.arrow_forward_ios,
               size: 14,
-              color: Colors.grey,
+              color: isDark ? AppColors.gold : Colors.grey,
             ),
           ),
         ),
@@ -102,17 +116,21 @@ class _AdminHomeState extends State<AdminHome> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: isDark ? AppColors.darkBackground : Colors.grey.shade50,
       appBar: AppBar(
         title: Text(
           l10n.adminDashboard,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: isDark ? Colors.white : Colors.black87,
+          ),
         ),
         centerTitle: false,
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: isDark ? AppColors.darkBackground : Colors.white,
         actions: [
           StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
             stream: _unreadNotificationsStream(),
@@ -122,9 +140,9 @@ class _AdminHomeState extends State<AdminHome> {
                 icon: Stack(
                   clipBehavior: Clip.none,
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.notifications_outlined,
-                      color: Colors.black87,
+                      color: isDark ? AppColors.gold : Colors.black87,
                     ),
                     if (hasUnread)
                       Positioned(

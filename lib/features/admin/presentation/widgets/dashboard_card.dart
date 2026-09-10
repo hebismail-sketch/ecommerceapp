@@ -1,5 +1,6 @@
 // File: lib/features/admin/presentation/widgets/dashboard_card.dart
 
+import 'package:ecommerceapp/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 /// Reusable dashboard card with modern gradient and shadow aesthetics
@@ -23,18 +24,24 @@ class DashboardCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? AppColors.darkCard : Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.08),
+            color: isDark
+                ? Colors.black.withOpacity(0.3)
+                : color.withOpacity(0.08),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
         ],
-        border: Border.all(color: Colors.grey.shade100),
+        border: Border.all(
+          color: isDark ? AppColors.darkBorder : Colors.grey.shade100,
+        ),
       ),
       child: Material(
         color: Colors.transparent,
@@ -90,7 +97,7 @@ class DashboardCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
-                        color: Colors.grey.shade700,
+                        color: isDark ? Colors.white : Colors.grey.shade700,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -101,7 +108,9 @@ class DashboardCard extends StatelessWidget {
                         subtitle!,
                         style: TextStyle(
                           fontSize: 11,
-                          color: Colors.grey.shade500,
+                          color: isDark
+                              ? AppColors.darkTextMuted
+                              : Colors.grey.shade500,
                         ),
                       ),
                     ],
