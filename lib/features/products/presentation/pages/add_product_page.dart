@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:ecommerceapp/core/constants/app_categories.dart';
 import 'package:ecommerceapp/core/services/cloudinary_service.dart';
+import 'package:ecommerceapp/core/theme/app_colors.dart';
 import 'package:ecommerceapp/core/services/product_translation_service.dart';
 import 'package:ecommerceapp/core/notifications/notification_api.dart';
 import 'package:ecommerceapp/core/widgets/profile_avatar.dart';
@@ -248,19 +249,27 @@ class _AddProductPageState extends State<AddProductPage> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final isEditing = widget.product != null;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: isDark ? AppColors.darkBackground : Colors.grey.shade50,
       appBar: AppBar(
+        backgroundColor: isDark ? AppColors.darkBackground : null,
         title: Text(
           isEditing ? l10n.editProduct : l10n.addProduct,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: isDark ? Colors.white : null,
+          ),
         ),
         centerTitle: true,
         leading: Navigator.canPop(context)
             ? IconButton(
                 tooltip: l10n.back,
-                icon: const Icon(Icons.arrow_back_ios_new),
+                icon: Icon(
+                  Icons.arrow_back_ios_new,
+                  color: isDark ? AppColors.gold : null,
+                ),
                 onPressed: () => Navigator.pop(context),
               )
             : null,
@@ -284,18 +293,21 @@ class _AddProductPageState extends State<AddProductPage> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: isDark ? AppColors.darkCard : Colors.white,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.grey.shade200),
+                border: Border.all(
+                  color: isDark ? AppColors.darkBorder : Colors.grey.shade200,
+                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     l10n.chooseImage,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
+                      color: isDark ? Colors.white : Colors.black87,
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -311,10 +323,14 @@ class _AddProductPageState extends State<AddProductPage> {
                         width: double.infinity,
                         height: 160,
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade50,
+                          color: isDark
+                              ? AppColors.darkSurface
+                              : Colors.grey.shade50,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: Colors.grey.shade300,
+                            color: isDark
+                                ? AppColors.darkBorder
+                                : Colors.grey.shade300,
                           ),
                         ),
                         child: Column(
@@ -323,13 +339,17 @@ class _AddProductPageState extends State<AddProductPage> {
                             Icon(
                               Icons.add_photo_alternate_outlined,
                               size: 48,
-                              color: Colors.grey.shade600,
+                              color: isDark
+                                  ? AppColors.gold
+                                  : Colors.grey.shade600,
                             ),
                             const SizedBox(height: 8),
                             Text(
                               l10n.chooseFromGallery,
                               style: TextStyle(
-                                color: Colors.grey.shade700,
+                                color: isDark
+                                    ? AppColors.darkTextSecondary
+                                    : Colors.grey.shade700,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 14,
                               ),
@@ -461,30 +481,53 @@ class _AddProductPageState extends State<AddProductPage> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: isDark ? AppColors.darkCard : Colors.white,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.grey.shade200),
+                border: Border.all(
+                  color: isDark ? AppColors.darkBorder : Colors.grey.shade200,
+                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     l10n.categoryLabel,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
+                      color: isDark ? Colors.white : Colors.black87,
                     ),
                   ),
                   const SizedBox(height: 10),
                   DropdownButtonFormField<String>(
                     value: _selectedCategory,
+                    dropdownColor: isDark ? AppColors.darkCard : Colors.white,
                     decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.category_outlined, size: 20),
+                      prefixIcon: Icon(
+                        Icons.category_outlined,
+                        size: 20,
+                        color: isDark ? AppColors.gold : null,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: isDark
+                              ? AppColors.darkBorder
+                              : Colors.grey.shade300,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: isDark
+                              ? AppColors.darkBorder
+                              : Colors.grey.shade300,
+                        ),
                       ),
                       filled: true,
-                      fillColor: Colors.grey.shade50,
+                      fillColor: isDark
+                          ? AppColors.darkSurface
+                          : Colors.grey.shade50,
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 14,
                         vertical: 12,
@@ -499,10 +542,15 @@ class _AddProductPageState extends State<AddProductPage> {
                             Icon(
                               cat.icon,
                               size: 20,
-                              color: Colors.red.shade600,
+                              color: isDark ? AppColors.gold : Colors.red.shade600,
                             ),
                             const SizedBox(width: 10),
-                            Text(cat.getTitle(l10n)),
+                            Text(
+                              cat.getTitle(l10n),
+                              style: TextStyle(
+                                color: isDark ? Colors.white : Colors.black87,
+                              ),
+                            ),
                           ],
                         ),
                       );
@@ -524,9 +572,11 @@ class _AddProductPageState extends State<AddProductPage> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: isDark ? AppColors.darkCard : Colors.white,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.grey.shade200),
+                border: Border.all(
+                  color: isDark ? AppColors.darkBorder : Colors.grey.shade200,
+                ),
               ),
               child: Column(
                 children: [
@@ -536,6 +586,7 @@ class _AddProductPageState extends State<AddProductPage> {
                         : _brandEnController,
                     label: l10n.brand,
                     icon: Icons.branding_watermark_outlined,
+                    isDark: isDark,
                   ),
                 ],
               ),
@@ -546,9 +597,11 @@ class _AddProductPageState extends State<AddProductPage> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: isDark ? AppColors.darkCard : Colors.white,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.grey.shade200),
+                border: Border.all(
+                  color: isDark ? AppColors.darkBorder : Colors.grey.shade200,
+                ),
               ),
               child: Column(
                 children: [
@@ -559,6 +612,7 @@ class _AddProductPageState extends State<AddProductPage> {
                     label: l10n.descriptionLabel,
                     icon: Icons.description_outlined,
                     maxLines: 2,
+                    isDark: isDark,
                   ),
                 ],
               ),
@@ -570,12 +624,16 @@ class _AddProductPageState extends State<AddProductPage> {
               height: 52,
               child: ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red.shade600,
-                  foregroundColor: Colors.white,
+                  backgroundColor:
+                      isDark ? AppColors.gold : Colors.red.shade600,
+                  foregroundColor:
+                      isDark ? const Color(0xFF0B0E14) : Colors.white,
+                  elevation: isDark ? 4 : 2,
+                  shadowColor:
+                      isDark ? AppColors.goldGlow : Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14),
                   ),
-                  elevation: 2,
                 ),
                 onPressed: (_isTranslating || _isUploadingImage)
                     ? null
@@ -617,6 +675,7 @@ class _AddProductPageState extends State<AddProductPage> {
     bool isNumber = false,
     int maxLines = 1,
     bool required = true,
+    bool isDark = false,
   }) {
     return TextFormField(
       controller: controller,
@@ -624,12 +683,31 @@ class _AddProductPageState extends State<AddProductPage> {
       keyboardType: isNumber
           ? const TextInputType.numberWithOptions(decimal: true)
           : TextInputType.text,
+      style: TextStyle(color: isDark ? Colors.white : Colors.black87),
       decoration: InputDecoration(
         labelText: label,
-        prefixIcon: Icon(icon, size: 20),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        labelStyle: TextStyle(
+          color: isDark ? AppColors.darkTextSecondary : null,
+        ),
+        prefixIcon: Icon(
+          icon,
+          size: 20,
+          color: isDark ? AppColors.gold : null,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(
+            color: isDark ? AppColors.darkBorder : Colors.grey.shade300,
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(
+            color: isDark ? AppColors.darkBorder : Colors.grey.shade300,
+          ),
+        ),
         filled: true,
-        fillColor: Colors.grey.shade50,
+        fillColor: isDark ? AppColors.darkSurface : Colors.grey.shade50,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 14,
           vertical: 12,

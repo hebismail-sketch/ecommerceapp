@@ -1,6 +1,7 @@
 // File: lib/features/products/presentation/pages/mange_products_page.dart
 
 import 'package:ecommerceapp/core/constants/app_categories.dart';
+import 'package:ecommerceapp/core/theme/app_colors.dart';
 import 'package:ecommerceapp/features/products/presentation/manager/product_cubit.dart';
 import 'package:ecommerceapp/core/widgets/profile_avatar.dart';
 import 'package:ecommerceapp/features/products/presentation/pages/add_product_page.dart';
@@ -63,17 +64,28 @@ class ManageProductsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: isDark ? AppColors.darkBackground : Colors.grey.shade50,
       appBar: AppBar(
-        title: Text(l10n.manageProducts),
+        title: Text(
+          l10n.manageProducts,
+          style: TextStyle(
+            color: isDark ? Colors.white : null,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
+        backgroundColor: isDark ? AppColors.darkBackground : null,
         elevation: 0,
         leading: Navigator.canPop(context)
             ? IconButton(
                 tooltip: l10n.back,
-                icon: const Icon(Icons.arrow_back_ios_new),
+                icon: Icon(
+                  Icons.arrow_back_ios_new,
+                  color: isDark ? AppColors.gold : null,
+                ),
                 onPressed: () => Navigator.pop(context),
               )
             : null,
@@ -89,13 +101,16 @@ class ManageProductsPage extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Colors.red.shade600,
-        foregroundColor: Colors.white,
+        backgroundColor: isDark ? AppColors.gold : Colors.red.shade600,
+        foregroundColor: isDark ? const Color(0xFF0B0E14) : Colors.white,
         onPressed: () {
           Navigator.pushNamed(context, AddProductPage.screenRoute);
         },
         icon: const Icon(Icons.add),
-        label: Text(l10n.addProduct),
+        label: Text(
+          l10n.addProduct,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
       body: BlocBuilder<ProductCubit, ProductState>(
         builder: (context, state) {
@@ -165,11 +180,16 @@ class ManageProductsPage extends StatelessWidget {
 
                 return Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: isDark ? AppColors.darkCard : Colors.white,
                     borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: isDark ? AppColors.darkBorder : Colors.transparent,
+                    ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.04),
+                        color: isDark
+                            ? Colors.black.withOpacity(0.35)
+                            : Colors.black.withOpacity(0.04),
                         blurRadius: 8,
                         offset: const Offset(0, 2),
                       ),
@@ -205,9 +225,10 @@ class ManageProductsPage extends StatelessWidget {
                     ),
                     title: Text(
                       name,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
+                        color: isDark ? Colors.white : Colors.black87,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -219,7 +240,9 @@ class ManageProductsPage extends StatelessWidget {
                         Text(
                           '${product.price} ${l10n.egp}',
                           style: TextStyle(
-                            color: Colors.red.shade600,
+                            color: isDark
+                                ? AppColors.gold
+                                : Colors.red.shade600,
                             fontWeight: FontWeight.bold,
                             fontSize: 13,
                           ),
@@ -234,8 +257,15 @@ class ManageProductsPage extends StatelessWidget {
                                   vertical: 2,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Colors.red.shade50,
+                                  color: isDark
+                                      ? AppColors.darkSurface
+                                      : Colors.red.shade50,
                                   borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(
+                                    color: isDark
+                                        ? AppColors.darkBorderGold
+                                        : Colors.transparent,
+                                  ),
                                 ),
                                 child: Text(
                                   ProductCategoryHelper.getCategoryName(
@@ -244,7 +274,9 @@ class ManageProductsPage extends StatelessWidget {
                                   ),
                                   style: TextStyle(
                                     fontSize: 11,
-                                    color: Colors.red.shade700,
+                                    color: isDark
+                                        ? AppColors.gold
+                                        : Colors.red.shade700,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -257,14 +289,23 @@ class ManageProductsPage extends StatelessWidget {
                                 vertical: 2,
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.grey.shade100,
+                                color: isDark
+                                    ? AppColors.darkSurface
+                                    : Colors.grey.shade100,
                                 borderRadius: BorderRadius.circular(6),
+                                border: Border.all(
+                                  color: isDark
+                                      ? AppColors.darkBorder
+                                      : Colors.transparent,
+                                ),
                               ),
                               child: Text(
                                 brand,
                                 style: TextStyle(
                                   fontSize: 11,
-                                  color: Colors.grey.shade700,
+                                  color: isDark
+                                      ? AppColors.darkTextSecondary
+                                      : Colors.grey.shade700,
                                 ),
                               ),
                             ),
@@ -275,14 +316,23 @@ class ManageProductsPage extends StatelessWidget {
                                 vertical: 2,
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.grey.shade100,
+                                color: isDark
+                                    ? AppColors.darkSurface
+                                    : Colors.grey.shade100,
                                 borderRadius: BorderRadius.circular(6),
+                                border: Border.all(
+                                  color: isDark
+                                      ? AppColors.darkBorder
+                                      : Colors.transparent,
+                                ),
                               ),
                               child: Text(
                                 '${product.year}',
                                 style: TextStyle(
                                   fontSize: 11,
-                                  color: Colors.grey.shade700,
+                                  color: isDark
+                                      ? AppColors.darkTextSecondary
+                                      : Colors.grey.shade700,
                                 ),
                               ),
                             ),
