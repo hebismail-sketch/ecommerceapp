@@ -183,13 +183,25 @@ class AppLocalizationsAr extends AppLocalizations {
   String get chooseImage => 'اختيار صورة';
 
   @override
+  String get chooseFromGallery => 'اختيار صورة من المعرض';
+
+  @override
+  String get changeImage => 'تغيير الصورة';
+
+  @override
+  String get uploadingImage => 'جارٍ رفع الصورة...';
+
+  @override
+  String get imageUploadFailed => 'فشل رفع الصورة، يرجى المحاولة مرة أخرى.';
+
+  @override
   String get descriptionLabel => 'الوصف';
 
   @override
   String get enterDescription => 'ادخل الوصف';
 
   @override
-  String get chooseImageFirst => 'اختر صورة أولاً';
+  String get chooseImageFirst => 'يرجى اختيار صورة أولاً';
 
   @override
   String get carAddedSuccessfully => 'تمت إضافة السيارة بنجاح';

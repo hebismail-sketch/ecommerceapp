@@ -180,7 +180,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noImageSelected => 'No image selected';
 
   @override
-  String get chooseImage => 'Product Image URL';
+  String get chooseImage => 'Choose Image';
+
+  @override
+  String get chooseFromGallery => 'Choose image from gallery';
+
+  @override
+  String get changeImage => 'Change Image';
+
+  @override
+  String get uploadingImage => 'Uploading image...';
+
+  @override
+  String get imageUploadFailed => 'Failed to upload image. Please try again.';
 
   @override
   String get descriptionLabel => 'Description';
@@ -189,7 +201,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get enterDescription => 'Enter description';
 
   @override
-  String get chooseImageFirst => 'Please enter or choose an image first';
+  String get chooseImageFirst => 'Please choose an image first';
 
   @override
   String get carAddedSuccessfully => 'Product added successfully';

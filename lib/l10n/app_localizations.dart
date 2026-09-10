@@ -431,8 +431,32 @@ abstract class AppLocalizations {
   /// No description provided for @chooseImage.
   ///
   /// In en, this message translates to:
-  /// **'Product Image URL'**
+  /// **'Choose Image'**
   String get chooseImage;
+
+  /// No description provided for @chooseFromGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose image from gallery'**
+  String get chooseFromGallery;
+
+  /// No description provided for @changeImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Image'**
+  String get changeImage;
+
+  /// No description provided for @uploadingImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading image...'**
+  String get uploadingImage;
+
+  /// No description provided for @imageUploadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to upload image. Please try again.'**
+  String get imageUploadFailed;
 
   /// No description provided for @descriptionLabel.
   ///
@@ -449,7 +473,7 @@ abstract class AppLocalizations {
   /// No description provided for @chooseImageFirst.
   ///
   /// In en, this message translates to:
-  /// **'Please enter or choose an image first'**
+  /// **'Please choose an image first'**
   String get chooseImageFirst;
 
   /// No description provided for @carAddedSuccessfully.
