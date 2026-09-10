@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:ecommerceapp/core/theme/app_colors.dart';
 import 'package:ecommerceapp/core/widgets/custom_search_app_bar.dart';
 import 'package:ecommerceapp/core/notifications/notification_api.dart';
 import 'package:ecommerceapp/features/carts/presentation/manager/cart_cubit.dart';
@@ -182,9 +183,10 @@ class _CartPageState extends State<CartPage> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: isDark ? AppColors.darkBackground : Colors.grey.shade50,
       appBar: const CustomSearchAppBar(showBackButton: true),
       body: BlocBuilder<CartCubit, CartState>(
         builder: (context, state) {
@@ -230,11 +232,18 @@ class _CartPageState extends State<CartPage> {
 
                       return Container(
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: isDark ? AppColors.darkCard : Colors.white,
                           borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: isDark
+                                ? AppColors.darkBorder
+                                : Colors.transparent,
+                          ),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.04),
+                              color: isDark
+                                  ? Colors.black.withOpacity(0.3)
+                                  : Colors.black.withOpacity(0.04),
                               blurRadius: 10,
                               offset: const Offset(0, 4),
                             ),
@@ -296,7 +305,9 @@ class _CartPageState extends State<CartPage> {
                                     Text(
                                       '${product.price}${l10n.egp}',
                                       style: TextStyle(
-                                        color: Colors.red.shade600,
+                                        color: isDark
+                                            ? AppColors.gold
+                                            : Colors.red.shade600,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 14,
                                       ),
@@ -313,9 +324,16 @@ class _CartPageState extends State<CartPage> {
                                             vertical: 2,
                                           ),
                                           decoration: BoxDecoration(
-                                            color: Colors.grey.shade100,
+                                            color: isDark
+                                                ? AppColors.darkSurface
+                                                : Colors.grey.shade100,
                                             borderRadius: BorderRadius.circular(
                                               20,
+                                            ),
+                                            border: Border.all(
+                                              color: isDark
+                                                  ? AppColors.darkBorder
+                                                  : Colors.grey.shade300,
                                             ),
                                           ),
                                           child: Row(
@@ -334,7 +352,9 @@ class _CartPageState extends State<CartPage> {
                                                   child: Icon(
                                                     Icons.remove,
                                                     size: 16,
-                                                    color: Colors.grey.shade800,
+                                                    color: isDark
+                                                        ? AppColors.gold
+                                                        : Colors.grey.shade800,
                                                   ),
                                                 ),
                                               ),
@@ -345,9 +365,12 @@ class _CartPageState extends State<CartPage> {
                                                     ),
                                                 child: Text(
                                                   '${cartItem.quantity}',
-                                                  style: const TextStyle(
+                                                  style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 13,
+                                                    color: isDark
+                                                        ? Colors.white
+                                                        : Colors.black,
                                                   ),
                                                 ),
                                               ),
@@ -364,7 +387,9 @@ class _CartPageState extends State<CartPage> {
                                                   child: Icon(
                                                     Icons.add,
                                                     size: 16,
-                                                    color: Colors.grey.shade800,
+                                                    color: isDark
+                                                        ? AppColors.gold
+                                                        : Colors.grey.shade800,
                                                   ),
                                                 ),
                                               ),
@@ -400,13 +425,13 @@ class _CartPageState extends State<CartPage> {
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: isDark ? const Color(0xFF10151E) : Colors.white,
                     borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(24),
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.06),
+                        color: Colors.black.withOpacity(isDark ? 0.35 : 0.06),
                         blurRadius: 16,
                         offset: const Offset(0, -4),
                       ),
@@ -423,15 +448,17 @@ class _CartPageState extends State<CartPage> {
                               l10n.totalPrices,
                               style: TextStyle(
                                 fontSize: 16,
-                                color: Colors.grey.shade600,
+                                color: isDark
+                                    ? AppColors.darkTextSecondary
+                                    : Colors.grey.shade600,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                             Text(
                               '${totalPrice.toStringAsFixed(0)}${l10n.egp}',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 22,
-                                color: Colors.red,
+                                color: isDark ? AppColors.gold : Colors.red,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -442,15 +469,23 @@ class _CartPageState extends State<CartPage> {
                           width: double.infinity,
                           padding: const EdgeInsets.all(14),
                           decoration: BoxDecoration(
-                            color: Colors.red.shade50,
+                            color: isDark
+                                ? AppColors.darkCard
+                                : Colors.red.shade50,
                             borderRadius: BorderRadius.circular(14),
-                            border: Border.all(color: Colors.red.shade100),
+                            border: Border.all(
+                              color: isDark
+                                  ? AppColors.darkBorder
+                                  : Colors.red.shade100,
+                            ),
                           ),
                           child: Row(
                             children: [
                               Icon(
                                 Icons.payments_outlined,
-                                color: Colors.red.shade700,
+                                color: isDark
+                                    ? AppColors.gold
+                                    : Colors.red.shade700,
                                 size: 28,
                               ),
                               const SizedBox(width: 12),
@@ -463,13 +498,18 @@ class _CartPageState extends State<CartPage> {
                                       style: TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold,
+                                        color: isDark
+                                            ? Colors.white
+                                            : Colors.black,
                                       ),
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
                                       l10n.cashOnDelivery,
                                       style: TextStyle(
-                                        color: Colors.grey.shade700,
+                                        color: isDark
+                                            ? AppColors.darkTextSecondary
+                                            : Colors.grey.shade700,
                                         fontSize: 13,
                                       ),
                                     ),
@@ -479,7 +519,9 @@ class _CartPageState extends State<CartPage> {
                               Radio<String>(
                                 value: 'cashOnDelivery',
                                 groupValue: _selectedPaymentMethod,
-                                activeColor: Colors.red.shade700,
+                                activeColor: isDark
+                                    ? AppColors.gold
+                                    : Colors.red.shade700,
                                 onChanged: _isSubmittingOrder
                                     ? null
                                     : (value) {
@@ -498,9 +540,16 @@ class _CartPageState extends State<CartPage> {
                           height: 52,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red.shade600,
-                              foregroundColor: Colors.white,
-                              elevation: 2,
+                              backgroundColor: isDark
+                                  ? AppColors.gold
+                                  : Colors.red.shade600,
+                              foregroundColor: isDark
+                                  ? const Color(0xFF0B0E14)
+                                  : Colors.white,
+                              elevation: isDark ? 4 : 2,
+                              shadowColor: isDark
+                                  ? AppColors.goldGlow
+                                  : Colors.transparent,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(14),
                               ),

@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ecommerceapp/features/favorites/presentation/manager/favorite_cubit.dart';
 import 'package:ecommerceapp/features/products/presentation/manager/product_cubit.dart';
 import 'package:ecommerceapp/features/products/presentation/pages/product_details_page.dart';
+import 'package:ecommerceapp/core/theme/app_colors.dart';
 import 'package:ecommerceapp/core/widgets/custom_search_app_bar.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 
@@ -80,8 +81,10 @@ class _FavoritePageState extends State<FavoritePage> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
+      backgroundColor: isDark ? AppColors.darkBackground : Colors.grey.shade50,
       appBar: const CustomSearchAppBar(showBackButton: true),
       body: BlocBuilder<FavoriteCubit, FavoriteState>(
         builder: (context, state) {
@@ -133,16 +136,28 @@ class _FavoritePageState extends State<FavoritePage> {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.grey.shade200),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.shade100,
-                          blurRadius: 5,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
+                      color: isDark ? AppColors.darkCard : Colors.white,
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(
+                        color: isDark
+                            ? AppColors.darkBorder
+                            : Colors.grey.shade200,
+                      ),
+                      boxShadow: isDark
+                          ? [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.35),
+                                blurRadius: 8,
+                                offset: const Offset(0, 3),
+                              ),
+                            ]
+                          : [
+                              BoxShadow(
+                                color: Colors.grey.shade100,
+                                blurRadius: 5,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -183,11 +198,13 @@ class _FavoritePageState extends State<FavoritePage> {
                                 child: Container(
                                   padding: const EdgeInsets.all(5),
                                   decoration: BoxDecoration(
-                                    color: Colors.white,
+                                    color: isDark
+                                        ? AppColors.darkSurface
+                                        : Colors.white,
                                     shape: BoxShape.circle,
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.black.withOpacity(0.12),
+                                        color: Colors.black.withOpacity(0.18),
                                         blurRadius: 4,
                                         offset: const Offset(0, 2),
                                       ),
@@ -212,16 +229,17 @@ class _FavoritePageState extends State<FavoritePage> {
                                 productName,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 12,
+                                  color: isDark ? Colors.white : Colors.black87,
                                 ),
                               ),
                               const SizedBox(height: 4),
                               Text(
                                 '${product.price}${l10n.egp}',
-                                style: const TextStyle(
-                                  color: Colors.red,
+                                style: TextStyle(
+                                  color: isDark ? AppColors.gold : Colors.red,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 12,
                                 ),
@@ -229,25 +247,29 @@ class _FavoritePageState extends State<FavoritePage> {
                               const SizedBox(height: 6),
                               Row(
                                 children: [
-                                  const Icon(
+                                  Icon(
                                     Icons.star,
                                     size: 12,
-                                    color: Colors.amber,
+                                    color: AppColors.gold,
                                   ),
                                   const SizedBox(width: 4),
-                                  const Text(
+                                  Text(
                                     '4.9',
                                     style: TextStyle(
                                       fontSize: 10,
-                                      color: Colors.grey,
+                                      color: isDark
+                                          ? AppColors.darkTextMuted
+                                          : Colors.grey,
                                     ),
                                   ),
                                   const SizedBox(width: 6),
                                   Text(
                                     '| ${l10n.sold('56')}',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 10,
-                                      color: Colors.grey,
+                                      color: isDark
+                                          ? AppColors.darkTextMuted
+                                          : Colors.grey,
                                     ),
                                   ),
                                 ],
