@@ -150,6 +150,15 @@
   "shoes": "Shoes",
   "medicine": "Medicine",
   "cars": "Cars",
+  "allCategories": "All",
+  "categoryLabel": "Category",
+  "selectCategory": "Select Category",
+  "noProductsInCategory": "No products in {category} yet",
+  "@noProductsInCategory": {
+    "placeholders": {
+      "category": {}
+    }
+  },
   "pleaseLoginFirst": "Please log in first",
   "controlCenter": "Control Center",
   "adminSubtitle": "Manage inventory, customer chats & orders",

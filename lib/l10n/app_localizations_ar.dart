@@ -380,6 +380,20 @@ class AppLocalizationsAr extends AppLocalizations {
   String get cars => 'سيارات';
 
   @override
+  String get allCategories => 'الكل';
+
+  @override
+  String get categoryLabel => 'القسم';
+
+  @override
+  String get selectCategory => 'اختر القسم';
+
+  @override
+  String noProductsInCategory(Object category) {
+    return 'لا توجد منتجات في قسم $category حالياً';
+  }
+
+  @override
   String get pleaseLoginFirst => 'يرجى تسجيل الدخول أولاً';
 
   @override

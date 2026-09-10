@@ -381,6 +381,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cars => 'Cars';
 
   @override
+  String get allCategories => 'All';
+
+  @override
+  String get categoryLabel => 'Category';
+
+  @override
+  String get selectCategory => 'Select Category';
+
+  @override
+  String noProductsInCategory(Object category) {
+    return 'No products in $category yet';
+  }
+
+  @override
   String get pleaseLoginFirst => 'Please log in first';
 
   @override

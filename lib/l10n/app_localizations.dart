@@ -824,6 +824,30 @@ abstract class AppLocalizations {
   /// **'Cars'**
   String get cars;
 
+  /// No description provided for @allCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get allCategories;
+
+  /// No description provided for @categoryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get categoryLabel;
+
+  /// No description provided for @selectCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Category'**
+  String get selectCategory;
+
+  /// No description provided for @noProductsInCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'No products in {category} yet'**
+  String noProductsInCategory(Object category);
+
   /// No description provided for @pleaseLoginFirst.
   ///
   /// In en, this message translates to:
