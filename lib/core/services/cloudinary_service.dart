@@ -8,7 +8,7 @@ import 'package:ecommerceapp/core/constants/cloudinary_constants.dart';
 class CloudinaryService {
   CloudinaryService._();
 
-  static Future<String> uploadProfileImage(File imageFile) async {
+  static Future<String> uploadImage(File imageFile) async {
     final uri = Uri.parse(
       'https://api.cloudinary.com/v1_1/'
           '${CloudinaryConstants.cloudName}/image/upload',
@@ -37,4 +37,7 @@ class CloudinaryService {
 
     return data['secure_url'] as String;
   }
+
+  static Future<String> uploadProfileImage(File imageFile) =>
+      uploadImage(imageFile);
 }
