@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:ecommerceapp/core/constants/app_categories.dart';
 import 'package:ecommerceapp/core/services/cloudinary_service.dart';
 import 'package:ecommerceapp/core/services/product_translation_service.dart';
 import 'package:ecommerceapp/core/notifications/notification_api.dart';
@@ -40,6 +41,7 @@ class _AddProductPageState extends State<AddProductPage> {
   final ImagePicker _imagePicker = ImagePicker();
   File? _selectedImage;
   String? _existingImageUrl;
+  String _selectedCategory = ProductCategoryHelper.clothing;
   late bool _isArabicInput;
   bool _isLanguageInitialized = false;
   bool _isTranslating = false;
@@ -58,6 +60,9 @@ class _AddProductPageState extends State<AddProductPage> {
       _descriptionArController.text = widget.product!.descriptionAr;
       _descriptionEnController.text = widget.product!.descriptionEn;
       _existingImageUrl = widget.product!.image;
+      if (widget.product!.category.isNotEmpty) {
+        _selectedCategory = widget.product!.category;
+      }
     }
   }
 
@@ -199,6 +204,7 @@ class _AddProductPageState extends State<AddProductPage> {
       price: double.tryParse(_priceController.text.trim()) ?? 0,
       year: int.tryParse(_yearController.text.trim()) ?? 2024,
       image: imageUrl,
+      category: _selectedCategory,
     );
 
     if (widget.product == null) {
@@ -445,6 +451,69 @@ class _AddProductPageState extends State<AddProductPage> {
                       icon: Icons.calendar_today,
                       isNumber: true,
                     ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // Category
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Colors.grey.shade200),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l10n.categoryLabel,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  DropdownButtonFormField<String>(
+                    value: _selectedCategory,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.category_outlined, size: 20),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey.shade50,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 12,
+                      ),
+                    ),
+                    items: ProductCategoryHelper.getSelectableCategories()
+                        .map((cat) {
+                      return DropdownMenuItem<String>(
+                        value: cat.id,
+                        child: Row(
+                          children: [
+                            Icon(
+                              cat.icon,
+                              size: 20,
+                              color: Colors.red.shade600,
+                            ),
+                            const SizedBox(width: 10),
+                            Text(cat.getTitle(l10n)),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (_isTranslating || _isUploadingImage)
+                        ? null
+                        : (value) {
+                            if (value != null) {
+                              setState(() => _selectedCategory = value);
+                            }
+                          },
                   ),
                 ],
               ),

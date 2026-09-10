@@ -1,5 +1,6 @@
 // File: lib/features/products/presentation/pages/product_details_page.dart
 
+import 'package:ecommerceapp/core/constants/app_categories.dart';
 import 'package:ecommerceapp/features/carts/domain/entities/cart_entity.dart';
 import 'package:ecommerceapp/features/carts/presentation/manager/cart_cubit.dart';
 import 'package:ecommerceapp/features/favorites/presentation/manager/favorite_cubit.dart';
@@ -196,6 +197,28 @@ class ProductDetailsPage extends StatelessWidget {
                   Wrap(
                     spacing: 8,
                     children: [
+                      if (product.category.isNotEmpty)
+                        Chip(
+                          avatar: Icon(
+                            ProductCategoryHelper.getCategoryIcon(
+                              product.category,
+                            ),
+                            size: 16,
+                            color: Colors.red.shade700,
+                          ),
+                          label: Text(
+                            ProductCategoryHelper.getCategoryName(
+                              product.category,
+                              l10n,
+                            ),
+                            style: TextStyle(
+                              color: Colors.red.shade700,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          backgroundColor: Colors.red.shade50,
+                          side: BorderSide(color: Colors.red.shade200),
+                        ),
                       Chip(
                         avatar: const Icon(Icons.branding_watermark, size: 16),
                         label: Text(brand),

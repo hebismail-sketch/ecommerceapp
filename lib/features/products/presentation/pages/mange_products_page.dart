@@ -1,5 +1,6 @@
 // File: lib/features/products/presentation/pages/mange_products_page.dart
 
+import 'package:ecommerceapp/core/constants/app_categories.dart';
 import 'package:ecommerceapp/features/products/presentation/manager/product_cubit.dart';
 import 'package:ecommerceapp/core/widgets/profile_avatar.dart';
 import 'package:ecommerceapp/features/products/presentation/pages/add_product_page.dart';
@@ -226,6 +227,30 @@ class ManageProductsPage extends StatelessWidget {
                         const SizedBox(height: 6),
                         Row(
                           children: [
+                            if (product.category.isNotEmpty) ...[
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.red.shade50,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Text(
+                                  ProductCategoryHelper.getCategoryName(
+                                    product.category,
+                                    l10n,
+                                  ),
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    color: Colors.red.shade700,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 6),
+                            ],
                             Container(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 8,
