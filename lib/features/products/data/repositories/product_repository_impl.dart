@@ -29,6 +29,7 @@ class ProductRepositoryImpl implements ProductRepository {
       image: product.image,
       price: product.price,
       year: product.year,
+      category: product.category,
     );
     return remoteDataSource.addProduct(productModel);
   }
@@ -49,6 +50,7 @@ class ProductRepositoryImpl implements ProductRepository {
       image: product.image,
       price: product.price,
       year: product.year,
+      category: product.category,
     );
     return remoteDataSource.updateProduct(productId, productModel);
   }

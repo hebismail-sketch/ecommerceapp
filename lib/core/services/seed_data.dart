@@ -114,7 +114,10 @@ class SeedData {
       await firestore
           .collection('products')
           .doc('car_${i + 1}')
-          .set(cars[i]);
+          .set({
+        ...cars[i],
+        'category': 'cars',
+      });
     }
 
 

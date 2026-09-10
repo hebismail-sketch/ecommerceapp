@@ -25,6 +25,9 @@ class ProductEntity extends Equatable {
   final double? latitude;
   final double? longitude;
 
+  // Category Field
+  final String category;
+
   const ProductEntity({
     required this.id,
     this.favoriteId,
@@ -42,6 +45,7 @@ class ProductEntity extends Equatable {
     this.storeName = '',
     this.latitude,
     this.longitude,
+    this.category = '',
   });
 
   @override
@@ -62,5 +66,6 @@ class ProductEntity extends Equatable {
         storeName,
         latitude,
         longitude,
+        category,
       ];
 }
