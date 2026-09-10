@@ -1,5 +1,6 @@
 // File: lib/core/widgets/custom_search_app_bar.dart
 
+import 'package:ecommerceapp/core/theme/app_colors.dart';
 import 'package:ecommerceapp/core/widgets/profile_avatar.dart';
 import 'package:ecommerceapp/features/products/presentation/manager/product_cubit.dart';
 import 'package:ecommerceapp/features/profile/presentation/pages/profile_screen.dart';
@@ -27,13 +28,18 @@ class CustomSearchAppBar extends StatelessWidget implements PreferredSizeWidget 
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final canPop = Navigator.canPop(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return AppBar(
       elevation: 0,
-      backgroundColor: Colors.white,
+      backgroundColor: isDark ? AppColors.darkBackground : Colors.white,
       leading: showBackButton && canPop
           ? IconButton(
-              icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black87, size: 20),
+              icon: Icon(
+                Icons.arrow_back_ios_new,
+                color: isDark ? AppColors.gold : Colors.black87,
+                size: 20,
+              ),
               onPressed: () => Navigator.pop(context),
             )
           : Padding(
@@ -48,20 +54,38 @@ class CustomSearchAppBar extends StatelessWidget implements PreferredSizeWidget 
       title: Container(
         height: 40,
         decoration: BoxDecoration(
-          color: Colors.grey.shade100,
+          color: isDark ? AppColors.darkSurface : Colors.grey.shade100,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey.shade300),
+          border: Border.all(
+            color: isDark ? AppColors.darkBorder : Colors.grey.shade300,
+          ),
         ),
         child: TextField(
           controller: searchController,
+          style: TextStyle(
+            color: isDark ? Colors.white : Colors.black87,
+            fontSize: 14,
+          ),
           onChanged: onSearchChanged ??
               (value) {
                 context.read<ProductCubit>().searchProducts(value);
               },
           decoration: InputDecoration(
             hintText: l10n.searchForCar,
-            hintStyle: TextStyle(fontSize: 14, color: Colors.grey.shade500),
-            prefixIcon: const Icon(Icons.search, size: 20, color: Colors.grey),
+            hintStyle: TextStyle(
+              fontSize: 14,
+              color: isDark ? AppColors.darkTextMuted : Colors.grey.shade500,
+            ),
+            prefixIcon: Icon(
+              Icons.search,
+              size: 20,
+              color: isDark ? AppColors.gold : Colors.grey,
+            ),
+            suffixIcon: Icon(
+              Icons.tune_rounded,
+              size: 18,
+              color: isDark ? AppColors.gold : Colors.grey.shade400,
+            ),
             border: InputBorder.none,
             contentPadding: const EdgeInsets.symmetric(vertical: 8),
           ),

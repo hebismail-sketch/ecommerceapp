@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerceapp/core/theme/app_colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -81,11 +82,15 @@ class ProfileAvatar extends StatelessWidget {
             );
           }
 
+          final isDark = Theme.of(context).brightness == Brightness.dark;
           return CircleAvatar(
             radius: size / 2,
+            backgroundColor:
+                isDark ? AppColors.darkSurface : Colors.grey.shade200,
             child: Icon(
               Icons.person,
               size: size * 0.55,
+              color: isDark ? AppColors.gold : Colors.grey.shade700,
             ),
           );
         },
