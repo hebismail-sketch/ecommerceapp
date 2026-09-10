@@ -65,7 +65,11 @@ Future<void> main() async {
     firebaseMessagingBackgroundHandler,
   );
 
-  await NotificationService.initialize();
+  try {
+    await NotificationService.initialize();
+  } catch (e) {
+    debugPrint('NotificationService initialization failed: $e');
+  }
 
   final appSettings = AppSettings();
   await appSettings.loadSettings();
