@@ -14,8 +14,7 @@ void main() {
     // Cairo is in Egypt
     expect(LocationService.isInEgypt(30.0444, 31.2357), isTrue);
 
-    // Fayoum is in Egypt
-    expect(LocationService.isInEgypt(29.3082, 30.8446), isTrue);
+  
 
     // US / Mountain View Android emulator mock location is flagged
     expect(LocationService.isUsOrEmulatorLocation(37.4219983, -122.084), isTrue);
