@@ -1,3 +1,4 @@
+import 'package:ecommerceapp/core/theme/app_colors.dart';
 import 'package:ecommerceapp/core/widgets/profile_avatar.dart';
 import 'package:ecommerceapp/features/orders/presentation/manager/order_cubit.dart';
 import 'package:ecommerceapp/features/orders/presentation/widgets/order_card.dart';
@@ -40,26 +41,31 @@ class _OrdersScreenState extends State<OrdersScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F7F8),
+      backgroundColor: isDark ? AppColors.darkBackground : const Color(0xFFF7F7F8),
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white,
+        backgroundColor: isDark ? AppColors.darkBackground : Colors.white,
+        surfaceTintColor: isDark ? AppColors.darkBackground : Colors.white,
         elevation: 0,
         centerTitle: false,
         automaticallyImplyLeading: false,
         leadingWidth: 56,
         title: Text(
           widget.adminMode ? l10n.customerOrders : l10n.orders,
-          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w700,
+            color: isDark ? Colors.white : Colors.black87,
+          ),
         ),
         leading: widget.adminMode
             ? IconButton(
                 tooltip: l10n.back,
-                icon: const Icon(
+                icon: Icon(
                   Icons.arrow_back_ios_new,
-                  color: Colors.black87,
+                  color: isDark ? AppColors.gold : Colors.black87,
                 ),
                 onPressed: () {
                   if (Navigator.canPop(context)) {

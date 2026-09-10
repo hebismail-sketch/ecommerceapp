@@ -1,3 +1,4 @@
+import 'package:ecommerceapp/core/theme/app_colors.dart';
 import 'package:ecommerceapp/features/orders/domain/entities/order_entity.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ class OrderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final isConfirmed = order.paymentStatus == 'confirmed';
     final formattedPrice = NumberFormat('#,###').format(order.totalPrice);
     final formattedDate = DateFormat(
@@ -22,10 +24,12 @@ class OrderCard extends StatelessWidget {
     return Card(
       elevation: 0,
       margin: EdgeInsets.zero,
-      color: Colors.white,
+      color: isDark ? AppColors.darkCard : Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(14),
-        side: BorderSide(color: Colors.grey.shade200),
+        side: BorderSide(
+          color: isDark ? AppColors.darkBorder : Colors.grey.shade200,
+        ),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -94,9 +98,10 @@ class OrderCard extends StatelessWidget {
                 ),
                 Text(
                   '$formattedPrice ${l10n.egp}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
+                    color: isDark ? AppColors.gold : Colors.black87,
                   ),
                 ),
               ],

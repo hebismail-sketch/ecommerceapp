@@ -1,5 +1,6 @@
 // File: lib/features/notifications/presentation/pages/notifications_page.dart
 
+import 'package:ecommerceapp/core/theme/app_colors.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,13 +19,17 @@ class NotificationsPage extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser;
 
     return Scaffold(
-      backgroundColor: isDark ? Colors.grey.shade900 : Colors.grey.shade50,
+      backgroundColor: isDark ? AppColors.darkBackground : Colors.grey.shade50,
       appBar: AppBar(
         title: Text(
           l10n.notificationsTitle,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: isDark ? Colors.white : Colors.black87,
+          ),
         ),
         centerTitle: true,
+        backgroundColor: isDark ? AppColors.darkBackground : null,
         elevation: 0,
       ),
       body: user == null
@@ -58,14 +63,24 @@ class NotificationsPage extends StatelessWidget {
                     final data = notifications[index].data();
                     final read = data['read'] == true;
                     return ListTile(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: BorderSide(
+                          color: isDark
+                              ? AppColors.darkBorder
+                              : Colors.transparent,
+                        ),
+                      ),
                       tileColor: read
-                          ? (isDark ? Colors.grey.shade800 : Colors.white)
-                          : (isDark ? Colors.red.shade900 : Colors.red.shade50),
+                          ? (isDark ? AppColors.darkCard : Colors.white)
+                          : (isDark
+                              ? AppColors.darkSurface
+                              : Colors.red.shade50),
                       leading: Icon(
                         read
                             ? Icons.notifications_none
                             : Icons.notifications_active,
-                        color: Colors.red.shade600,
+                        color: isDark ? AppColors.gold : Colors.red.shade600,
                       ),
                       title: Text(
                         data['title']?.toString() ?? l10n.notificationsTitle,
@@ -101,13 +116,15 @@ class _EmptyNotifications extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: Colors.red.withValues(alpha: 0.1),
+                color: isDark
+                    ? AppColors.gold.withOpacity(0.12)
+                    : Colors.red.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 Icons.notifications_active_outlined,
                 size: 64,
-                color: Colors.red.shade600,
+                color: isDark ? AppColors.gold : Colors.red.shade600,
               ),
             ),
             const SizedBox(height: 20),
