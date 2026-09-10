@@ -31,23 +31,29 @@ class NotificationService {
   static Future<void> initialize() async {
     if (_initialized) return;
 
-    await initializeLocalNotifications();
-
-    await _messaging.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-      provisional: false,
-    );
-
-    final userId = FirebaseAuth.instance.currentUser?.uid ?? '';
-    if (userId.isNotEmpty) {
-      await identifyUser(userId);
+    try {
+      await initializeLocalNotifications();
+    } catch (e) {
+      debugPrint('initializeLocalNotifications failed: $e');
     }
 
-    FirebaseMessaging.onMessage.listen(_handleForegroundMessage);
+    try {
+      await _messaging.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+        provisional: false,
+      );
+    } catch (e) {
+      debugPrint('requestPermission failed: $e');
+    }
 
-    _messaging.onTokenRefresh.listen(_handleTokenRefresh);
+    try {
+      FirebaseMessaging.onMessage.listen(_handleForegroundMessage);
+      _messaging.onTokenRefresh.listen(_handleTokenRefresh);
+    } catch (e) {
+      debugPrint('Notification listeners setup failed: $e');
+    }
 
     _initialized = true;
   }
@@ -59,36 +65,52 @@ class NotificationService {
   }) async {
     if (userId.trim().isEmpty) return;
 
-    await FirebaseFirestore.instance.collection('users').doc(userId).set({
-      'role': role,
-      'updatedAt': FieldValue.serverTimestamp(),
-    }, SetOptions(merge: true));
+    try {
+      await FirebaseFirestore.instance.collection('users').doc(userId).set({
+        'role': role,
+        'updatedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+    } catch (e) {
+      debugPrint('NotificationService.identifyUser failed: $e');
+    }
   }
 
   static Future<void> saveToken(String userId) async {
-    final token = await _messaging.getToken();
+    try {
+      final token = await _messaging.getToken();
 
-    if (token == null || token.isEmpty) return;
+      if (token == null || token.isEmpty) return;
 
-    await _saveTokenForUser(userId: userId, token: token);
+      await _saveTokenForUser(userId: userId, token: token);
+    } catch (e) {
+      debugPrint('NotificationService.saveToken failed: $e');
+    }
   }
 
   static Future<void> _handleTokenRefresh(String token) async {
-    final userId = FirebaseAuth.instance.currentUser?.uid;
+    try {
+      final userId = FirebaseAuth.instance.currentUser?.uid;
 
-    if (userId == null || token.isEmpty) return;
+      if (userId == null || token.isEmpty) return;
 
-    await _saveTokenForUser(userId: userId, token: token);
+      await _saveTokenForUser(userId: userId, token: token);
+    } catch (e) {
+      debugPrint('NotificationService._handleTokenRefresh failed: $e');
+    }
   }
 
   static Future<void> _saveTokenForUser({
     required String userId,
     required String token,
   }) async {
-    await FirebaseFirestore.instance.collection('users').doc(userId).set({
-      'fcmToken': token,
-      'notificationsEnabled': true,
-    }, SetOptions(merge: true));
+    try {
+      await FirebaseFirestore.instance.collection('users').doc(userId).set({
+        'fcmToken': token,
+        'notificationsEnabled': true,
+      }, SetOptions(merge: true));
+    } catch (e) {
+      debugPrint('NotificationService._saveTokenForUser failed: $e');
+    }
   }
 
   static Future<void> showNotification({
