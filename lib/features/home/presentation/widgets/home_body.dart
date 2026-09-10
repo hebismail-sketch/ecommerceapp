@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ecommerceapp/features/products/presentation/pages/product_details_page.dart';
 
 import 'package:ecommerceapp/core/constants/app_categories.dart';
+import 'package:ecommerceapp/core/theme/app_colors.dart';
 import 'package:ecommerceapp/features/favorites/presentation/manager/favorite_cubit.dart';
 import 'package:ecommerceapp/features/products/presentation/manager/product_cubit.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
@@ -38,6 +39,7 @@ class _HomeBodyState extends State<HomeBody> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final categories = ProductCategoryHelper.getCategories();
 
     return NestedScrollView(
@@ -50,12 +52,26 @@ class _HomeBodyState extends State<HomeBody> {
               child: Container(
                 height: 140,
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.red.shade400, Colors.red.shade700],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
+                  gradient: isDark
+                      ? AppColors.darkBannerGradient
+                      : LinearGradient(
+                          colors: [Colors.red.shade400, Colors.red.shade700],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
                   borderRadius: BorderRadius.circular(16),
+                  border: isDark
+                      ? Border.all(color: AppColors.darkBorderGold, width: 1.2)
+                      : null,
+                  boxShadow: isDark
+                      ? [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.35),
+                            blurRadius: 14,
+                            offset: const Offset(0, 4),
+                          ),
+                        ]
+                      : null,
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -66,13 +82,21 @@ class _HomeBodyState extends State<HomeBody> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
+                          color: isDark
+                              ? AppColors.gold.withOpacity(0.18)
+                              : Colors.white.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(6),
+                          border: isDark
+                              ? Border.all(
+                                  color: AppColors.gold.withOpacity(0.4),
+                                  width: 0.8,
+                                )
+                              : null,
                         ),
                         child: Text(
                           l10n.bestSeller,
-                          style: const TextStyle(
-                            color: Colors.white,
+                          style: TextStyle(
+                            color: isDark ? AppColors.gold : Colors.white,
                             fontSize: 11,
                             fontWeight: FontWeight.bold,
                           ),
@@ -92,17 +116,24 @@ class _HomeBodyState extends State<HomeBody> {
                         height: 28,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: Colors.red,
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            backgroundColor: isDark ? AppColors.gold : Colors.white,
+                            foregroundColor:
+                                isDark ? const Color(0xFF0B0E14) : Colors.red,
+                            padding: const EdgeInsets.symmetric(horizontal: 14),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6),
+                              borderRadius: BorderRadius.circular(8),
                             ),
+                            elevation: isDark ? 3 : 0,
+                            shadowColor:
+                                isDark ? AppColors.goldGlow : Colors.transparent,
                           ),
                           onPressed: () {},
                           child: Text(
                             l10n.shopNow,
-                            style: const TextStyle(fontSize: 11),
+                            style: const TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
@@ -118,7 +149,7 @@ class _HomeBodyState extends State<HomeBody> {
             pinned: true,
             delegate: _SliverCategoryDelegate(
               child: Container(
-                color: Colors.white,
+                color: isDark ? AppColors.darkBackground : Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,7 +161,11 @@ class _HomeBodyState extends State<HomeBody> {
                         children: [
                           Text(
                             l10n.categories,
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: isDark ? Colors.white : Colors.black87,
+                            ),
                           ),
                         ],
                       ),
@@ -168,21 +203,24 @@ class _HomeBodyState extends State<HomeBody> {
                                     padding: const EdgeInsets.all(10),
                                     decoration: BoxDecoration(
                                       color: isSelected
-                                          ? Colors.red.shade600
-                                          : Colors.grey.shade100,
+                                          ? AppColors.gold
+                                          : (isDark
+                                              ? AppColors.darkCard
+                                              : Colors.grey.shade100),
                                       shape: BoxShape.circle,
                                       border: Border.all(
                                         color: isSelected
-                                            ? Colors.red.shade600
-                                            : Colors.grey.shade300,
+                                            ? AppColors.gold
+                                            : (isDark
+                                                ? AppColors.darkBorder
+                                                : Colors.grey.shade300),
                                         width: isSelected ? 1.5 : 1.0,
                                       ),
                                       boxShadow: isSelected
                                           ? [
                                               BoxShadow(
-                                                color: Colors.red
-                                                    .withOpacity(0.35),
-                                                blurRadius: 6,
+                                                color: AppColors.goldGlow,
+                                                blurRadius: 8,
                                                 offset: const Offset(0, 2),
                                               ),
                                             ]
@@ -192,8 +230,10 @@ class _HomeBodyState extends State<HomeBody> {
                                       cat.icon,
                                       size: 20,
                                       color: isSelected
-                                          ? Colors.white
-                                          : Colors.black87,
+                                          ? const Color(0xFF0B0E14)
+                                          : (isDark
+                                              ? AppColors.gold
+                                              : Colors.black87),
                                     ),
                                   ),
                                   const SizedBox(height: 4),
@@ -205,8 +245,12 @@ class _HomeBodyState extends State<HomeBody> {
                                           ? FontWeight.bold
                                           : FontWeight.normal,
                                       color: isSelected
-                                          ? Colors.red.shade700
-                                          : Colors.black87,
+                                          ? (isDark
+                                              ? AppColors.goldLight
+                                              : Colors.red.shade700)
+                                          : (isDark
+                                              ? AppColors.darkTextSecondary
+                                              : Colors.black87),
                                     ),
                                   ),
                                 ],
@@ -240,9 +284,10 @@ class _HomeBodyState extends State<HomeBody> {
                           _selectedCategoryId,
                           l10n,
                         ),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                    color: isDark ? Colors.white : Colors.black87,
                   ),
                 ),
                 if (_selectedCategoryId != ProductCategoryHelper.all)
@@ -259,7 +304,7 @@ class _HomeBodyState extends State<HomeBody> {
                     child: Text(
                       l10n.allCategories,
                       style: TextStyle(
-                        color: Colors.red.shade700,
+                        color: isDark ? AppColors.gold : Colors.red.shade700,
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
                       ),
@@ -381,16 +426,28 @@ class _HomeBodyState extends State<HomeBody> {
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: Colors.grey.shade200),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.shade100,
-                                  blurRadius: 5,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
+                              color: isDark ? AppColors.darkCard : Colors.white,
+                              borderRadius: BorderRadius.circular(14),
+                              border: Border.all(
+                                color: isDark
+                                    ? AppColors.darkBorder
+                                    : Colors.grey.shade200,
+                              ),
+                              boxShadow: isDark
+                                  ? [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.35),
+                                        blurRadius: 8,
+                                        offset: const Offset(0, 3),
+                                      ),
+                                    ]
+                                  : [
+                                      BoxShadow(
+                                        color: Colors.grey.shade100,
+                                        blurRadius: 5,
+                                        offset: const Offset(0, 2),
+                                      ),
+                                    ],
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -437,20 +494,29 @@ class _HomeBodyState extends State<HomeBody> {
                                             child: Container(
                                               padding: const EdgeInsets.all(5),
                                               decoration: BoxDecoration(
-                                                color: Colors.white,
+                                                color: isDark
+                                                    ? AppColors.darkSurface
+                                                    : Colors.white,
                                                 shape: BoxShape.circle,
                                                 boxShadow: [
                                                   BoxShadow(
-                                                    color: Colors.black.withOpacity(0.12),
+                                                    color: Colors.black
+                                                        .withOpacity(0.18),
                                                     blurRadius: 4,
                                                     offset: const Offset(0, 2),
                                                   ),
                                                 ],
                                               ),
                                               child: Icon(
-                                                isFav ? Icons.favorite : Icons.favorite_border,
+                                                isFav
+                                                    ? Icons.favorite
+                                                    : Icons.favorite_border,
                                                 size: 18,
-                                                color: isFav ? Colors.red : Colors.grey.shade600,
+                                                color: isFav
+                                                    ? Colors.red
+                                                    : (isDark
+                                                        ? AppColors.gold
+                                                        : Colors.grey.shade600),
                                               ),
                                             ),
                                           ),
@@ -468,13 +534,21 @@ class _HomeBodyState extends State<HomeBody> {
                                         productName,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                          color: isDark
+                                              ? Colors.white
+                                              : Colors.black87,
+                                        ),
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
                                         '${product.price}${l10n.egp}',
-                                        style: const TextStyle(
-                                          color: Colors.red,
+                                        style: TextStyle(
+                                          color: isDark
+                                              ? AppColors.gold
+                                              : Colors.red,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 12,
                                         ),
@@ -482,13 +556,30 @@ class _HomeBodyState extends State<HomeBody> {
                                       const SizedBox(height: 6),
                                       Row(
                                         children: [
-                                          const Icon(Icons.star, size: 12, color: Colors.amber),
+                                          Icon(
+                                            Icons.star,
+                                            size: 12,
+                                            color: AppColors.gold,
+                                          ),
                                           const SizedBox(width: 4),
-                                          const Text('4.9', style: TextStyle(fontSize: 10, color: Colors.grey)),
+                                          Text(
+                                            '4.9',
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                              color: isDark
+                                                  ? AppColors.darkTextMuted
+                                                  : Colors.grey,
+                                            ),
+                                          ),
                                           const SizedBox(width: 6),
                                           Text(
                                             '| ${l10n.sold('56')}',
-                                            style: const TextStyle(fontSize: 10, color: Colors.grey),
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                              color: isDark
+                                                  ? AppColors.darkTextMuted
+                                                  : Colors.grey,
+                                            ),
                                           ),
                                         ],
                                       ),

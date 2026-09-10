@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:ecommerceapp/core/theme/app_colors.dart';
 import 'package:ecommerceapp/features/home/presentation/pages/home_page.dart';
 import 'package:ecommerceapp/features/favorites/presentation/pages/favorite_page.dart';
 import 'package:ecommerceapp/features/orders/presentation/pages/order_screen.dart';
@@ -32,6 +33,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       // Display the current selected screen body
@@ -41,8 +43,9 @@ class _MainScreenState extends State<MainScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.red.shade400,
-        unselectedItemColor: Colors.grey,
+        backgroundColor: isDark ? const Color(0xFF10151E) : Colors.white,
+        selectedItemColor: isDark ? AppColors.gold : Colors.red.shade400,
+        unselectedItemColor: isDark ? const Color(0xFF707E94) : Colors.grey,
         onTap: (index) {
           if (index == 2) {
             // Navigate directly to the chat page when the center chat button is tapped
@@ -70,17 +73,22 @@ class _MainScreenState extends State<MainScreen> {
             icon: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Colors.red.shade400,
+                gradient: isDark ? AppColors.goldGradient : null,
+                color: isDark ? null : Colors.red.shade400,
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.red.shade200,
-                    blurRadius: 6,
+                    color: isDark ? AppColors.goldGlow : Colors.red.shade200,
+                    blurRadius: 10,
                     offset: const Offset(0, 3),
                   ),
                 ],
               ),
-              child: const Icon(Icons.chat_bubble_outline, color: Colors.white, size: 36),
+              child: Icon(
+                Icons.chat_bubble_outline,
+                color: isDark ? const Color(0xFF0B0E14) : Colors.white,
+                size: 34,
+              ),
             ),
             label: l10n.chat,
           ),
