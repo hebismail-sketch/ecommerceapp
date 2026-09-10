@@ -1,5 +1,8 @@
 // File: lib/features/products/presentation/pages/add_product_page.dart
 
+import 'dart:io';
+
+import 'package:ecommerceapp/core/services/cloudinary_service.dart';
 import 'package:ecommerceapp/core/services/product_translation_service.dart';
 import 'package:ecommerceapp/core/notifications/notification_api.dart';
 import 'package:ecommerceapp/core/widgets/profile_avatar.dart';
@@ -9,6 +12,7 @@ import 'package:ecommerceapp/features/profile/presentation/pages/profile_screen.
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddProductPage extends StatefulWidget {
   final ProductEntity? product;
@@ -33,10 +37,13 @@ class _AddProductPageState extends State<AddProductPage> {
   final _brandEnController = TextEditingController();
   final _descriptionArController = TextEditingController();
   final _descriptionEnController = TextEditingController();
-  final _imageUrlController = TextEditingController();
+  final ImagePicker _imagePicker = ImagePicker();
+  File? _selectedImage;
+  String? _existingImageUrl;
   late bool _isArabicInput;
   bool _isLanguageInitialized = false;
   bool _isTranslating = false;
+  bool _isUploadingImage = false;
 
   @override
   void initState() {
@@ -50,7 +57,7 @@ class _AddProductPageState extends State<AddProductPage> {
       _brandEnController.text = widget.product!.brandEn;
       _descriptionArController.text = widget.product!.descriptionAr;
       _descriptionEnController.text = widget.product!.descriptionEn;
-      _imageUrlController.text = widget.product!.image;
+      _existingImageUrl = widget.product!.image;
     }
   }
 
@@ -73,12 +80,45 @@ class _AddProductPageState extends State<AddProductPage> {
     _brandEnController.dispose();
     _descriptionArController.dispose();
     _descriptionEnController.dispose();
-    _imageUrlController.dispose();
     super.dispose();
   }
 
+  Future<void> _pickImage() async {
+    final XFile? pickedFile = await _imagePicker.pickImage(
+      source: ImageSource.gallery,
+    );
+
+    if (pickedFile == null) return;
+
+    setState(() {
+      _selectedImage = File(pickedFile.path);
+    });
+  }
+
+  void _removeImage() {
+    setState(() {
+      _selectedImage = null;
+      _existingImageUrl = null;
+    });
+  }
+
   Future<void> _saveProduct(AppLocalizations l10n) async {
-    if (!_formKey.currentState!.validate() || _isTranslating) return;
+    if (!_formKey.currentState!.validate() || _isTranslating || _isUploadingImage) {
+      return;
+    }
+
+    final hasImage = _selectedImage != null ||
+        (_existingImageUrl != null && _existingImageUrl!.trim().isNotEmpty);
+
+    if (!hasImage) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.chooseImageFirst),
+          backgroundColor: Colors.red.shade700,
+        ),
+      );
+      return;
+    }
 
     final productCubit = context.read<ProductCubit>();
     setState(() => _isTranslating = true);
@@ -117,9 +157,36 @@ class _AddProductPageState extends State<AddProductPage> {
       return;
     }
 
-    final image = _imageUrlController.text.trim().isNotEmpty
-        ? _imageUrlController.text.trim()
-        : 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=800';
+    if (mounted) {
+      setState(() {
+        _isTranslating = false;
+        _isUploadingImage = true;
+      });
+    }
+
+    String imageUrl = _existingImageUrl ?? '';
+
+    if (_selectedImage != null) {
+      try {
+        imageUrl = await CloudinaryService.uploadImage(_selectedImage!);
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(l10n.imageUploadFailed),
+              backgroundColor: Colors.red.shade700,
+            ),
+          );
+          setState(() => _isUploadingImage = false);
+        }
+        return;
+      }
+    }
+
+    if (imageUrl.trim().isEmpty) {
+      imageUrl =
+          'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=800';
+    }
 
     final product = ProductEntity(
       id: widget.product?.id ?? '',
@@ -131,7 +198,7 @@ class _AddProductPageState extends State<AddProductPage> {
       descriptionEn: _descriptionEnController.text.trim(),
       price: double.tryParse(_priceController.text.trim()) ?? 0,
       year: int.tryParse(_yearController.text.trim()) ?? 2024,
-      image: image,
+      image: imageUrl,
     );
 
     if (widget.product == null) {
@@ -163,7 +230,10 @@ class _AddProductPageState extends State<AddProductPage> {
     }
 
     if (mounted) {
-      setState(() => _isTranslating = false);
+      setState(() {
+        _isTranslating = false;
+        _isUploadingImage = false;
+      });
       Navigator.pop(context);
     }
   }
@@ -204,7 +274,7 @@ class _AddProductPageState extends State<AddProductPage> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            // Image URL & Preview Section
+            // Image Picker Section (From Gallery)
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -222,39 +292,104 @@ class _AddProductPageState extends State<AddProductPage> {
                       fontSize: 14,
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _imageUrlController,
-                    decoration: InputDecoration(
-                      hintText: l10n.productImageUrlHint,
-                      prefixIcon: const Icon(Icons.link),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 10,
-                      ),
-                    ),
-                    onChanged: (_) => setState(() {}),
-                  ),
-                  if (_imageUrlController.text.trim().isNotEmpty) ...[
-                    const SizedBox(height: 12),
-                    ClipRRect(
+                  const SizedBox(height: 12),
+                  if (_selectedImage == null &&
+                      (_existingImageUrl == null ||
+                          _existingImageUrl!.trim().isEmpty))
+                    InkWell(
                       borderRadius: BorderRadius.circular(12),
-                      child: Image.network(
-                        _imageUrlController.text.trim(),
-                        height: 140,
+                      onTap: (_isTranslating || _isUploadingImage)
+                          ? null
+                          : _pickImage,
+                      child: Container(
                         width: double.infinity,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => Container(
-                          height: 100,
-                          color: Colors.grey.shade100,
-                          child: const Center(
-                            child: Icon(Icons.broken_image, color: Colors.grey),
+                        height: 160,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade50,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.grey.shade300,
                           ),
                         ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.add_photo_alternate_outlined,
+                              size: 48,
+                              color: Colors.grey.shade600,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              l10n.chooseFromGallery,
+                              style: TextStyle(
+                                color: Colors.grey.shade700,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
+                    )
+                  else ...[
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: _selectedImage != null
+                          ? Image.file(
+                              _selectedImage!,
+                              height: 180,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.network(
+                              _existingImageUrl!,
+                              height: 180,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, __, ___) => Container(
+                                height: 180,
+                                color: Colors.grey.shade100,
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.broken_image,
+                                    color: Colors.grey,
+                                    size: 40,
+                                  ),
+                                ),
+                              ),
+                            ),
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            onPressed: (_isTranslating || _isUploadingImage)
+                                ? null
+                                : _pickImage,
+                            icon: const Icon(Icons.photo_library_outlined,
+                                size: 18),
+                            label: Text(l10n.changeImage),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        IconButton(
+                          tooltip: l10n.deleteImage,
+                          style: IconButton.styleFrom(
+                            foregroundColor: Colors.red.shade700,
+                          ),
+                          onPressed: (_isTranslating || _isUploadingImage)
+                              ? null
+                              : _removeImage,
+                          icon: const Icon(Icons.delete_outline),
+                        ),
+                      ],
                     ),
                   ],
                 ],
@@ -373,8 +508,10 @@ class _AddProductPageState extends State<AddProductPage> {
                   ),
                   elevation: 2,
                 ),
-                onPressed: _isTranslating ? null : () => _saveProduct(l10n),
-                icon: _isTranslating
+                onPressed: (_isTranslating || _isUploadingImage)
+                    ? null
+                    : () => _saveProduct(l10n),
+                icon: (_isTranslating || _isUploadingImage)
                     ? const SizedBox(
                         width: 20,
                         height: 20,
@@ -387,7 +524,9 @@ class _AddProductPageState extends State<AddProductPage> {
                 label: Text(
                   _isTranslating
                       ? l10n.translating
-                      : (isEditing ? l10n.saveChanges : l10n.addProductButton),
+                      : (_isUploadingImage
+                          ? l10n.uploadingImage
+                          : (isEditing ? l10n.saveChanges : l10n.addProductButton)),
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
