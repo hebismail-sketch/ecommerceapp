@@ -46,3 +46,6 @@ app.*.map.json
 
 # Test screenshots
 emulator_screen*.png
+.kotlin/
+.wrangler/
+*.log

@@ -9,6 +9,8 @@ import 'package:ecommerceapp/features/authentication/presentation/manager/authen
 import 'package:ecommerceapp/features/authentication/presentation/pages/login_page.dart';
 import 'package:ecommerceapp/features/authentication/presentation/pages/register_page.dart';
 import 'package:ecommerceapp/features/carts/presentation/pages/cart_page.dart';
+import 'package:ecommerceapp/features/chat/presentation/pages/admin_chat_detail_page.dart';
+import 'package:ecommerceapp/features/chat/presentation/pages/admin_conversations_page.dart';
 import 'package:ecommerceapp/features/chat/presentation/pages/user_chat_page.dart';
 import 'package:ecommerceapp/features/favorites/presentation/pages/favorite_page.dart';
 import 'package:ecommerceapp/features/home/presentation/pages/home_page.dart';
@@ -158,6 +160,7 @@ class MyApp extends StatelessWidget {
     final settings = context.watch<AppSettings>();
 
     return MaterialApp(
+      navigatorKey: NotificationService.navigatorKey,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
@@ -199,6 +202,10 @@ class MyApp extends StatelessWidget {
             (_) => const ProfileScreen(),
         UserChatPage.screenRoute:
             (_) => const UserChatPage(),
+        AdminConversationsPage.screenRoute:
+            (_) => const AdminConversationsPage(),
+        AdminChatDetailPage.screenRoute:
+            (_) => const AdminChatDetailPage(),
       },
     );
   }

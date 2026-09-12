@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import 'package:ecommerceapp/core/constants/app_constants.dart';
+import 'package:ecommerceapp/core/notifications/notification_api.dart';
 import 'package:ecommerceapp/features/chat/data/models/chat_message_model.dart';
 import 'package:ecommerceapp/features/chat/data/models/conversation_model.dart';
 import 'package:ecommerceapp/features/chat/domain/entities/chat_message_entity.dart';
@@ -98,12 +99,28 @@ class _AdminChatDetailPageState extends State<AdminChatDetailPage> {
 
     _messageController.clear();
 
-    // The Cloud Function notifies the user after Firestore writes the message.
+    // Send the message
     await context.read<ChatCubit>().sendMessage(
       conversationId: conversationId,
       message: message,
       conversation: updatedConversation,
     );
+
+    // Notify the user directly via NotificationApi
+    final targetUserId = _conversation?.userId;
+    if (targetUserId != null && targetUserId.isNotEmpty) {
+      await NotificationApi.notify(
+        action: 'notify_user',
+        recipientUserId: targetUserId,
+        title: 'New Support Reply',
+        body: '${user.displayName ?? 'Support'}: $text',
+        data: {
+          'type': 'chat_message',
+          'conversationId': conversationId,
+        },
+      );
+    }
+
     _scrollToBottom();
   }
 

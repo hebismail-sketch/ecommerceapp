@@ -1,5 +1,6 @@
 // File: lib/features/notifications/presentation/pages/notifications_page.dart
 
+import 'package:ecommerceapp/core/notifications/notification_service.dart';
 import 'package:ecommerceapp/core/theme/app_colors.dart';
 import 'package:ecommerceapp/l10n/app_localizations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -87,9 +88,25 @@ class NotificationsPage extends StatelessWidget {
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       subtitle: Text(data['body']?.toString() ?? ''),
-                      onTap: () => notifications[index].reference.update({
-                        'read': true,
-                      }),
+                      onTap: () {
+                        notifications[index].reference.update({
+                          'read': true,
+                        });
+
+                        final rawData = data['data'];
+                        final Map<String, dynamic> targetData = {};
+                        if (rawData is Map<String, dynamic>) {
+                          targetData.addAll(rawData);
+                        }
+                        if (!targetData.containsKey('type') &&
+                            data['type'] != null) {
+                          targetData['type'] = data['type'];
+                        }
+
+                        if (targetData.isNotEmpty) {
+                          NotificationService.handleNotificationData(targetData);
+                        }
+                      },
                     );
                   },
                 );
@@ -117,7 +134,7 @@ class _EmptyNotifications extends StatelessWidget {
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
                 color: isDark
-                    ? AppColors.gold.withOpacity(0.12)
+                    ? AppColors.gold.withValues(alpha: 0.12)
                     : Colors.red.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),

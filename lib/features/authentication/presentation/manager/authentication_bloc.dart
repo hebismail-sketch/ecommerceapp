@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ecommerceapp/core/notifications/notification_service.dart';
 import 'package:ecommerceapp/features/authentication/domain/entities/user_entity.dart';
@@ -116,6 +117,11 @@ class AuthenticationBloc
 
       if (user != null) {
         await NotificationService.identifyUser(user.uid, role: user.role);
+        try {
+          await saveDeviceTokenUseCase.call(userId: user.uid);
+        } catch (e) {
+          debugPrint('Failed to save device token on check auth: $e');
+        }
         emit(UserLoggedIn(user: user));
       } else {
         emit(const UserLoggedOut());

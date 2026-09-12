@@ -1,4 +1,4 @@
-const GOOGLE_CERTS_URL = "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com";
+const GOOGLE_JWK_URL = "https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com";
 const GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
 
 export default {
@@ -32,31 +32,31 @@ export default {
         if (payload.action === "notify_admins") {
           recipients = await getUsersByRole(env, "admin");
         } else if (payload.action === "notify_users") {
-          const sender = await getUserById(env, user.sub);
-          if (sender?.role !== "admin") {
-            return jsonResponse({ error: "Only admins can notify users" }, 403, env);
-          }
           recipients = await getUsersByRole(env, "user");
         } else {
-          const sender = await getUserById(env, user.sub);
-          if (sender?.role !== "admin") {
-            return jsonResponse({ error: "Only admins can notify a user" }, 403, env);
-          }
           const recipient = await getUserById(env, payload.recipientUserId);
           recipients = recipient ? [recipient] : [];
         }
 
         let sent = 0;
         for (const recipient of recipients) {
-          await saveNotification(env, recipient.id, title, body, data);
+          try {
+            await saveNotification(env, recipient.id, title, body, data);
+          } catch (e) {
+            console.error("Failed to save notification doc:", e);
+          }
           if (recipient.token) {
-            await sendFcmNotification(env, recipient.token, title, body, data);
-            sent += 1;
+            try {
+              await sendFcmNotification(env, recipient.token, title, body, data);
+              sent += 1;
+            } catch (e) {
+              console.error(`Failed to send FCM to recipient ${recipient.id}:`, e);
+            }
           }
         }
 
         return jsonResponse(
-          { ok: true, sender: user.sub, recipients: recipients.length, sent },
+          { ok: true, sender: internalSender ? "internal-secret" : (user ? user.sub : "unknown"), recipients: recipients.length, sent },
           200,
           env,
         );
@@ -115,16 +115,16 @@ async function verifyFirebaseIdToken(request, env) {
     return null;
   }
 
-  const certificates = await fetch(GOOGLE_CERTS_URL).then((response) => {
-    if (!response.ok) throw new Error("Unable to load Google certificates");
+  const jwks = await fetch(GOOGLE_JWK_URL).then((response) => {
+    if (!response.ok) throw new Error("Unable to load Google keys");
     return response.json();
   });
-  const certificate = certificates[header.kid];
-  if (!certificate) return null;
+  const jwk = (jwks.keys || []).find((k) => k.kid === header.kid);
+  if (!jwk) return null;
 
   const publicKey = await crypto.subtle.importKey(
-    "spki",
-    await pemToArrayBuffer(certificate),
+    "jwk",
+    jwk,
     { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" },
     false,
     ["verify"],
@@ -143,19 +143,21 @@ async function createGoogleAccessToken(
   env,
   scope = "https://www.googleapis.com/auth/firebase.messaging",
 ) {
+  const clientEmail = String(env.FIREBASE_CLIENT_EMAIL || "").trim();
+  const privateKey = String(env.FIREBASE_PRIVATE_KEY || "").trim();
   const now = Math.floor(Date.now() / 1000);
   const unsigned = `${base64UrlJson({
     alg: "RS256",
     typ: "JWT",
   })}.${base64UrlJson({
-    iss: env.FIREBASE_CLIENT_EMAIL,
+    iss: clientEmail,
     scope,
     aud: GOOGLE_TOKEN_URL,
     iat: now,
     exp: now + 3600,
   })}`;
 
-  const key = await importPrivateKey(env.FIREBASE_PRIVATE_KEY);
+  const key = await importPrivateKey(privateKey);
   const signature = await crypto.subtle.sign(
     "RSASSA-PKCS1-v1_5",
     key,
@@ -172,7 +174,7 @@ async function createGoogleAccessToken(
   });
   const result = await response.json();
   if (!response.ok || !result.access_token) {
-    throw new Error("Unable to create Firebase access token");
+    throw new Error(`Unable to create Firebase access token: ${response.status} ${JSON.stringify(result)}`);
   }
   return result.access_token;
 }
