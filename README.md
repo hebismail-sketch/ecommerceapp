@@ -1,17 +1,58 @@
-# ecommerceapp
+# E-Commerce App
 
-A new Flutter project.
+A modern e-commerce mobile application built with Flutter.
 
-## Getting Started
+## ✨ Features
 
-This project is a starting point for a Flutter application.
+- User Authentication (Login, Register & Role-based Access)
+- Browse & Search Products (Multi-Category Catalog)
+- Categories & Product Details
+- Cart & Wishlist
+- Checkout & Delivery Location Selection
+- Order Management & Tracking
+- Real-time Chat (Customer & Admin Support)
+- Push Notifications (OneSignal & Firebase Cloud Messaging)
+- Admin Dashboard
+- Product & Order Management
+- Interactive Map & Geolocation Tracking (OpenStreetMap)
+- On-Device AI Translation & Language Detection (Google ML Kit)
+- Multi-Language Support (English & Arabic with full RTL/LTR)
+- Cloud Image Uploading & Optimization
 
-A few resources to get you started if this is your first Flutter project:
+## 🛠 Tech Stack
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+- Flutter & Dart
+- BLoC & Cubit (`flutter_bloc`) - State Management
+- Cloud Firestore - Database
+- Firebase Authentication - Auth Service
+- Firebase Storage & Cloudinary - Media & Image Hosting
+- Firebase Cloud Messaging (FCM) & OneSignal - Push Notifications
+- REST API & HTTP Client (`http`)
+- Flutter Map & LatLong2 - Map Integration
+- Geolocator & GeoFlutterFire Plus - Geolocation & Distance Calculation
+- Google ML Kit - Language Identification & On-Device Translation
+- Shared Preferences - Local Key-Value Storage
+- Clean Architecture (Data, Domain, Presentation Layers)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🏗 Architecture
+
+The project follows Clean Architecture with a feature-based structure
+to provide scalability, maintainability, and separation of concerns.
+
+## 📱 Screenshots
+
+<p align="center">
+  <img src="screenshots/admin%20dashboard.png" width="280" alt="Admin Dashboard">
+  <img src="screenshots/chat%20page.png" width="280" alt="Chat Page">
+  <img src="screenshots/delivery%20address.png" width="280" alt="Delivery Address">
+  <img src="screenshots/home%20page%20in%20arb%20and%20dark%20mode.png" width="280" alt="Home ARB Dark">
+  <img src="screenshots/home%20page%20in%20arb.png" width="280" alt="Home ARB">
+</p>
+
+## 🚀 Getting Started
+
+```bash
+git clone <repository-url>
+cd ecommerceapp
+flutter pub get
+flutter run
