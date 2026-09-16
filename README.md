@@ -42,11 +42,11 @@ to provide scalability, maintainability, and separation of concerns.
 ## 📱 Screenshots
 
 <p align="center">
-  <img src="screenshots/admin%20dashboard.png" width="280" alt="Admin Dashboard">
-  <img src="screenshots/chat%20page.png" width="280" alt="Chat Page">
-  <img src="screenshots/delivery%20address.png" width="280" alt="Delivery Address">
-  <img src="screenshots/home%20page%20in%20arb%20and%20dark%20mode.png" width="280" alt="Home ARB Dark">
-  <img src="screenshots/home%20page%20in%20arb.png" width="280" alt="Home ARB">
+  <img src="screenshots/admin_dashboard.png" width="280" alt="Admin Dashboard">
+  <img src="screenshots/chat_page.png" width="280" alt="Chat Page">
+  <img src="screenshots/delivery_address.png" width="280" alt="Delivery Address">
+  <img src="screenshots/home_page_arb_and_dark_mode.png" width="280" alt="Home ARB Dark">
+  <img src="screenshots/home_page_in_arb.png" width="280" alt="Home ARB">
 </p>
 
 ## 🚀 Getting Started
