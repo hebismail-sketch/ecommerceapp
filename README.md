@@ -1,30 +1,59 @@
-# ecommerceapp
+# E-Commerce App
 
-## OneSignal notifications
+A modern e-commerce mobile application built with Flutter.
 
-The app maps each Firebase user id to the OneSignal external user id. Cloud
-Functions send four notification types:
+## ✨ Features
 
-1. New order to admins.
-2. Order status changes to the customer.
-3. New chat messages to the other side of the conversation.
-4. New products to customers.
+- User Authentication (Login, Register & Role-based Access)
+- Browse & Search Products (Multi-Category Catalog)
+- Categories & Product Details
+- Cart & Wishlist
+- Checkout & Delivery Location Selection
+- Order Management & Tracking
+- Real-time Chat (Customer & Admin Support)
+- Push Notifications (OneSignal & Firebase Cloud Messaging)
+- Admin Dashboard
+- Product & Order Management
+- Interactive Map & Geolocation Tracking (OpenStreetMap)
+- On-Device AI Translation & Language Detection (Google ML Kit)
+- Multi-Language Support (English & Arabic with full RTL/LTR)
+- Cloud Image Uploading & Optimization
 
-Create `functions/.env` locally with the OneSignal REST API key, then deploy:
+## 🛠 Tech Stack
 
-```text
-ONE_SIGNAL_APP_ID=ef94b6f5-27e2-4f82-808a-815c7be086c6
-ONE_SIGNAL_REST_API_KEY=YOUR_ONESIGNAL_REST_API_KEY
+- Flutter & Dart
+- BLoC & Cubit (`flutter_bloc`) - State Management
+- Cloud Firestore - Database
+- Firebase Authentication - Auth Service
+- Firebase Storage & Cloudinary - Media & Image Hosting
+- Firebase Cloud Messaging (FCM) & OneSignal - Push Notifications
+- REST API & HTTP Client (`http`)
+- Flutter Map & LatLong2 - Map Integration
+- Geolocator & GeoFlutterFire Plus - Geolocation & Distance Calculation
+- Google ML Kit - Language Identification & On-Device Translation
+- Shared Preferences - Local Key-Value Storage
+- Clean Architecture (Data, Domain, Presentation Layers)
+
+## 🏗 Architecture
+
+The project follows Clean Architecture with a feature-based structure
+to provide scalability, maintainability, and separation of concerns.
+
+## 📱 Screenshots
+
+<p align="center">
+  <img src="screenshots/admin_dashboard.png" width="280" alt="Admin Dashboard">
+  <img src="screenshots/chat_page.png" width="280" alt="Chat Page">
+  <img src="screenshots/delivery_address.png" width="280" alt="Delivery Address">
+  <img src="screenshots/home_page_arb_and_dark_mode.png" width="280" alt="Home ARB Dark">
+  <img src="screenshots/home_page_in_arb.png" width="280" alt="Home ARB">
+</p>
+
+## 🚀 Getting Started
+
+```bash
+git clone <repository-url>
+cd ecommerceapp
+flutter pub get
+flutter run
 ```
-
-```powershell
-firebase deploy --only functions
-```
-
-The REST API key must stay in `functions/.env`; it must never be placed in
-Flutter code or committed to the repository. Test with one admin and one
-customer device after both users grant permission and log in once.
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
